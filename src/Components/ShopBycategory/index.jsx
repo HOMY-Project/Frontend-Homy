@@ -8,6 +8,7 @@ import Col from "react-bootstrap/Col";
 import "./index.css";
 
 function ShopByCate() {
+  console.log(process.env.REACT_APP_BACKEND_URL);
   const [category, setCategories] = useState([]);
   const [filterVal, setFilterVal] = useState(null);
 
@@ -19,8 +20,8 @@ function ShopByCate() {
     const source = axios.CancelToken.source();
     const getCategories = async () => {
       const url = filterVal
-        ? `/api/v1/categories?place=${filterVal}`
-        : "/api/v1/categories";
+        ? `${process.env.REACT_APP_BACKEND_URL}/api/v1/categories?place=${filterVal}`
+        : `${process.env.REACT_APP_BACKEND_URL}/api/v1/categories`;
       try {
         const { data: { data } } = await axios.get(url, { cancelToken: source.token });
         console.log(data, 'data');
