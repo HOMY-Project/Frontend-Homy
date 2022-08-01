@@ -1,0 +1,80 @@
+/* // Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) { 
+    .custom-navbar form.me-auto.my-2.my-lg-0.searchForm {
+        width: 100%;
+    }
+    .custom-navbar .d-flex.navbar-nav.navbar-nav-scroll {
+        width: 100%;
+        justify-content: space-around;
+    }
+    .custom-navbar .nav-item {
+        display: flex;
+        justify-content: flex-start;
+    }
+    /* About us */
+    .aboutus-holder .site-card-wrapper .ant-row {
+        flex-direction: column;
+        align-items: center;
+    }
+    .aboutus-holder .site-card-wrapper{
+        padding: "0 1px";
+    }
+    .aboutus-holder .ant-col.ant-col-8 {
+        margin-bottom: 2%;
+    }
+    /* signIn */
+    .Auth-form-container {
+        padding: 2% 6%;
+    }
+ }
+
+/* // Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) { 
+    .custom-navbar form.me-auto.my-2.my-lg-0.searchForm {
+        width: 100%;
+    }
+    .custom-navbar .d-flex.navbar-nav.navbar-nav-scroll {
+        width: 100%;
+        justify-content: space-around;
+    }
+    .custom-navbar .nav-item {
+        display: flex;
+        justify-content: flex-start;
+    }
+    /* About us */
+    .aboutus-holder .site-card-wrapper .ant-row {
+        flex-direction: column;
+        align-items: center;
+    }
+    .aboutus-holder .site-card-wrapper{
+        padding: "0 1px";
+    }
+    .aboutus-holder .ant-col.ant-col-8 {
+        margin-bottom: 2%;
+    }
+    /* signIn */
+    .Auth-form-container {
+        padding: 2% 6%;
+    }
+ }
+
+/* // Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) { 
+    .custom-navbar form.me-auto.my-2.my-lg-0.searchForm {
+        width: 100%;
+    }
+    .custom-navbar .d-flex.navbar-nav.navbar-nav-scroll {
+        width: 100%;
+        justify-content: space-around;
+    }
+    .custom-navbar .nav-item {
+        display: flex;
+        justify-content: flex-start;
+    }
+ }
+
+/* // Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {  }
+
+/* // Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {  }

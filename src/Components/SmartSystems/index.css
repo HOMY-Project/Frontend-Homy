@@ -1,0 +1,11 @@
+.SmartSystems-holder .card {
+    margin-right: 2%;
+}
+.SmartSystems-holder  small.text-muted {
+    color: #0F6AD0 !important;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    font-size: 15px;
+    cursor: pointer;
+}

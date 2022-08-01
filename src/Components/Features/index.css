@@ -1,0 +1,17 @@
+img.featuredImg {
+    width: 70px;
+}
+.aboutus-holder .ant-card-bordered .ant-card-cover {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 3%;
+}
+.aboutus-holder .ant-row {
+    width: 100%;
+}
+.aboutus-holder .ant-col.ant-col-8 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
