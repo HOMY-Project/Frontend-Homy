@@ -37,8 +37,8 @@ function MainNavbar() {
           </Form>
           <Nav className="d-flex" style={{ maxHeight: "100px" }} navbarScroll>
             <NavDropdown title="Account" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="/signIn">Sign In</NavDropdown.Item>
-              <NavDropdown.Item href="/myOrders">My orders</NavDropdown.Item>
+              <NavDropdown.Item><Link to="/signIn">Sign In</Link></NavDropdown.Item>
+              <NavDropdown.Item ><Link to="/myOrders">My orders</Link></NavDropdown.Item>
             </NavDropdown>
 
             <Nav.Item>
