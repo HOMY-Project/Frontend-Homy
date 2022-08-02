@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button } from "antd";
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
-import { StarFilled } from '@ant-design/icons';
+// import { StarFilled } from '@ant-design/icons';
 import axios from "axios";
 import Heading from "../Heading/index";
 import { message } from "antd";
@@ -9,7 +9,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-const { Meta } = Card;
+// const { Meta } = Card;
 
 function ProductInfo() {
     const [product, setProduct] = useState([]);
@@ -18,7 +18,7 @@ function ProductInfo() {
     useEffect(() => {
         const source = axios.CancelToken.source();
         const getProducts = async () => {
-          const url = `/api/v1/product/${productId}`;
+          const url = `${process.env.REACT_APP_BACKEND_URL}/api/v1/product/${productId}`;
           try {
             const { data: { data } } = await axios.get(url, { cancelToken: source.token });
             console.log(data, 'data');
@@ -60,7 +60,7 @@ function ProductInfo() {
                     <Heading heading="Recomended Products" />
                 </Row>
             </>
-        )  
+        )
     }): [] }
   </Container>
     // <div className="productInfo">

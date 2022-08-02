@@ -1,0 +1,40 @@
+.superDeals .ant-card{
+    width: 90%;
+}
+.price-holder{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.superDeals .ant-card-meta-title {
+    color: #18181A;
+    font-weight: 600;
+    font-size: 17px;
+}
+.superDeals .ant-card-meta-description {
+    color: #545454;
+    font-weight: 400;
+    font-size: 16px;
+    margin-bottom: 3%;
+}
+.superDeals span.anticon.anticon-star {
+    color: #FFC416;
+}
+.superDeals button.ant-btn.ant-btn-default {
+    background: #0F6AD0;
+    color: #fff;
+    border-color: #0F6AD0;
+    font-weight: 400;
+}
+.superDeals p.price {
+    color: #0F6AD0;
+    font-weight: 700;
+    font-size: 17px;
+    margin-right: 4%;
+}
+p.discount {
+    color: #FB1E34;
+    font-weight: 400;
+    font-size: 14px;
+    text-decoration: line-through;
+}
