@@ -4,33 +4,33 @@ import { Form, Input, message } from "antd";
 import axios from "axios";
 import "../SignIn/index.css";
 
-const SignUp = () => {
+const AccountInfo = () => {
   const navigate = useNavigate();
-  const [name, setFullName] = useState("");
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [phone, setPhoneNum] = useState("");
+  const [PhoneNum, setPhoneNum] = useState("");
 
-  const signup = async () => {
-    try {
-      const {
-        data: { message: verifyMessage },
-      } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/signup`, {
-        name,
-        email,
-        password,
-        phone,
-      });
-      message.success(`Welcome ${name}, ${verifyMessage}`);
-      navigate("/");
-    } catch ({
-      response: {
-        data: { message: msg },
-      },
-    }) {
-      message.error(msg);
-    }
-  };
+//   const signup = async () => {
+//     try {
+//       const {
+//         data: { message: verifyMessage },
+//       } = await axios.post("/api/signup", {
+//         name: fullName,
+//         email,
+//         password,
+//         PhoneNum,
+//       });
+//       message.success(`Welcome ${fullName}, ${verifyMessage}`);
+//       navigate("/");
+//     } catch ({
+//       response: {
+//         data: { message: msg },
+//       },
+//     }) {
+//       message.error(msg);
+//     }
+//   };
 
   const { Item } = Form;
   const { Password } = Input;
@@ -49,8 +49,8 @@ const SignUp = () => {
           remember: true,
         }}
         autoComplete="off"
-        onFinish={() => signup()}
-      >
+        // onFinish={() => signup()}
+     >
         <div className="Auth-form-content">
           <h3 className="Auth-form-title">Sign Up</h3>
 
@@ -59,7 +59,7 @@ const SignUp = () => {
             <Item
               className="form-control mt-1"
               name="fullName"
-              value={phone}
+              value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               rules={[
                 {
@@ -105,13 +105,13 @@ const SignUp = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               rules={[
-                // {
-                //   // password Should be combination of numbers & alphabets and one special character
-                //   pattern:
-                //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{4,}$/,
-                //   message:
-                //     "Password must contain at least one lowercase letter, uppercase letter, number, and special character",
-                // },
+                {
+                  // password Should be combination of numbers & alphabets and one special character
+                  pattern:
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{4,}$/,
+                  message:
+                    "Password must contain at least one lowercase letter, uppercase letter, number, and special character",
+                },
                 {
                   required: true,
                   message: "Please input your Passsword",
@@ -128,7 +128,7 @@ const SignUp = () => {
             <Item
               name="phone"
               className="form-control mt-1"
-              value={phone}
+              value={PhoneNum}
               placeholder="+965"
               onChange={(e) => setPhoneNum(e.target.value)}
               rules={[
@@ -176,4 +176,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default AccountInfo;
