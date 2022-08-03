@@ -1,5 +1,5 @@
 import React from 'react';
-import ProductInfo from '../Components/ProductInfo/index';
+import ProductInfo from '../Components/ProductInfo';
 
 const ProductDetails = () => {
     return (

@@ -1,10 +1,40 @@
 
-import React from "react"
+import React, { useState } from "react"
+import {
+  message, notification,
+} from 'antd';
+
+import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../Redux/features/authSlice';
+import { CheckCircleTwoTone } from '@ant-design/icons';
 import './index.css';
 
  const SignIn = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
+
+  const signIn = async () => {
+    try {
+      const { data: { data: { user } } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/signin`, { email, password });
+      dispatch(setUser(user));
+      notification.open({
+        message: 'Welcome back',
+        description:
+          'You can start your interview now with the best interviewers',
+        icon: (
+          <CheckCircleTwoTone twoToneColor="#52c41a" />
+        ),
+      });
+      // when all pages done link to home page
+    } catch ({ response: { data: { message: msg } } }) {
+      message.error(msg);
+    }
+  };
+
   return (
     <div className="Auth-form-container">
       <form className="Auth-form">
@@ -16,6 +46,8 @@ import './index.css';
               type="email"
               className="form-control mt-1"
               placeholder="Enter email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="form-group mt-3">
@@ -24,6 +56,8 @@ import './index.css';
               type="password"
               className="form-control mt-1"
               placeholder="Enter password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <div className="d-grid gap-2 mt-3 sec-password">
@@ -35,7 +69,7 @@ import './index.css';
             </p>
           </div>
           <div className="d-grid gap-2 mt-3">
-            <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#0F6AD0'}}>
+            <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#0F6AD0'}} onClick={() => signIn()}>
               Sign In
             </button>
           </div>

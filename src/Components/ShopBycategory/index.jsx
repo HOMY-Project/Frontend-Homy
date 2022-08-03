@@ -24,7 +24,6 @@ function ShopByCate() {
         : `${process.env.REACT_APP_BACKEND_URL}/api/v1/categories`;
       try {
         const { data: { data } } = await axios.get(url, { cancelToken: source.token });
-        console.log(data, 'data');
         setCategories(data);
       } catch ({
         response: {
