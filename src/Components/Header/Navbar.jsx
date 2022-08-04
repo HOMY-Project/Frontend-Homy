@@ -2,7 +2,6 @@ import React from "react";
 import { useNavigate, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearUser } from '../../Redux/features/authSlice';
-import axios from 'axios';
 import { message } from 'antd';
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";

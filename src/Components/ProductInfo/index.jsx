@@ -68,7 +68,6 @@ function ProductInfo() {
           }
         );
         setProduct(data);
-        console.log(data, "data");
       } catch ({
         response: {
           data: { message: msg },
