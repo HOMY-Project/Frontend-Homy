@@ -7,9 +7,10 @@ import "../SignIn/index.css";
 import "./index.css";
 
 const AccountInfo = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhoneNum] = useState("");
+  const { user } = useSelector((state) => state.auth);
+  const [name, setName] = useState(user.name);
+  const [email, setEmail] = useState(user.email);
+  const [phone, setPhoneNum] = useState(user.phone);
   const [edit, isEdit] = useState(true); 
 
   const tokenVal = document.cookie
@@ -17,7 +18,6 @@ const AccountInfo = () => {
   .find((row) => row.startsWith('token='))
   ?.split('=')[1];
 
-  const { user } = useSelector((state) => state.auth);
 
   const editInfo = async () => {
     try {

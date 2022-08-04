@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../Redux/features/authSlice';
 import { Form, Input, message } from "antd";
 import axios from "axios";
 import "../SignIn/index.css";
@@ -10,17 +12,21 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhoneNum] = useState("");
+  const dispatch = useDispatch();
 
   const signup = async () => {
     try {
       const {
-        data: { message: verifyMessage },
+        data: { data, message: verifyMessage },
       } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/signup`, {
         name,
         email,
         password,
         phone,
       });
+      console.log(data, 'sign up data');
+      dispatch(setUser(data));
+
       message.success(`Welcome ${name}, ${verifyMessage}`);
       navigate("/");
     } catch ({
@@ -147,7 +153,7 @@ const SignUp = () => {
               type="submit"
               className="btn btn-primary"
               style={{ backgroundColor: "#0F6AD0" }}
-              onClick={() => signup()}
+              onClick={() => signup}
             >
               Sign Up
             </button>

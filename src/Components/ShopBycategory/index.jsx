@@ -8,7 +8,7 @@ import Col from "react-bootstrap/Col";
 import "./index.css";
 
 function ShopByCate() {
-  console.log(process.env.REACT_APP_BACKEND_URL);
+
   const [category, setCategories] = useState([]);
   const [filterVal, setFilterVal] = useState(null);
 
@@ -61,7 +61,7 @@ function ShopByCate() {
                     src={item.image}
                     alt="homey-sg-home-security-camera-1"
                     width="100%"
-                    class="categoryImg"
+                    className="categoryImg"
                   />
                 </div>{" "}
                 <p className="categoryName" style={{ marginTop: "5%", fontWeight: "bold" , fontSize: "16px" }}>{item.name}</p>

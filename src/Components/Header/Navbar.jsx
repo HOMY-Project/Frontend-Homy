@@ -1,5 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Container from "react-bootstrap/Container";
@@ -10,9 +11,22 @@ import logo from "../../assets/logo.png";
 import "./media.css";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-// import 'boxicons';
+
 
 function MainNavbar() {
+  const { user } = useSelector((state) => state.auth);
+  console.log(user, 'navbar');
+  // const dispatch = useDispatch();
+  // const navigate = useNavigate();
+
+  // const logout = async () => {
+  //   await axios.post('/api/logout');
+  //   dispatch(clearUser());
+  //   message.success('Logged out successfully');
+  //   navigate('/');
+  // };
+
+
   return (
     <Navbar bg="light" expand="lg" className="custom-navbar">
       <Container fluid>
@@ -36,11 +50,18 @@ function MainNavbar() {
             </InputGroup>
           </Form>
           <Nav className="d-flex" style={{ maxHeight: "100px" }} navbarScroll>
+            {user ? ( 
+              <NavDropdown title={user.name} id="basic-nav-dropdown">
+                <NavDropdown.Item href="/myAccount">My account</NavDropdown.Item>
+                <NavDropdown.Item ><Link to="/myOrders">My orders</Link></NavDropdown.Item>
+                <NavDropdown.Item >Logout</NavDropdown.Item>
+              </NavDropdown>
+            ) : (
             <NavDropdown title="Account" id="navbarScrollingDropdown">
               <NavDropdown.Item><Link to="/signIn">Sign In</Link></NavDropdown.Item>
               <NavDropdown.Item ><Link to="/myOrders">My orders</Link></NavDropdown.Item>
             </NavDropdown>
-
+            )} 
             <Nav.Item>
               <Link to="/Wishlist">
                 <box-icon name="heart"></box-icon>
