@@ -29,15 +29,15 @@ function MainNavbar() {
 
 
   return (
-    <Navbar bg="light" expand="lg" className="custom-navbar">
+    <Navbar bg="light" expand="lg" className="custom-navbar" collapseOnSelect >
       <Container fluid>
         <Navbar.Brand href="#">
           <Link to="/">
             <img src={logo} alt="logo" className="logo-img" />
           </Link>
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="navbarScroll" />
-        <Navbar.Collapse id="navbarScroll">
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
           <Form className="me-auto my-2 my-lg-0 searchForm">
             <InputGroup className="mb-6">
               <Form.Control
@@ -50,19 +50,21 @@ function MainNavbar() {
               </InputGroup.Text>
             </InputGroup>
           </Form>
-          <Nav className="d-flex" style={{ maxHeight: "100px" }} navbarScroll>
+          <Nav className="me-auto scrollNav" navbarScroll>
+
             {user ? ( 
-              <NavDropdown title={user.name} id="basic-nav-dropdown">
+              <NavDropdown title={user.name} id="collasible-nav-dropdown">
                 <NavDropdown.Item ><Link to="/myAccount">My account</Link></NavDropdown.Item>
                 <NavDropdown.Item ><Link to="/myOrders">My orders</Link></NavDropdown.Item>
                 <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
               </NavDropdown>
             ) : (
-            <NavDropdown title="Account" id="navbarScrollingDropdown">
+            <NavDropdown title="Account" id="collasible-nav-dropdown">
               <NavDropdown.Item><Link to="/signIn">Sign In</Link></NavDropdown.Item>
               <NavDropdown.Item ><Link to="/myOrders">My orders</Link></NavDropdown.Item>
             </NavDropdown>
             )} 
+
             <Nav.Item>
               <Link to="/Wishlist">
                 <box-icon name="heart"></box-icon>
