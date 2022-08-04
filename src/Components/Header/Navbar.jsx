@@ -1,6 +1,9 @@
 import React from "react";
 import { useNavigate, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { clearUser } from '../../Redux/features/authSlice';
+import axios from 'axios';
+import { message } from 'antd';
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Container from "react-bootstrap/Container";
@@ -16,15 +19,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function MainNavbar() {
   const { user } = useSelector((state) => state.auth);
   console.log(user, 'navbar');
-  // const dispatch = useDispatch();
-  // const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // const logout = async () => {
-  //   await axios.post('/api/logout');
-  //   dispatch(clearUser());
-  //   message.success('Logged out successfully');
-  //   navigate('/');
-  // };
+  const logout = () => {
+    dispatch(clearUser());
+    message.success('Logged out successfully');
+    navigate('/');
+  };
 
 
   return (
@@ -54,7 +56,7 @@ function MainNavbar() {
               <NavDropdown title={user.name} id="basic-nav-dropdown">
                 <NavDropdown.Item ><Link to="/myAccount">My account</Link></NavDropdown.Item>
                 <NavDropdown.Item ><Link to="/myOrders">My orders</Link></NavDropdown.Item>
-                <NavDropdown.Item >Logout</NavDropdown.Item>
+                <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
               </NavDropdown>
             ) : (
             <NavDropdown title="Account" id="navbarScrollingDropdown">
