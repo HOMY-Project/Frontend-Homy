@@ -8,7 +8,7 @@ import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux';
-import { setUser } from '../../Redux/features/authSlice';
+import { setUser, setToken } from '../../Redux/features/authSlice';
 import { CheckCircleTwoTone } from '@ant-design/icons';
 import './index.css';
 
@@ -21,9 +21,10 @@ import './index.css';
   const signIn = async (e) => {
     e.preventDefault();
     try {
-      const { data: { data, message: verifyMessage } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/signin`
+      const { data: { data, message: verifyMessage, token } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/signin`
       , { email, password });
       dispatch(setUser(data));
+      dispatch(setToken(token));
 
       notification.open({
         message: 'Welcome back',

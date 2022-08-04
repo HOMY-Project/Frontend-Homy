@@ -3,7 +3,13 @@
 }
 .accountInfo-form{
     flex-direction: column;
+    padding: 0px;
 }
 .accountInfo-form .form-control{
     border: 0px !important;
-   }
+}
+.accountInfo-form .edit-btns-holder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

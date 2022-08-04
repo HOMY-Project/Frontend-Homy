@@ -5,7 +5,7 @@ import Container from 'react-bootstrap/Container';
 
 const OrderStatus = () => {
   return (
-    <Container fluid>
+    <Container fluid style={{ marginTop: '3%' }}>
     <Breadcrumb>
       <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
       <Breadcrumb.Item active>Orders</Breadcrumb.Item>

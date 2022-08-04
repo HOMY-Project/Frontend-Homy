@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
-import { setUser } from '../../Redux/features/authSlice';
+import { setUser, setToken } from '../../Redux/features/authSlice';
 import { Form, Input, message } from "antd";
 import axios from "axios";
 import "../SignIn/index.css";
@@ -17,7 +17,7 @@ const SignUp = () => {
   const signup = async () => {
     try {
       const {
-        data: { data, message: verifyMessage },
+        data: { data, message: verifyMessage, token },
       } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/signup`, {
         name,
         email,
@@ -26,6 +26,7 @@ const SignUp = () => {
       });
       console.log(data, 'sign up data');
       dispatch(setUser(data));
+      dispatch(setToken(token));
 
       message.success(`Welcome ${name}, ${verifyMessage}`);
       navigate("/");

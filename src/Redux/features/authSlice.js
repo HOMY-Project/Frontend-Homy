@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 // Create the initial state for the auth feature
 const initialState = {
-    token: '',
+    token: null,
     user: null,
   };
   // Create the authSlice, which will contain the reducer and the actions
@@ -15,12 +15,15 @@ const authSlice = createSlice({
       setUser: (state, action) => {
         state.user = action.payload;
       },
+      setToken : (state, action) =>{
+        state.token = action.payload;
+      },
       clearUser: (state) => {
-        state.isAuthenticated = false;
+        state.token = null;
         state.user = null;
       },
     }
 });
 
 export default authSlice.reducer;
-export const { setUser, clearUser } = authSlice.actions;
+export const { setUser, clearUser, setToken } = authSlice.actions;

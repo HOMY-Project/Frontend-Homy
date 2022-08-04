@@ -7,17 +7,13 @@ import "../SignIn/index.css";
 import "./index.css";
 
 const AccountInfo = () => {
-  const { user } = useSelector((state) => state.auth);
-  console.log(user, 'user');
-  const [name, setName] = useState(user.name? user.name : '');
-  const [email, setEmail] = useState(user.email? user.email : '');
-  const [phone, setPhoneNum] = useState(user.phone? user.phone : '');
-  const [edit, isEdit] = useState(true); 
+  const { user, token } = useSelector((state) => state.auth);
+  console.log(user, token , 'from accountInfo');
 
-  const tokenVal = document.cookie
-  .split('; ')
-  .find((row) => row.startsWith('token='))
-  ?.split('=')[1];
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('') ;
+  const [phone, setPhoneNum] = useState('');
+  const [edit, isEdit] = useState(true); 
 
 
   const editInfo = async () => {
@@ -29,7 +25,7 @@ const AccountInfo = () => {
         email,
         phone,
       }, {
-        headers: { token: `Bearer ${tokenVal}`
+        headers: { token: `Bearer ${token}`
        } });
        isEdit(true);
       message.success(verifyMessage);
@@ -139,22 +135,24 @@ const AccountInfo = () => {
               </button>
             </div>
           ) : ( 
-            <div className="d-grid gap-2 mt-3">
-              <button
-                type="submit"
-                className="btn btn-primary"
-                style={{ backgroundColor: "#0F6AD0" }}
-                onClick={() => editInfo()}
-              >
-                Save Changes
-              </button>
-              <button
-                type="submit"
-                className="btn btn-primary"
-                style={{ backgroundColor: "#0F6AD0" }}
-              >
-                Change Password
-              </button>
+            <div className="d-grid mt-3">
+              <div className="edit-btns-holder">
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  style={{ backgroundColor: "#0F6AD0" , marginRight: "2%"}}
+                  onClick={() => editInfo()}
+                >
+                  Save Changes
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  style={{ backgroundColor: "#fff" , color: "#0F6AD0" , borderColor: "#0F6AD0"}}
+                >
+                  Change Password
+                </button>
+              </div>
             </div>
               )}
         </div>
