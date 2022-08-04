@@ -6,9 +6,9 @@ import {
 
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux';
-import { setUser } from '../../Redux/features/authSlice';
+import { setUser, setToken } from '../../Redux/features/authSlice';
 import { CheckCircleTwoTone } from '@ant-design/icons';
 import './index.css';
 
@@ -16,22 +16,27 @@ import './index.css';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const signIn = async () => {
+  const signIn = async (e) => {
+    e.preventDefault();
     try {
-      const { data: { data: { user } } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/signin`, { email, password });
-      dispatch(setUser(user));
+      const { data: { data, message: verifyMessage, token } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/signin`
+      , { email, password });
+      dispatch(setUser(data));
+      dispatch(setToken(token));
+
       notification.open({
         message: 'Welcome back',
-        description:
-          'You can start your interview now with the best interviewers',
+        description: {verifyMessage},
         icon: (
           <CheckCircleTwoTone twoToneColor="#52c41a" />
         ),
       });
-      // when all pages done link to home page
+      navigate("/");
     } catch ({ response: { data: { message: msg } } }) {
       message.error(msg);
+      console.log(msg, 'msg');
     }
   };
 
@@ -65,11 +70,11 @@ import './index.css';
               <Form.Check type="checkbox" label="Save Password" />
             </Form.Group>
             <p className="forgot-password text-right mt-2">
-              <a href="/">Forgot password?</a>
+              <Link to="/">Forgot password?</Link>
             </p>
           </div>
           <div className="d-grid gap-2 mt-3">
-            <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#0F6AD0'}} onClick={() => signIn()}>
+            <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#0F6AD0'}} onClick={(e) => signIn(e)}>
               Sign In
             </button>
           </div>

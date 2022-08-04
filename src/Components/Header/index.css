@@ -26,7 +26,7 @@ a.navbar-brand {
 }
 .custom-navbar{
     background-color: #fff !important;
-    margin-bottom: 4%;
+    /* margin-bottom: 4%; */
 }
 form.me-auto.my-2.my-lg-0 span#basic-addon2 {
     background-color: #0F6AD0;
@@ -65,15 +65,17 @@ form.me-auto.my-2.my-lg-0 span#basic-addon2 {
     position: relative;
     width: 50px;
 }
-.custom-navbar .nav-item {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+
 .custom-navbar form.me-auto.my-2.my-lg-0.searchForm {
     width: 52%;
 }
 .custom-navbar .d-flex.navbar-nav.navbar-nav-scroll {
     width: 20%;
     justify-content: space-around;
+}
+.scrollNav{
+    max-height: "100px"
+}
+.me-auto.navbar-nav.navbar-nav-scroll.scrollNav {
+    margin-left: auto!important;
 }

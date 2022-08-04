@@ -3,13 +3,21 @@
     .custom-navbar form.me-auto.my-2.my-lg-0.searchForm {
         width: 100%;
     }
-    .custom-navbar .d-flex.navbar-nav.navbar-nav-scroll {
-        width: 100%;
-        justify-content: space-around;
+    .navbar-nav-scroll.scrollNa .nav-item {
+        padding: 6px 0px;
     }
-    .custom-navbar .nav-item {
-        display: flex;
-        justify-content: flex-start;
+    .custom-navbar .navbar-toggler-icon {
+        font-size: 16px;
+        color: #0f3460 !important;
+    }
+    .custom-navbar button.navbar-toggler {
+        border: none;
+    }
+    .scrollNav{
+        max-height: "200px"
+    }
+    .head {
+        font-size: 12px;
     }
     /* About us */
     .aboutus-holder .site-card-wrapper .ant-row {
@@ -33,13 +41,15 @@
     .custom-navbar form.me-auto.my-2.my-lg-0.searchForm {
         width: 100%;
     }
+    .navbar-nav-scroll.scrollNa .nav-item {
+        padding: 6px 0px;
+    }
     .custom-navbar .d-flex.navbar-nav.navbar-nav-scroll {
         width: 100%;
         justify-content: space-around;
     }
-    .custom-navbar .nav-item {
-        display: flex;
-        justify-content: flex-start;
+    .head {
+        font-size: 12px;
     }
     /* About us */
     .aboutus-holder .site-card-wrapper .ant-row {
@@ -63,18 +73,34 @@
     .custom-navbar form.me-auto.my-2.my-lg-0.searchForm {
         width: 100%;
     }
+    .navbar-nav-scroll.scrollNa .nav-item {
+        padding: 6px 0px;
+    }
     .custom-navbar .d-flex.navbar-nav.navbar-nav-scroll {
         width: 100%;
         justify-content: space-around;
     }
-    .custom-navbar .nav-item {
-        display: flex;
-        justify-content: flex-start;
-    }
  }
 
 /* // Large devices (desktops, 992px and up) */
-@media (min-width: 992px) and (max-width: 1199.98px) {  }
+@media (min-width: 992px) and (max-width: 1199.98px) { 
+    .me-auto.navbar-nav.navbar-nav-scroll.scrollNav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 25%;
+    }
+ }
 
 /* // Extra large devices (large desktops, 1200px and up) */
-@media (min-width: 1200px) {  }
+@media (min-width: 1200px) { 
+    .me-auto.navbar-nav.navbar-nav-scroll.scrollNav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 25%;
+    }
+    .me-auto.navbar-nav .nav-item {
+        margin-right: 5%;
+    }
+ }
