@@ -1,8 +1,8 @@
 import React from "react";
-import { useNavigate, Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { clearUser } from '../../Redux/features/authSlice';
-import { message } from 'antd';
+import { useNavigate, Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { clearUser } from "../../Redux/features/authSlice";
+import { message, Badge, Avatar } from "antd";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Container from "react-bootstrap/Container";
@@ -14,22 +14,19 @@ import "./media.css";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-
 function MainNavbar() {
   const { user } = useSelector((state) => state.auth);
-  console.log(user, 'navbar');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const logout = () => {
     dispatch(clearUser());
-    message.success('Logged out successfully');
-    navigate('/');
+    message.success("Logged out successfully");
+    navigate("/");
   };
 
-
   return (
-    <Navbar bg="light" expand="lg" className="custom-navbar" collapseOnSelect >
+    <Navbar bg="light" expand="lg" className="custom-navbar" collapseOnSelect>
       <Container fluid>
         <Navbar.Brand href="#">
           <Link to="/">
@@ -51,19 +48,26 @@ function MainNavbar() {
             </InputGroup>
           </Form>
           <Nav className="me-auto scrollNav" navbarScroll>
-
-            {user ? ( 
+            {user ? (
               <NavDropdown title={user.name} id="collasible-nav-dropdown">
-                <NavDropdown.Item ><Link to="/myAccount">My account</Link></NavDropdown.Item>
-                <NavDropdown.Item ><Link to="/myOrders">My orders</Link></NavDropdown.Item>
+                <NavDropdown.Item>
+                  <Link to="/myAccount">My account</Link>
+                </NavDropdown.Item>
+                <NavDropdown.Item>
+                  <Link to="/myOrders">My orders</Link>
+                </NavDropdown.Item>
                 <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
               </NavDropdown>
             ) : (
-            <NavDropdown title="Account" id="collasible-nav-dropdown">
-              <NavDropdown.Item><Link to="/signIn">Sign In</Link></NavDropdown.Item>
-              <NavDropdown.Item ><Link to="/myOrders">My orders</Link></NavDropdown.Item>
-            </NavDropdown>
-            )} 
+              <NavDropdown title="Account" id="collasible-nav-dropdown">
+                <NavDropdown.Item>
+                  <Link to="/signIn">Sign In</Link>
+                </NavDropdown.Item>
+                <NavDropdown.Item>
+                  <Link to="/myOrders">My orders</Link>
+                </NavDropdown.Item>
+              </NavDropdown>
+            )}
 
             <Nav.Item>
               <Link to="/Wishlist">
@@ -73,10 +77,9 @@ function MainNavbar() {
 
             <Nav.Item className="cartIconHolder">
               <Link to="/cart">
-                <div className="icon-wrap cart-icon">
-                  <div className="prod-cart-num">0</div>
+                <Badge count={5}>
                   <box-icon name="cart"></box-icon>
-                </div>
+                </Badge>
               </Link>
             </Nav.Item>
           </Nav>

@@ -9,7 +9,6 @@ import "./index.css";
 
 const AccountInfo = () => {
   const { user, token } = useSelector((state) => state.auth);
-  console.log(user, token, "from accountInfo");
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

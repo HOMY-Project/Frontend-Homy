@@ -7,8 +7,8 @@ import {
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import { Link, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux';
-import { setUser, setToken } from '../../Redux/features/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser, setToken, loginStart, loginFailure } from '../../Redux/features/authSlice';
 import { CheckCircleTwoTone } from '@ant-design/icons';
 import './index.css';
 
@@ -17,9 +17,11 @@ import './index.css';
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { isFetching } = useSelector((state) => state.auth);
 
   const signIn = async (e) => {
     e.preventDefault();
+    dispatch(loginStart());
     try {
       const { data: { data, message: verifyMessage, token } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/signin`
       , { email, password });
@@ -36,7 +38,7 @@ import './index.css';
       navigate("/");
     } catch ({ response: { data: { message: msg } } }) {
       message.error(msg);
-      console.log(msg, 'msg');
+      dispatch(loginFailure());
     }
   };
 
@@ -82,7 +84,7 @@ import './index.css';
             <hr />
             <p className=""> New Customer?</p>
             <Link to="/signUp" className="new-customer-a">
-              <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#fff', color: '#0F6AD0', width: '100%'}}>
+              <button type="submit" className="btn btn-primary" disabled={isFetching} style={{ backgroundColor: '#fff', color: '#0F6AD0', width: '100%'}}>
                 Create An Account
               </button>
             </Link>
