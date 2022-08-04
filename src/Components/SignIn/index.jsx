@@ -18,10 +18,11 @@ import './index.css';
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const signIn = async () => {
+  const signIn = async (e) => {
+    e.preventDefault();
     try {
-      const { data: { message: verifyMessage , data} } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/signin`, { email, password });
-      console.log(data, 'sign in data');
+      const { data: { data, message: verifyMessage } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/signin`
+      , { email, password });
       dispatch(setUser(data));
 
       notification.open({
@@ -34,6 +35,7 @@ import './index.css';
       navigate("/");
     } catch ({ response: { data: { message: msg } } }) {
       message.error(msg);
+      console.log(msg, 'msg');
     }
   };
 
@@ -67,11 +69,11 @@ import './index.css';
               <Form.Check type="checkbox" label="Save Password" />
             </Form.Group>
             <p className="forgot-password text-right mt-2">
-              <a href="/">Forgot password?</a>
+              <Link to="/">Forgot password?</Link>
             </p>
           </div>
           <div className="d-grid gap-2 mt-3">
-            <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#0F6AD0'}} onClick={() => signIn}>
+            <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#0F6AD0'}} onClick={(e) => signIn(e)}>
               Sign In
             </button>
           </div>

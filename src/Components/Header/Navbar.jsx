@@ -52,7 +52,7 @@ function MainNavbar() {
           <Nav className="d-flex" style={{ maxHeight: "100px" }} navbarScroll>
             {user ? ( 
               <NavDropdown title={user.name} id="basic-nav-dropdown">
-                <NavDropdown.Item href="/myAccount">My account</NavDropdown.Item>
+                <NavDropdown.Item ><Link to="/myAccount">My account</Link></NavDropdown.Item>
                 <NavDropdown.Item ><Link to="/myOrders">My orders</Link></NavDropdown.Item>
                 <NavDropdown.Item >Logout</NavDropdown.Item>
               </NavDropdown>

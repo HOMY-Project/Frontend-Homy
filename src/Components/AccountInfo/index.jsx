@@ -8,6 +8,7 @@ import "./index.css";
 
 const AccountInfo = () => {
   const { user } = useSelector((state) => state.auth);
+  console.log(user, 'user');
   const [name, setName] = useState(user.name? user.name : '');
   const [email, setEmail] = useState(user.email? user.email : '');
   const [phone, setPhoneNum] = useState(user.phone? user.phone : '');
