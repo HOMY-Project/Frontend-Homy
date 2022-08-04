@@ -5,7 +5,7 @@ import Footer from './Components/Footer/MainFooter';
 import OrderStatus from './Components/OrderStatus/index';
 import SignIn from "./Components/SignIn";
 import Signup from "./Components/Signup";
-import { Home, AboutUs, ProductDetails } from './Pages';
+import { Home, AboutUs, ProductDetails, AccountInformation } from './Pages';
 import SubFooter from "./Components/Footer/SubFooter";
 import "./App.css";
 import "antd/dist/antd.min.css";
@@ -26,6 +26,7 @@ function App() {
                   <Route path="/signIn" element={<SignIn />} />
                   <Route path="/signUp" element={<Signup />} />
                   <Route path="/myOrders" element={<OrderStatus />} />
+                  <Route path="/myAccount" element={<AccountInformation />} />
                   <Route path="/api/v1/product/:productId" element={<ProductDetails /> } />
                 </Routes>
             </div>

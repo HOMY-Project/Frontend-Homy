@@ -19,17 +19,18 @@ import './index.css';
 
   const signIn = async () => {
     try {
-      const { data: { data: { user } } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/signin`, { email, password });
-      dispatch(setUser(user));
+      const { data: { data , message: verifyMessage } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/signin`, { email, password });
+      console.log(data, 'sign data');
+      dispatch(setUser(data));
+
       notification.open({
         message: 'Welcome back',
-        description:
-          'You can start your interview now with the best interviewers',
+        description: verifyMessage,
         icon: (
           <CheckCircleTwoTone twoToneColor="#52c41a" />
         ),
       });
-      // when all pages done link to home page
+
     } catch ({ response: { data: { message: msg } } }) {
       message.error(msg);
     }
