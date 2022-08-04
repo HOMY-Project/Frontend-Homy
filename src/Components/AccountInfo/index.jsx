@@ -8,9 +8,9 @@ import "./index.css";
 
 const AccountInfo = () => {
   const { user } = useSelector((state) => state.auth);
-  const [name, setName] = useState(user.name);
-  const [email, setEmail] = useState(user.email);
-  const [phone, setPhoneNum] = useState(user.phone);
+  const [name, setName] = useState(user.name? user.name : '');
+  const [email, setEmail] = useState(user.email)? user.email : '';
+  const [phone, setPhoneNum] = useState(user.phone? user.phone : '');
   const [edit, isEdit] = useState(true); 
 
   const tokenVal = document.cookie
