@@ -52,7 +52,7 @@ const AccountInfo = () => {
 
   return (
     <><Breadcrumb style={{ marginTop : '2%', paddingLeft : '10%' }}>
-      <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+      <Breadcrumb.Item to="/">Home</Breadcrumb.Item>
       <Breadcrumb.Item>Account</Breadcrumb.Item>
       <Breadcrumb.Item active>Account Information</Breadcrumb.Item>
     </Breadcrumb><div className="Auth-form-container accountInfo-form">

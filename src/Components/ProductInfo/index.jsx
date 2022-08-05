@@ -101,7 +101,7 @@ function ProductInfo() {
               <>
                 {/* {images.push(albums)} */}
                 <Breadcrumb style={{ marginBottom: "4%" }}>
-                  <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+                  <Breadcrumb.Item to="/">Home</Breadcrumb.Item>
                   <Breadcrumb.Item>Smart Lighting</Breadcrumb.Item>
                   <Breadcrumb.Item active>{name}</Breadcrumb.Item>
                 </Breadcrumb>

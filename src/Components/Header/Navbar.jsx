@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { clearUser } from "../../Redux/features/authSlice";
-import { message, Badge, Avatar } from "antd";
+import { message, Badge } from "antd";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Container from "react-bootstrap/Container";
@@ -28,7 +28,7 @@ function MainNavbar() {
   return (
     <Navbar bg="light" expand="lg" className="custom-navbar" collapseOnSelect>
       <Container fluid>
-        <Navbar.Brand href="#">
+        <Navbar.Brand >
           <Link to="/">
             <img src={logo} alt="logo" className="logo-img" />
           </Link>
