@@ -27,33 +27,37 @@ function ProductInfo() {
     "https://i.postimg.cc/Y9xBgzFL/Rectangle-107.png",
     "https://i.postimg.cc/J7PWzKm9/Rectangle-106.png",
   ];
-  const newAlbums = albums.map((item) => item);
-  console.log(newAlbums, 'newAlbums')
+    const images=[];
+    for(var i=0; i<albums.length; i++) {
+      var obj = {};
+      obj.original = albums[i];
+      obj.thumbnail = albums[i];
+      obj.img = albums[i];
+      images.push(obj);
+    }
 
-  // receive array of albums then convert items to object with original and thumbnail keys and img values
-  // then push the object to images array
 
-  const images = [
-    {
-      original: "https://picsum.photos/id/1018/1000/600/",
-      thumbnail: "https://picsum.photos/id/1018/250/150/",
-    },
-    {
-      original: "https://picsum.photos/id/1015/1000/600/",
-      thumbnail: "https://picsum.photos/id/1015/250/150/",
-    },
-    {
-      original: "https://picsum.photos/id/1019/1000/600/",
-      thumbnail: "https://picsum.photos/id/1019/250/150/",
-    },
-    {
-      original: "https://picsum.photos/id/1019/1000/600/",
-      thumbnail: "https://picsum.photos/id/1019/250/150/",
-    },
-  ];
-  console.log(images, 'images');
-  albums.forEach(album => images.push(Object(album)));
-  console.log(images, 'images after pushing');
+  // const images = [
+  //   {
+  //     original: "https://picsum.photos/id/1018/1000/600/",
+  //     thumbnail: "https://picsum.photos/id/1018/250/150/",
+  //   },
+  //   {
+  //     original: "https://picsum.photos/id/1015/1000/600/",
+  //     thumbnail: "https://picsum.photos/id/1015/250/150/",
+  //   },
+  //   {
+  //     original: "https://picsum.photos/id/1019/1000/600/",
+  //     thumbnail: "https://picsum.photos/id/1019/250/150/",
+  //   },
+  //   {
+  //     original: "https://picsum.photos/id/1019/1000/600/",
+  //     thumbnail: "https://picsum.photos/id/1019/250/150/",
+  //   },
+  // ];
+
+  // albums.forEach(album => images.push(Object(album)));
+  // console.log(images, 'images after pushing');
 
   useEffect(() => {
     const source = axios.CancelToken.source();

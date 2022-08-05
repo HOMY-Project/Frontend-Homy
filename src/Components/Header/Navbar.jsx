@@ -54,6 +54,9 @@ function MainNavbar() {
                   <Link to="/myAccount">My account</Link>
                 </NavDropdown.Item>
                 <NavDropdown.Item>
+                  <Link to="/addressInfo">My address</Link>
+                </NavDropdown.Item>
+                <NavDropdown.Item>
                   <Link to="/myOrders">My orders</Link>
                 </NavDropdown.Item>
                 <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>

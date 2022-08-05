@@ -9,3 +9,6 @@
     width: 100%;
     max-width: 100%;
 }
+.Auth-form-container .address-form {
+    width: 500px;
+}
