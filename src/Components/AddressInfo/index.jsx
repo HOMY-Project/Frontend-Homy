@@ -20,11 +20,11 @@ const AddressInfo = () => {
   const { confirm } = Modal;
 
   const handelDeleteAddress = async (id) =>{
-    // console.log( userId , id);
+    console.log( token );
     try {
-      const { data } = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${userId}/address`, {
-        headers: { token: `Bearer ${token}` } }, {id});
-      setAddress((prev) => prev.filter((item) => item.key !== id));
+      const { data: { message : msg } } = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${userId}/address`, {id} ,{ headers: { token: `Bearer ${token}` } });
+      message.success(msg);
+      setAddress((prev) => prev.filter((item) => item.id !== id));
     } catch ({ response: { data: { message: msg } } }) {
       message.error(msg);
     }
@@ -42,10 +42,7 @@ const AddressInfo = () => {
   };
   const handleDefault = async (id) => {
     try {
-      await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${userId}/address`,
-      {
-        headers: { token: `Bearer ${token}` },
-      }, {id});
+      await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${userId}/address/default`, {id}, { headers: { token: `Bearer ${token}` } });
 
       setAddress((prevAddress) => prevAddress.map((item) => {
         if (item.id === id) {
@@ -53,6 +50,7 @@ const AddressInfo = () => {
         }
         return item;
       }));
+      console.log('update address');
     } catch ({
       response: {
         data: { message: msg },
@@ -63,7 +61,7 @@ const AddressInfo = () => {
   };
   const handelEdit = async (id) => {
     try {
-      await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${userId}/address`,
+      await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${userId}/address`,
       {
         headers: { token: `Bearer ${token}` },
       }, {id});
