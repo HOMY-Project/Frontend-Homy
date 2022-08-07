@@ -66,3 +66,46 @@ button.ant-btn.ant-btn-default.buyNow {
     color: #0F6AD0;
     font-size: 20px;
 }
+.image-gallery-left-nav .image-gallery-svg,.image-gallery-right-nav .image-gallery-svg {
+    height: 75px !important;
+    width: 75px;
+}
+.productInfoCard-holder .ant-progress-bg, .ant-progress-success-bg {
+    background-color: #FFC416 !important;
+}
+.productInfoCard-holder .ant-rate {
+    color: #ffc416;
+    font-size: 17px;
+}
+.productInfoCard-holder .left-rate {
+    background-color: #FBFBFB;
+    padding: 16px;
+}
+.productInfoCard-holder .rate-text{
+    font-size: 15px;
+    font-weight: 600;
+    margin-left: 2%;
+}
+.productInfoCard-holder .ant-comment-content-author>a, .ant-comment-content-author>span {
+    font-size: 18px;
+    font-weight: 600;
+    color: #18181a;
+    margin-bottom: 2%;
+}
+.productInfoCard-holder .ant-comment-content-detail p {
+    font-size: 14px;
+    line-height: 24px;
+    color: #737373;
+    align-self: stretch;
+    flex-grow: 0;
+}
+.productInfoCard-holder .ant-comment {
+    border-bottom: 1px solid rgba(0,0,0,.06);
+}
+.productInfoCard-holder li.ant-rate-star.ant-rate-star-zero div {
+    color: #9DA0AE;
+}
+.ant-rate-star {
+    margin-right: 5px;
+    font-size: 20px;
+}

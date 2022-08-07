@@ -1,5 +1,5 @@
 .superDeals .ant-card{
-    width: 90%;
+    width: 83%;
 }
 .price-holder{
     display:flex;
@@ -14,8 +14,12 @@
 .superDeals .ant-card-meta-description {
     color: #545454;
     font-weight: 400;
-    font-size: 16px;
-    margin-bottom: 3%;
+    font-size: 14px;
+    height: 70px;
+    overflow: hidden;
+}
+.superDeals .ant-card-cover {
+    height: 300px;
 }
 .superDeals span.anticon.anticon-star {
     color: #FFC416;
@@ -37,4 +41,16 @@ p.discount {
     font-weight: 400;
     font-size: 14px;
     text-decoration: line-through;
+}
+@media (max-width: 575.98px) { 
+    .superDeals .ant-card-cover {
+        height: auto;
+    }
+  }
+  
+/* // Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) { 
+    .superDeals .ant-card-cover {
+        height: auto;
+    }
 }

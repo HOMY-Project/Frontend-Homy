@@ -1,64 +1,42 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button } from "antd";
+import { Card, Button, Rate, Progress, Comment, message  } from "antd";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import { CheckCircleFilled } from "@ant-design/icons";
 import ImageGallery from "react-image-gallery";
 import axios from "axios";
 import Heading from "../Heading/index";
-import { message } from "antd";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from 'react-bootstrap/Form';
+import Alert from 'react-bootstrap/Alert';
 import InputGroup from 'react-bootstrap/InputGroup';
-
+import LoadingSpinner from '../LoadingSpinner';
 import "./index.css";
 
 const { Meta } = Card;
 
 function ProductInfo() {
   const [product, setProduct] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [quantity, setQuantity] = useState(0);
+  const [newAlbums, setNewAlbums] = useState([])
   const productId = window.location.href.split("/")[6];
 
-  const albums = [
-    "https://i.postimg.cc/vTQMSNyv/Rectangle-109.png",
-    "https://i.postimg.cc/NfjB6Sps/Rectangle-108.png",
-    "https://i.postimg.cc/Y9xBgzFL/Rectangle-107.png",
-    "https://i.postimg.cc/J7PWzKm9/Rectangle-106.png",
-  ];
-  const newAlbums = albums.map((item) => item);
-  console.log(newAlbums, 'newAlbums')
-
-  // receive array of albums then convert items to object with original and thumbnail keys and img values
-  // then push the object to images array
-
-  const images = [
-    {
-      original: "https://picsum.photos/id/1018/1000/600/",
-      thumbnail: "https://picsum.photos/id/1018/250/150/",
-    },
-    {
-      original: "https://picsum.photos/id/1015/1000/600/",
-      thumbnail: "https://picsum.photos/id/1015/250/150/",
-    },
-    {
-      original: "https://picsum.photos/id/1019/1000/600/",
-      thumbnail: "https://picsum.photos/id/1019/250/150/",
-    },
-    {
-      original: "https://picsum.photos/id/1019/1000/600/",
-      thumbnail: "https://picsum.photos/id/1019/250/150/",
-    },
-  ];
-  console.log(images, 'images');
-  albums.forEach(album => images.push(Object(album)));
-  console.log(images, 'images after pushing');
+    const images=[];  
+    var obj = {};
+    for(var i=0; i<newAlbums.length; i++) {
+      obj.original = newAlbums[i];
+      obj.thumbnail = newAlbums[i];
+      images.push(obj);
+    }
 
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getProducts = async () => {
       try {
+        setLoading(true);
         const {
           data: { data },
         } = await axios.get(
@@ -68,12 +46,15 @@ function ProductInfo() {
           }
         );
         setProduct(data);
+        setNewAlbums(data[0].albums)
+        setLoading(false);
       } catch ({
         response: {
           data: { message: msg },
         },
       }) {
         message.warning(msg);
+        setLoading(false);
       }
     };
     getProducts();
@@ -81,6 +62,33 @@ function ProductInfo() {
       source.cancel();
     };
   }, []);
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+    const getReview = async () => {
+      try {
+        const {
+          data: { data },
+        } = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/api/v1/product/${productId}/review`,
+          {
+            cancelToken: source.token,
+          }
+        );
+        setReviews(data);
+        console.log(data);
+      } catch ({
+        response: {
+          data: { message: msg },
+        },
+      }) {
+        message.warning(msg);
+      }
+    }
+    getReview();
+    return () => {
+      source.cancel();
+    };
+  }, [])
 
   //increase counter
   const increase = () => {
@@ -94,94 +102,155 @@ function ProductInfo() {
  
   return (
     <div className="productInfoCard-holder">
-      <Container fluid>
+      <Container fluid style={{ marginTop: "3%" }}>
         {product.length &&
           product.map(({ id, name, price, description, brand, albums, quick_overview }) => {
+            
             return (
               <>
-                {/* {images.push(albums)} */}
-                <Breadcrumb style={{ marginBottom: "4%" }}>
-                  <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-                  <Breadcrumb.Item>Smart Lighting</Breadcrumb.Item>
-                  <Breadcrumb.Item active>{name}</Breadcrumb.Item>
-                </Breadcrumb>
-
+              <Breadcrumb style={{ marginBottom: "4%" }}>
+                <Breadcrumb.Item to="/">Home</Breadcrumb.Item>
+                <Breadcrumb.Item>Smart Lighting</Breadcrumb.Item>
+                <Breadcrumb.Item active>{name}</Breadcrumb.Item>
+              </Breadcrumb>
+              {loading ? (
+                <div style={{display: 'flex', justifyContent: 'center' , alignItems: 'center' , height : '200px'}}>
+                  <LoadingSpinner />
+              </div>
+              ) : (
+              <>
                 <Row>
-                  <Col>
-                    <ImageGallery items={images} thumbnailPosition="left" />
-                  </Col>
-                  <Col>
-                    <div>
-                      <Card bordered={false}>
-                        <Meta
-                          title={name}
-                          description={"brand" + " : " + brand}
-                        />
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            marginBottom: "2%",
-                            marginTop: "2%"
-                          }}
-                        >
-                          <span style={{ marginRight: "2%", fontSize: "16px", fontWeight: "bold"}}>In Stock</span>
-                          <CheckCircleFilled />{" "}
-                        </div>
-                        <hr />
-                        <div className="price-holder">
-                          <p className="price">{price} KWD</p>
-                        </div>
-                        <div className="quantity-holder">
-                          <p style={{ marginRight: "3%", fontWeight: "bold" , fontSize: "17px" }}>Quantity</p>
-                          <InputGroup className="mb-3">
-                            <Button
-                              variant="outline-secondary"
-                              id="button-addon1"
-                              onClick={() => increase()}
-                            >
-                              +
+                    <Col>
+                      <ImageGallery items={images} thumbnailPosition="left" />
+                    </Col>
+                    <Col>
+                      <div>
+                        <Card bordered={false}>
+                          <Meta
+                            title={name}
+                            description={"brand" + " : " + brand} />
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              marginBottom: "2%",
+                              marginTop: "2%"
+                            }}
+                          >
+                            <span style={{ marginRight: "2%", fontSize: "16px", fontWeight: "bold" }}>In Stock</span>
+                            <CheckCircleFilled />{" "}
+                          </div>
+                          <hr />
+                          <div className="price-holder">
+                            <p className="price">{price} KWD</p>
+                          </div>
+                          <div className="quantity-holder">
+                            <p style={{ marginRight: "3%", fontWeight: "bold", fontSize: "17px" }}>Quantity</p>
+                            <InputGroup className="mb-3">
+                              <Button
+                                variant="outline-secondary"
+                                id="button-addon1"
+                                onClick={() => increase()}
+                              >
+                                +
+                              </Button>
+                              <Form.Control
+                                className="quantityInput"
+                                aria-label="Example text with button addon"
+                                aria-describedby="basic-addon2"
+                                disabled
+                                value={quantity} />
+                              <Button
+                                variant="outline-secondary"
+                                id="button-addon2"
+                                onClick={() => quantity > 0 ? decrease() : 0}
+                              >
+                                -
+                              </Button>
+                            </InputGroup>
+                          </div>
+                          <div className="productInfo-btns">
+                            <Button variant="primary" size="lg" className="addToCart">
+                              Add to Cart{" "}
                             </Button>
-                            <Form.Control
-                              className="quantityInput"
-                              aria-label="Example text with button addon"
-                              aria-describedby="basic-addon2"
-                              disabled
-                              value={quantity}
-                            />
-                            <Button
-                              variant="outline-secondary"
-                              id="button-addon2"
-                              onClick={() => decrease()}
-                            >
-                              -
+                            <Button variant="primary" size="lg" className="buyNow">
+                              Buy Now{" "}
                             </Button>
-                          </InputGroup>
-                        </div>
-                        <div className="productInfo-btns">
-                          <Button variant="primary" size="lg" className="addToCart">
-                            Add to Cart{" "}
-                          </Button>
-                          <Button variant="primary" size="lg" className="buyNow">
-                            Buy Now{" "}
-                          </Button>
-                        </div>
-                        <hr />
-                        <div>
-                          <h4 style={{ color: "#18181A", fontSize: "16px", fontWeight: "bold" }}>Quick Overview</h4>
-                          <p className="quickOverview">{quick_overview}</p>
-                        </div>
-                      </Card>
-                    </div>
-                  </Col>
+                          </div>
+                          <hr />
+                          <div>
+                            <h4 style={{ color: "#18181A", fontSize: "16px", fontWeight: "bold" }}>Quick Overview</h4>
+                            <p className="quickOverview">{quick_overview}</p>
+                          </div>
+                        </Card>
+                      </div>
+                    </Col>
                 </Row>
                 <Row>
-                  <Heading heading="Product Description" />
-                  <p>{description}</p>
+                    <Heading heading="Product Description" />
+                    <p>{description}</p>
+                </Row>
+                <Row>
+                <Heading heading="Customer Ratings" />
+                <Col>
+                    <div className="left-rate">
+                      <div style={{display : 'flex'}}>
+                        <Rate disabled defaultValue={5} />
+                        <p className="rate-text">4.6 out of 5</p>
+                      </div>
+                      <p>7363 customers ratings</p>
+                      <div
+                        style={{
+                          width: 170,
+                        }}
+                      >
+                        <Progress percent={90} size="small" />
+                        <Progress percent={70} size="small" />
+                        <Progress percent={30} size="small" />
+                        <Progress percent={15} size="small" />
+                        <Progress percent={5} size="small" />
+
+                      </div>
+                    </div>
+                  </Col>     
+                  <Col xs={9}>
+                    <div> 
+                      <h6 style={{fontWeight: 'bold'}}>Customers Comments</h6>
+                      <hr style={{borderTop: '1px solid rgba(0,0,0,.06)'}}/>
+                    </div>
+                    <div className="comment-holder">
+                      {reviews.length > 0 ? (
+                        reviews.map((review) => {
+                          return(
+                            <>
+                            <Comment
+                              key={review.name}
+                              author={review.name}
+                              content={<p>{review.comment}</p>} 
+                              datetime={
+                                 <Rate disabled defaultValue={review.rate} /> 
+                              }
+                              />
+                            </>
+                          )
+                        })
+                      ) : (
+                        <div className="AddressInfo-container">
+                          <div className="AddressInfo-item">
+                            <Alert key='primary' variant='primary'>
+                              <Alert.Heading style={{ fontWeight: 'bold' , fontSize: '18px'}}>No Reviews Available </Alert.Heading>
+                          </Alert>
+                          </div>
+                      </div>                       
+                      )}
+                    </div>
+                  </Col>          
                 </Row>
                 <Row>
                   <Heading heading="Recommended Products" />
                 </Row>
+              </>
+              )}
               </>
             );
           })}
