@@ -72,7 +72,7 @@ import './index.css';
               <Form.Check type="checkbox" label="Save Password" />
             </Form.Group>
             <p className="forgot-password text-right mt-2">
-              <Link to="/">Forgot password?</Link>
+              <Link to="/changePassword">Forgot password?</Link>
             </p>
           </div>
           <div className="d-grid gap-2 mt-3">

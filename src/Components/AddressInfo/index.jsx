@@ -20,15 +20,14 @@ const AddressInfo = () => {
   const { confirm } = Modal;
 
   const handelDeleteAddress = async (id) =>{
-    console.log( token );
     try {
-      const { data: { message : msg } } = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${userId}/address`, {id} ,{ headers: { token: `Bearer ${token}` } });
+     const {data : { data : { message : msg }  }} = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${userId}/address`, {id}, { headers: { token: `Bearer ${token}` } });
       message.success(msg);
       setAddress((prev) => prev.filter((item) => item.id !== id));
-    } catch ({ response: { data: { message: msg } } }) {
+    } catch ({ response: {data: { message: msg }} }) {
       message.error(msg);
     }
-  }
+  }   
   const showDeleteConfirm = (id) => {
     confirm({
       title: 'Delete address',
@@ -40,6 +39,8 @@ const AddressInfo = () => {
       onOk: async () => handelDeleteAddress(id),
     });
   };
+
+
   const handleDefault = async (id) => {
     try {
       await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${userId}/address/default`, {id}, { headers: { token: `Bearer ${token}` } });
@@ -50,15 +51,12 @@ const AddressInfo = () => {
         }
         return item;
       }));
-      console.log('update address');
-    } catch ({
-      response: {
-        data: { message: msg },
-      },
-    }) {
+      message.success('address is updated successfully')
+    } catch ({ response: {data: { message: msg }} }) {
       message.error(msg);
     }
   };
+
   const handelEdit = async (id) => {
     try {
       await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${userId}/address`,
@@ -147,7 +145,7 @@ const AddressInfo = () => {
                       </Descriptions.Item><Descriptions.Item label="">
                         <div className="descriptions-btn">
                           <Button type="primary" onClick={() => handelEdit(item.id)}>Edit Address</Button>
-                          <Button onClick={() => handleDefault(item.id)}>Make it Default</Button>
+                          <Button onClick={() => handleDefault(item.id)}> { item.default_address ? 'Make it not Default' : 'Make it Default'}</Button>
                           <Button danger onClick={() => showDeleteConfirm(item.id)}>Delete</Button>
                         </div>
                       </Descriptions.Item>

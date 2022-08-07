@@ -42,3 +42,15 @@ p.discount {
     font-size: 14px;
     text-decoration: line-through;
 }
+@media (max-width: 575.98px) { 
+    .superDeals .ant-card-cover {
+        height: auto;
+    }
+  }
+  
+/* // Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) { 
+    .superDeals .ant-card-cover {
+        height: auto;
+    }
+}

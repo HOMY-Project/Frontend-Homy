@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from 'react-router-dom';
-import { AddaddressForm, OrderStatus,SignIn, Signup, AddressInfo, Header, Footer, SubFooter  } from './Components';
+import { AddaddressForm, OrderStatus,SignIn, Signup, AddressInfo, Header, Footer, SubFooter, ChangePassword  } from './Components';
 import { Home, AboutUs, ProductDetails, AccountInformation } from './Pages';
 import "./App.css";
 import "antd/dist/antd.min.css";
@@ -24,6 +24,7 @@ function App() {
                   <Route path="/myAccount" element={<AccountInformation />} />
                   <Route path="/addressInfo" element={<AddressInfo />} />
                   <Route path="/addAddress" element={<AddaddressForm />} />
+                  <Route path="/changePassword" element={<ChangePassword />} />
                   <Route path="/api/v1/product/:productId" element={<ProductDetails /> } />
                 </Routes>
             </div>

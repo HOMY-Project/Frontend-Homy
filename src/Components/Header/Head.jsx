@@ -19,18 +19,5 @@ const Head = () => {
     </>
   )
 }
-// const Head = () => {
-//   return (
-//       <div className="head">
-//         <Row 
-//         justify="center"      
-//       >
-//           <Col className="gutter-row" span={8}>Accepting order 24 hours</Col>
-//           <Col className="gutter-row"  span={8}>Free delivery for more than 50 KWD</Col>
-//           <Col className="gutter-row"  span={8}>Delivery within 24 hours</Col>
-//         </Row>
-//       </div>
-//   );
-// };
 
 export default Head;

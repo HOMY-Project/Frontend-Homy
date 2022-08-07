@@ -6,6 +6,7 @@ import SignIn from "./SignIn";
 import Header from "./Header";
 import Footer from './Footer/MainFooter';
 import SubFooter from "./Footer/SubFooter";
+import ChangePassword from './SignIn/ChangePassword';
 
 export {
     AddaddressForm,
@@ -15,5 +16,6 @@ export {
     SignIn,
     Header,
     Footer,
-    SubFooter
+    SubFooter,
+    ChangePassword
 }
