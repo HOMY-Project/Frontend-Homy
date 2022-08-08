@@ -7,7 +7,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux';
 import { CheckCircleTwoTone } from '@ant-design/icons';
-import './index.css';
+import '../SignIn/index.css';
 
  const ChangePassword = () => {
   const [newPassword, setnewPassword] = useState('');

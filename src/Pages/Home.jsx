@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
-import WelcomeToHomy from '../Components/WelcomeToHomy';
-import SmartSystems from '../Components/SmartSystems';
-import SuperDeals from '../Components/SuperDeals';
-import Slider from '../Components/Slider';
-import ShopByCate from '../Components/ShopBycategory';
-
+import { Brands, ShopByCate, Slider, SuperDeals, SmartSystems,  WelcomeToHomy } from '../Components';
 
 class Home extends Component {
     render() {
@@ -14,7 +9,8 @@ class Home extends Component {
                 <ShopByCate />
                 <SuperDeals />
                 <SmartSystems />
-                <WelcomeToHomy /> 
+                <WelcomeToHomy />
+                <Brands /> 
             </div>
         );
     }

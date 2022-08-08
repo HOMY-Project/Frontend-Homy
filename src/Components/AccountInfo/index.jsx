@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { Link } from 'react-router-dom'
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import { Form, Input, message } from "antd";
 import axios from "axios";
@@ -157,6 +158,7 @@ const AccountInfo = () => {
                   >
                     Save Changes
                   </button>
+                  <Link to="/changePassword">
                   <button
                     type="submit"
                     className="btn btn-primary"
@@ -168,6 +170,7 @@ const AccountInfo = () => {
                   >
                     Change Password
                   </button>
+                  </Link>
                 </div>
               </div>
             )}

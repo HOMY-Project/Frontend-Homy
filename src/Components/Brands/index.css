@@ -1,0 +1,6 @@
+.brands-holder li.react-multi-carousel-item{
+    width: 200px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

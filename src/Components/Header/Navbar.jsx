@@ -1,14 +1,13 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { clearUser } from "../../Redux/features/authSlice";
+import { clearUser, setSearchWord } from "../../Redux/features/authSlice";
 import { message, Badge } from "antd";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import NavLink from "react-bootstrap/NavLink";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import logo from "../../assets/logo.png";
 import "./media.css";
@@ -42,6 +41,7 @@ function MainNavbar() {
                 placeholder="Search"
                 aria-label="Search"
                 aria-describedby="basic-addon2"
+                onChange={(e) => dispatch(setSearchWord(e.target.value))}
               />
               <InputGroup.Text id="basic-addon2">
                 <box-icon name="search" color="#F8F9FA"></box-icon>
@@ -72,7 +72,6 @@ function MainNavbar() {
                 </NavDropdown.Item>
               </NavDropdown>
             )}
-
             <Nav.Item>
               <Link to="/Wishlist">
                 <box-icon name="heart"></box-icon>
