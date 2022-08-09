@@ -7,6 +7,7 @@ const initialState = {
     user: null,
     isFetching: false,
     error: false,
+    searchWord: null,
   };
   // Create the authSlice, which will contain the reducer and the actions
 
@@ -31,9 +32,16 @@ const authSlice = createSlice({
       loginFailure: (state) => {
         state.isFetching = false;
         state.error = true;
-      } ,
+      },
+      setSearchWord: (state, action) => {
+        state.searchWord = action.payload;
+      },
+      clearSearchWord: (state) => {
+        state.searchWord = null;
+      }
+      
     }
 });
 
 export default authSlice.reducer;
-export const { setUser, clearUser, setToken, loginFailure, loginStart } = authSlice.actions;
+export const { setUser, clearUser, setToken, loginFailure, loginStart, setSearchWord } = authSlice.actions;

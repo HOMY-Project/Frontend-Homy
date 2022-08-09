@@ -1,14 +1,14 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { clearUser } from "../../Redux/features/authSlice";
+import { clearUser, setSearchWord } from "../../Redux/features/authSlice";
+import { clearCart } from "../../Redux/features/cartSlice";
 import { message, Badge } from "antd";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import NavLink from "react-bootstrap/NavLink";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import logo from "../../assets/logo.png";
 import "./media.css";
@@ -17,11 +17,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 function MainNavbar() {
   const { user } = useSelector((state) => state.auth);
+  const { quantity, total, products }  = useSelector((state) => state.cart);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  
   const logout = () => {
     dispatch(clearUser());
+    dispatch(clearCart());
     message.success("Logged out successfully");
     navigate("/");
   };
@@ -42,6 +45,7 @@ function MainNavbar() {
                 placeholder="Search"
                 aria-label="Search"
                 aria-describedby="basic-addon2"
+                onChange={(e) => dispatch(setSearchWord(e.target.value))}
               />
               <InputGroup.Text id="basic-addon2">
                 <box-icon name="search" color="#F8F9FA"></box-icon>
@@ -72,7 +76,6 @@ function MainNavbar() {
                 </NavDropdown.Item>
               </NavDropdown>
             )}
-
             <Nav.Item>
               <Link to="/Wishlist">
                 <box-icon name="heart"></box-icon>
@@ -81,7 +84,7 @@ function MainNavbar() {
 
             <Nav.Item className="cartIconHolder">
               <Link to="/cart">
-                <Badge count={5}>
+                <Badge count={quantity}>
                   <box-icon name="cart"></box-icon>
                 </Badge>
               </Link>

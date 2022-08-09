@@ -1,0 +1,44 @@
+.order-holder .ant-table-column-title,.order-holder .ant-table-thead>tr>th {
+    position: relative;
+    z-index: 1;
+    flex: 1 1;
+    font-size: 16px;
+    font-weight: 600;
+}
+.order-holder .card-group {
+    justify-content: space-around;
+}
+.Shipping-holder {
+    background: #FBFBFB;
+    border-radius: 4px;
+    padding: 16px;
+}
+.ant-descriptions-item-container .ant-descriptions-item-content, .ant-descriptions-item-container .ant-descriptions-item-label {
+    align-items: center !important;
+}
+.payment .ant-descriptions-item-container {
+    width: 100%;
+}
+.orderSummary h3{
+    overflow: hidden;
+    color: rgba(0,0,0,.85);
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 1.5715;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.main-title-summary{
+    overflow: hidden;
+    color: rgba(0,0,0,.85);
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.5715;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.orderSummary.container {
+    background: #FBFBFB;
+    border-radius: 8px;
+    padding: 24px 16px;
+}

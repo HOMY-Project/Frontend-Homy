@@ -30,6 +30,11 @@
     border-color: #0F6AD0;
     font-weight: 400;
 }
+button.ant-btn.ant-btn-default.btn.btn-cart:hover {
+    background: #fff;
+    color: #0F6AD0;
+    border-color: #0F6AD0;
+}
 .superDeals p.price {
     color: #0F6AD0;
     font-weight: 700;
