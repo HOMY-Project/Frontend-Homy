@@ -1,22 +1,44 @@
+import { SearchOutlined } from '@ant-design/icons';
+import { Button, Input, Space, Table, message, Tag } from 'antd';
 import React, { useRef, useState, useEffect } from 'react';
-import Breadcrumb from 'react-bootstrap/Breadcrumb';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Container from 'react-bootstrap/Container';
-import axios from 'axios';
-import {  Space, Table, Tag , Input, Modal} from 'antd';
-import {  SearchOutlined } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
 import Highlighter from 'react-highlight-words';
+import Breadcrumb from 'react-bootstrap/Breadcrumb';
+import Container from 'react-bootstrap/Container';
+import Heading from '../Heading';
+import axios from "axios";
 import './index.css';
 
-const OrderStatus = () => {
-  const [email, setEmail] = useState('');
-  const [orderNumber, setOrderNo] = useState('');
+const Orders = () => {
   const [searchText, setSearchText] = useState('');
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [searchedColumn, setSearchedColumn] = useState('');
   const [data, setData ] = useState([]);
   const searchInput = useRef(null);
+  const { user, token } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+    const getOrders = async () => {
+      try {
+        const { data: { data } } = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${user.id}/orders`, { headers: { token: `Bearer ${token}` } },
+          { cancelToken: source.token }
+        );
+        setData(data);
+        console.log(data, 'orders');
+      } catch ({
+        response: {
+          data: { message: msg },
+        },
+      }) {
+        message.warning(msg);
+      }
+    };
+    getOrders();
+    return () => {
+      source.cancel();
+    };
+  }, []);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -113,6 +135,7 @@ const OrderStatus = () => {
         text
       ),
   });
+
   const columns = [
     {
       title: 'Order',
@@ -153,60 +176,17 @@ const OrderStatus = () => {
         key: 'Review',
       },
   ];
-
-
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-  const getSingleOrder = async (e) => {
-    e.preventDefault();
-    try {
-      const { data: { data: orderDetails , message: msg } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/single-order`
-      , { email, orderNumber });
-      // message.success(msg)
-      setData((prev) => [...prev, orderDetails]);
-      console.log(data, 'ordre data')
-      setIsModalVisible(true);
-    } catch(err){
-      console.error(err);
-    }
-  };
-  
   return (
-    <Container fluid style={{ marginTop: '3%' }} className="checkOrderContainer">
-    <Breadcrumb>
-      <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-      <Breadcrumb.Item active>Account</Breadcrumb.Item>
-      
-    </Breadcrumb>
-    <p>To track your order please enter your Order ID in the box below and press the "Check" button. This was given to you on your receipt and in the confirmation email you should have received.</p>
-    <Form style={{ marginTop: "2%" }}>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>Email address</Form.Label>
-        <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
-      </Form.Group>
+    <Container fluid style={{ marginTop: '3%' }} className="order-holder">
+        <Breadcrumb>
+        <Breadcrumb.Item href="/">Account</Breadcrumb.Item>
+        <Breadcrumb.Item active>Orders</Breadcrumb.Item>
+        </Breadcrumb>
+        <Heading heading="All Orders" />
+        <Table columns={columns} dataSource={data} />
+  </Container>
+  )
+  ;
+};
 
-      <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label>Order Number</Form.Label>
-        <Form.Control type="text" placeholder="Enter Order Number" value={orderNumber} onChange={(e) => setOrderNo(e.target.value)} required/>
-      </Form.Group>
-      <Button variant="primary" type="submit" style={{ backgroundColor: '#0F6AD0'}} onClick={(e) =>  getSingleOrder(e)}>
-        Check
-      </Button>
-    </Form>
-    <Modal title="All Orders" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} >
-        <div className="orderTableResult">
-          <Table columns={columns} dataSource={data} />
-        </div>
-    </Modal>
-
-
-    </Container>
-  );
-}
-
-export default OrderStatus;
+export default Orders;

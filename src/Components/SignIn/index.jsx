@@ -27,7 +27,7 @@ import './index.css';
       , { email, password });
       dispatch(setUser(data));
       dispatch(setToken(token));
-
+      console.log(email, password);
       notification.open({
         message: 'Welcome back',
         description: {verifyMessage},
@@ -54,7 +54,7 @@ import './index.css';
               className="form-control mt-1"
               placeholder="Enter email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)} required
             />
           </div>
           <div className="form-group mt-3">
@@ -64,7 +64,7 @@ import './index.css';
               className="form-control mt-1"
               placeholder="Enter password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)} required 
             />
           </div>
           <div className="d-grid gap-2 mt-3 sec-password">

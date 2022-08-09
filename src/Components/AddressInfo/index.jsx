@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Descriptions, message, Button, Modal} from "antd";
+import { Descriptions, message, Button, Modal, Popconfirm } from "antd";
 import LoadingSpinner from '../LoadingSpinner';
 import {
   ExclamationCircleOutlined,
@@ -17,28 +17,17 @@ const AddressInfo = () => {
   const [loading, setLoading] = useState(false);
   const { user, token } = useSelector((state) => state.auth);
   const userId = user.id;
-  const { confirm } = Modal;
 
   const handelDeleteAddress = async (id) =>{
     try {
-     const {data : { data : { message : msg }  }} = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${userId}/address`, {id}, { headers: { token: `Bearer ${token}` } });
-      message.success(msg);
+     await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${userId}/address/${id}`
+     , { headers: { token: `Bearer ${token}` } });
       setAddress((prev) => prev.filter((item) => item.id !== id));
+      message.success('address deleted successfully');
     } catch ({ response: {data: { message: msg }} }) {
       message.error(msg);
     }
   }   
-  const showDeleteConfirm = (id) => {
-    confirm({
-      title: 'Delete address',
-      icon: <ExclamationCircleOutlined />,
-      content: 'Are you sure to delete this address?',
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
-      onOk: async () => handelDeleteAddress(id),
-    });
-  };
 
 
   const handleDefault = async (id) => {
@@ -146,7 +135,20 @@ const AddressInfo = () => {
                         <div className="descriptions-btn">
                           <Button type="primary" onClick={() => handelEdit(item.id)}>Edit Address</Button>
                           <Button onClick={() => handleDefault(item.id)}> { item.default_address ? 'Make it not Default' : 'Make it Default'}</Button>
-                          <Button danger onClick={() => showDeleteConfirm(item.id)}>Delete</Button>
+                        <Popconfirm
+                          title="Are you sure to delete this task?"
+                          onConfirm={() => {
+                            handelDeleteAddress(item.id)
+                          }}
+                          onCancel={(e) => {
+                            console.log(e);
+                            message.error('Click on No');
+                          }}
+                          okText="Yes"
+                          cancelText="No"
+                          >
+                          <Button danger >Delete</Button>
+                          </Popconfirm>
                         </div>
                       </Descriptions.Item>
                   </>

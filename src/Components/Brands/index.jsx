@@ -40,7 +40,6 @@ const Brands = () => {
           { cancelToken: source.token }
         );
         setBrands(data);
-        console.log(brands, 'brand');
       } catch ({
         response: {
           data: { message: msg },

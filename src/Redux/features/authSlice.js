@@ -35,6 +35,9 @@ const authSlice = createSlice({
       },
       setSearchWord: (state, action) => {
         state.searchWord = action.payload;
+      },
+      clearSearchWord: (state) => {
+        state.searchWord = null;
       }
       
     }

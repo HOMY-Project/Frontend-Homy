@@ -13,6 +13,9 @@ import SmartSystems from './SmartSystems';
 import SuperDeals from './SuperDeals';
 import ShopByCate from './ShopBycategory';
 import Slider from './Slider';
+import Orders from './Order';
+import SingleOrder from './Order/SingleOrder';
+import Cart from './Cart';
 
 export {
     AddaddressForm,
@@ -29,5 +32,8 @@ export {
     SmartSystems,
     SuperDeals,
     ShopByCate,
-    Slider
+    Slider,
+    Orders,
+    SingleOrder,
+    Cart
 }

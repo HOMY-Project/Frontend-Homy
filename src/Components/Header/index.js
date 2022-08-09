@@ -8,7 +8,7 @@ const Header = () => {
             <>
             <Head />
             <Navbar />
-            <Subnav />
+            {/* <Subnav /> */}
             </>
     );
 };

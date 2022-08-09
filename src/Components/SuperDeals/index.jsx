@@ -17,7 +17,6 @@ const SuperDeals = () => {
       try {
         const { data: { data } } = await axios.get(url, { cancelToken: source.token });
         setSuperProducts(data);
-        console.log(data);
       } catch ({
         response: {
           data: { message: msg },
@@ -30,7 +29,7 @@ const SuperDeals = () => {
     return () => {
       source.cancel();
     };
-  }, []);
+  }, [searchWord]);
 
   return (
     <>

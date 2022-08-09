@@ -84,7 +84,12 @@ button.ant-btn.ant-btn-default.buyNow {
 .productInfoCard-holder .rate-text{
     font-size: 15px;
     font-weight: 600;
-    margin-left: 2%;
+    margin-left: 1%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0;
+
 }
 .productInfoCard-holder .author-name {
     font-size: 18px !important;
@@ -106,12 +111,15 @@ button.ant-btn.ant-btn-default.buyNow {
     color: #9DA0AE;
 }
 .ant-rate-star {
-    margin-right: 5px;
+    margin-right: 5px !important;
     font-size: 20px;
 }
 .productInfoCard-holder .pagination-holder {
     margin-top: 7%;
     display: flex;
     justify-content: center;
-    /* color: azure; */
+}
+.productInfoCard-holder span.anticon.anticon-check-circle {
+    color: #0f6ad0;
+    font-size: 18px;
 }

@@ -10,6 +10,8 @@ import {
   Pagination,
 } from "antd";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
+import { useDispatch } from "react-redux";
+import { addProduct } from '../../Redux/features/cartSlice';
 import { CheckCircleFilled } from "@ant-design/icons";
 import ImageGallery from "react-image-gallery";
 import axios from "axios";
@@ -30,6 +32,7 @@ function ProductInfo() {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(false);
   const [quantity, setQuantity] = useState(0);
+  const [rate, setRate] = useState([]);
   const [newAlbums, setNewAlbums] = useState([]);
   const [sort, setSort] = useState("Recent");
   const [page, setPage] = useState(0);
@@ -37,6 +40,7 @@ function ProductInfo() {
   const productId = window.location.href.split("/")[6];
   const { Option } = Select;
 
+  
   const images = [];
   var obj = {};
   for (var i = 0; i < newAlbums.length; i++) {
@@ -44,8 +48,11 @@ function ProductInfo() {
     obj.thumbnail = newAlbums[i];
     images.push(obj);
   }
+  const dispatch = useDispatch();
 
-  
+  const handelAddProduct = (product) => {
+    quantity > 0 ? dispatch(addProduct({...product, quantity })) : message.error("Please select quantity");
+  }
 
   // const HandelSort = () => {
   //   if(sort === 'Recent'){
@@ -113,7 +120,6 @@ function ProductInfo() {
         );
         setReviews(data);
         setTotal(data[0].count);
-        console.log(data, "reviews");
       } catch ({
         response: {
           data: { message: msg },
@@ -128,6 +134,34 @@ function ProductInfo() {
     };
   }, []);
 
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+    const getRate = async () => {
+      try {
+        const {
+          data: { data },
+        } = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/api/v1/product/${productId}/rate`,
+          {
+            cancelToken: source.token,
+          }
+        );
+        setRate(data);
+        console.log(data, "rate");
+      } catch ({
+        response: {
+          data: { message: msg },
+        },
+      }) {
+        message.warning(msg);
+      }
+    };
+    getRate();
+    return () => {
+      source.cancel();
+    };
+  }, []);
+
   //increase counter
   const increase = () => {
     setQuantity((count) => count + 1);
@@ -137,19 +171,19 @@ function ProductInfo() {
   const decrease = () => {
     setQuantity((count) => count - 1);
   };
-
+  
   return (
     <div className="productInfoCard-holder">
       <Container fluid style={{ marginTop: "3%" }}>
         {product.length &&
           product.map(
-            ({ id, name, price, description, brand, quick_overview }) => {
+            (prod) => {
               return (
                 <>
                   <Breadcrumb style={{ marginBottom: "4%" }}>
                     <Breadcrumb.Item to="/">Home</Breadcrumb.Item>
                     <Breadcrumb.Item>Smart Lighting</Breadcrumb.Item>
-                    <Breadcrumb.Item active>{name}</Breadcrumb.Item>
+                    <Breadcrumb.Item active>{prod.name}</Breadcrumb.Item>
                   </Breadcrumb>
                   {loading ? (
                     <div
@@ -175,8 +209,8 @@ function ProductInfo() {
                           <div>
                             <Card bordered={false}>
                               <Meta
-                                title={name}
-                                description={"brand" + " : " + brand}
+                                title={prod.name}
+                                description={"brand" + " : " + prod.brand}
                               />
                               <div
                                 style={{
@@ -197,9 +231,13 @@ function ProductInfo() {
                                 </span>
                                 <CheckCircleFilled />{" "}
                               </div>
+                              <div style={{ display: "flex",alignItems: "center", marginTop: "2%"}}>
+                                <Rate disabled defaultValue={rate[0]?.rate} />
+                                <p className="rate-text" style={{ color: "#989898", marginBottom : '0'}}>{rate[0]?.count} rating</p>
+                              </div>
                               <hr />
                               <div className="price-holder">
-                                <p className="price">{price} KWD</p>
+                                <p className="price">{prod.price} KWD</p>
                               </div>
                               <div className="quantity-holder">
                                 <p
@@ -242,6 +280,7 @@ function ProductInfo() {
                                   variant="primary"
                                   size="lg"
                                   className="addToCart"
+                                  onClick={() => handelAddProduct(prod)}
                                 >
                                   Add to Cart{" "}
                                 </Button>
@@ -265,7 +304,7 @@ function ProductInfo() {
                                   Quick Overview
                                 </h4>
                                 <p className="quickOverview">
-                                  {quick_overview}
+                                  {prod.quick_overview}
                                 </p>
                               </div>
                             </Card>
@@ -274,7 +313,7 @@ function ProductInfo() {
                       </Row>
                       <Row>
                         <Heading heading="Product Description" />
-                        <p>{description}</p>
+                        <p>{prod.description}</p>
                       </Row>
                       <Row>
                         <div>
@@ -283,10 +322,10 @@ function ProductInfo() {
                         <Col>
                           <div className="left-rate">
                             <div style={{ display: "flex" }}>
-                              <Rate disabled defaultValue={5} />
-                              <p className="rate-text">4.6 out of 5</p>
+                              <Rate disabled defaultValue={rate[0]?.rate} />
+                              <p className="rate-text">{rate[0]?.rate} out of 5</p>
                             </div>
-                            <p>7363 customers ratings</p>
+                            <p>{rate[0]?.count} customers ratings</p>
                             <div
                               style={{
                                 width: 170,

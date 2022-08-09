@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { clearUser, setSearchWord } from "../../Redux/features/authSlice";
+import { clearCart } from "../../Redux/features/cartSlice";
 import { message, Badge } from "antd";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -16,11 +17,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 function MainNavbar() {
   const { user } = useSelector((state) => state.auth);
+  const { quantity, total, products }  = useSelector((state) => state.cart);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  
   const logout = () => {
     dispatch(clearUser());
+    dispatch(clearCart());
     message.success("Logged out successfully");
     navigate("/");
   };
@@ -80,7 +84,7 @@ function MainNavbar() {
 
             <Nav.Item className="cartIconHolder">
               <Link to="/cart">
-                <Badge count={5}>
+                <Badge count={quantity}>
                   <box-icon name="cart"></box-icon>
                 </Badge>
               </Link>
