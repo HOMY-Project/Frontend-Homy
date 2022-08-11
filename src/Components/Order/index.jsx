@@ -1,12 +1,15 @@
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Space, Table, message, Tag } from 'antd';
 import React, { useRef, useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { setOrder } from "../../Redux/features/singleOrderSlice";
 import Highlighter from 'react-highlight-words';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Container from 'react-bootstrap/Container';
 import Heading from '../Heading';
 import axios from "axios";
+import { useNavigate } from 'react-router-dom'
 import './index.css';
 
 const Orders = () => {
@@ -15,7 +18,8 @@ const Orders = () => {
   const [data, setData ] = useState([]);
   const searchInput = useRef(null);
   const { user, token } = useSelector((state) => state.auth);
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getOrders = async () => {
@@ -39,6 +43,18 @@ const Orders = () => {
       source.cancel();
     };
   }, []);
+
+  const getSingleOrder = async (id) => {
+    try {
+      const { data: { data  } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/single-order/${id}`,
+      { headers: { token: `Bearer ${token}` } });
+      dispatch(setOrder(data));
+      console.log(data, 'data from order num');
+      navigate('/singleOrder');
+    } catch(err){
+      console.error(err);
+    }
+  };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -143,6 +159,7 @@ const Orders = () => {
       key: 'order_number',
       width: '20%',
       ...getColumnSearchProps('order_number'),
+      render: (order_number) => <Button type="submit" onClick={() => getSingleOrder(order_number) }>{order_number}</Button>
     },
     {
       title: 'Date',

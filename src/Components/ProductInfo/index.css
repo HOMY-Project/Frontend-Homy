@@ -39,6 +39,11 @@ input.quantityInput.form-control {
     padding: 5px 38px;
     height: 36px;
 }
+button.ant-btn.ant-btn-default.btn.btn-cart:active {
+    background: #fff;
+    color: #0F6AD0;
+    border-color: #0F6AD0;
+}
 button.ant-btn.ant-btn-default.buyNow {
     background: #fff;
     color: #0F6AD0;

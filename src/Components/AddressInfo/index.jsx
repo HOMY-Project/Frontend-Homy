@@ -69,13 +69,11 @@ const AddressInfo = () => {
   }
 
   useEffect(() => {
-    // const source = axios.CancelToken.source();
     const getAddress = async () => {
       try {
         setLoading(true);
         const { data: { data } } = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${userId}/address`,
-          // { cancelToken: source.token },
           {
             headers: { token: `Bearer ${token}` },
           }
@@ -92,9 +90,6 @@ const AddressInfo = () => {
       }
     };
     getAddress();
-    // return () => {
-    //   source.cancel();
-    // };
   }, []);
 
   return (
@@ -127,9 +122,13 @@ const AddressInfo = () => {
                   xs: 1,
                 }}>
                   <>
-                  <Descriptions.Item label="City">{item.city}</Descriptions.Item><Descriptions.Item label="Area">{item.area}</Descriptions.Item><Descriptions.Item label="Street">
+                  <Descriptions.Item label="City">{item.city}</Descriptions.Item>
+                  <Descriptions.Item label="Area">{item.area}</Descriptions.Item>
+                  <Descriptions.Item label="Street">
                       {item.street}
-                    </Descriptions.Item><Descriptions.Item label="Block">{item.block}</Descriptions.Item><Descriptions.Item label="Building">
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Block">{item.block}</Descriptions.Item>
+                    <Descriptions.Item label="Building">
                         {item.building}
                       </Descriptions.Item><Descriptions.Item label="">
                         <div className="descriptions-btn">

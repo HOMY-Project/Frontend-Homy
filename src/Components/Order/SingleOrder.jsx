@@ -1,97 +1,37 @@
-import React, { useState, useEffect } from "react";
-import { StarFilled } from "@ant-design/icons";
+import React from "react";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { Card, Button, Descriptions } from "antd";
+import { Descriptions } from "antd";
 import CardGroup from "react-bootstrap/CardGroup";
 import Heading from "../Heading";
-import { Link } from "react-router-dom";
-// import axios from "axios";
+import OrderProduct from './orderProduct';
 import "./index.css";
-import logo from "../../assets/logo.png";
-import payment from "../../assets/payment.jpg";
-// import "./media.css";
-import "./index.css";
+import paymentImg from "../../assets/payment.jpg";
+import { useSelector } from "react-redux";
+
 
 const SingleOrder = () => {
-  const { Meta } = Card;
+  const { orderDetails: { order_number, payment, products, addresses, phone } } = useSelector((state) => state.singleOrder);
+  const { subTotal } = useSelector((state) => state.singleOrder);
+
   return (
     <div>
       <Container fluid style={{ marginTop: "3%" }} className="order-holder">
         <Breadcrumb>
           <Breadcrumb.Item href="/">Account</Breadcrumb.Item>
           <Breadcrumb.Item href="/">Orders</Breadcrumb.Item>
-          <Breadcrumb.Item active>Order 12345</Breadcrumb.Item>
+          <Breadcrumb.Item active>Order {order_number}</Breadcrumb.Item>
         </Breadcrumb>
-        <Heading heading="Order 12345" />
+        <Heading heading={<p>Order {order_number}</p>}/>
         <Row>
           <Col lg="8" md="10" sm="12">
             <Row style={{ marginBottom: "2%" }}>
-              <CardGroup>
-                <Col lg="5" md="6" sm="12">
-                  <Card
-                    bordered={false}
-                    cover={<img alt="example" src={logo} />}
-                  >
-                    <Meta
-                      title={
-                        <Link to={"/api/v1/product/${product.id}"}>
-                          {" "}
-                          prdocut 9
-                        </Link>
-                      }
-                      description="Smart Switches"
-                    />
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginBottom: "2%",
-                        marginTop: "3%",
-                      }}
-                    >
-                      <StarFilled />{" "}
-                      <span style={{ marginLeft: "2%" }}>5.0</span>
-                    </div>
-                    <div className="price-holder">
-                      <p className="price">500 KWD</p>
-                      <p className="Qun">Qty: 2</p>
-                    </div>
-                  </Card>
-                </Col>
-                <Col lg="5" md="6" sm="12">
-                  <Card
-                    bordered={false}
-                    cover={<img alt="example" src={logo} />}
-                  >
-                    <Meta
-                      title={
-                        <Link to={"/api/v1/product/${product.id}"}>
-                          {" "}
-                          prdocut 9
-                        </Link>
-                      }
-                      description="Smart Switches"
-                    />
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginBottom: "2%",
-                        marginTop: "3%",
-                      }}
-                    >
-                      <StarFilled />{" "}
-                      <span style={{ marginLeft: "2%" }}>5.0</span>
-                    </div>
-                    <div className="price-holder">
-                      <p className="price">500 KWD</p>
-                      <p className="Qun">Qty: 2</p>
-                    </div>
-                  </Card>
-                </Col>
+              <CardGroup style={{ justifyContent : "space-between" }}>
+                {products.map(product => 
+                    <OrderProduct product={product}/>
+                  )}
               </CardGroup>
             </Row>
             <Row>
@@ -102,18 +42,25 @@ const SingleOrder = () => {
                       size="small"
                       column={2}
                       title="Shipping Information"
+                      style={{ fontSize: '20px'}}
                     >
-                      <Descriptions.Item label="Created">
-                        Lili Qu
+                      <Descriptions.Item label="City">
+                        {addresses[0]}
                       </Descriptions.Item>
-                      <Descriptions.Item label="Association">
-                        <a>421421</a>
+                      <Descriptions.Item label="Area">
+                       {addresses[1]}
                       </Descriptions.Item>
-                      <Descriptions.Item label="Creation Time">
-                        2017-01-10
+                      <Descriptions.Item label="street">
+                      {addresses[2]}
                       </Descriptions.Item>
-                      <Descriptions.Item label="Effective Time">
-                        2017-10-10
+                      <Descriptions.Item label="block No.">
+                      {addresses[3]}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Building No.">
+                      {addresses[4]}
+                      </Descriptions.Item>
+                      <Descriptions.Item label="Phone No.">
+                      {phone}
                       </Descriptions.Item>
                     </Descriptions>
                   </div>
@@ -124,11 +71,12 @@ const SingleOrder = () => {
                       size="small"
                       column={1}
                       title="Payment Method"
+                      style={{ fontSize: '20px'}}
                     >
                       <div style={{ display: "flex" }}>
                         <img
                           alt="example"
-                          src={payment}
+                          src={paymentImg}
                           style={{ width: "80px" }}
                         />
                         <p
@@ -138,7 +86,7 @@ const SingleOrder = () => {
                             marginLeft: "2%",
                           }}
                         >
-                          Ending 1234
+                        {payment}
                         </p>
                       </div>
                     </Descriptions>
@@ -152,7 +100,7 @@ const SingleOrder = () => {
               <h3>Order Summary</h3>
               <Row style={{ marginTop: "6%" }} >
                 <Col lg="6"><p className="main-title-summary">Item Subtotal <span style={{ color: "#9a9a9a"}}> (4 Item) </span></p></Col>
-                <Col lg="6" ><p>24.00 KWD</p></Col>
+                <Col lg="6" ><p>{subTotal} KWD</p></Col>
               </Row>
               <Row style={{ marginTop: "3%" }} >
                 <Col  lg="6"><p className="main-title-summary">Shipping</p><p style={{ color: "#9a9a9a"}}>Standart Delivery</p></Col>

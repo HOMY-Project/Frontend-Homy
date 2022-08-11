@@ -1,9 +1,9 @@
-import React from "react";
+import React,{useState} from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { clearUser, setSearchWord } from "../../Redux/features/authSlice";
 import { clearCart } from "../../Redux/features/cartSlice";
-import { message, Badge } from "antd";
+import { message, Badge, AutoComplete, Input } from "antd";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Container from "react-bootstrap/Container";
@@ -16,12 +16,30 @@ import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function MainNavbar() {
-  const { user } = useSelector((state) => state.auth);
-  const { quantity, total, products }  = useSelector((state) => state.cart);
+  const { user, allProducts } = useSelector((state) => state.auth);
+  const { quantity } = useSelector((state) => state.cart)
+
+  const [options, setOptions] = useState([]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+
+  const onSelect = (data) => {
+     const proId = allProducts.filter((item) => item.name === data)[0].id
+      navigate(`/api/v1/product/${proId}`);
+  };
+
+
+  const onSearch = (searchText) => {
+    dispatch(setSearchWord(searchText))
+    setOptions(
+      !searchText ? [] : allProducts?.map(product => ({
+        value: product.name,
+      }
+    ))
+    );
+  };
+
   const logout = () => {
     dispatch(clearUser());
     dispatch(clearCart());
@@ -32,7 +50,7 @@ function MainNavbar() {
   return (
     <Navbar bg="light" expand="lg" className="custom-navbar" collapseOnSelect>
       <Container fluid>
-        <Navbar.Brand >
+        <Navbar.Brand>
           <Link to="/">
             <img src={logo} alt="logo" className="logo-img" />
           </Link>
@@ -41,15 +59,16 @@ function MainNavbar() {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Form className="me-auto my-2 my-lg-0 searchForm">
             <InputGroup className="mb-6">
-              <Form.Control
-                placeholder="Search"
-                aria-label="Search"
-                aria-describedby="basic-addon2"
-                onChange={(e) => dispatch(setSearchWord(e.target.value))}
-              />
-              <InputGroup.Text id="basic-addon2">
-                <box-icon name="search" color="#F8F9FA"></box-icon>
-              </InputGroup.Text>
+              <AutoComplete
+                options={options}
+                style={{
+                  width: '90%',
+                }}
+                onSelect={onSelect}
+                onSearch={onSearch}
+              >
+                 <Input.Search size="large" placeholder="Search" style={{  color: "#F8F9FA !important" }}enterButton />
+                </AutoComplete>
             </InputGroup>
           </Form>
           <Nav className="me-auto scrollNav" navbarScroll>

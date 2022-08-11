@@ -6,7 +6,7 @@
     font-weight: 600;
 }
 .order-holder .card-group {
-    justify-content: space-around;
+    justify-content: space-between;
 }
 .Shipping-holder {
     background: #FBFBFB;

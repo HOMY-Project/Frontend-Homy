@@ -32,6 +32,11 @@ form.me-auto.my-2.my-lg-0 span#basic-addon2 {
     background-color: #0F6AD0;
     color: #fff;
 }
+button.ant-btn.ant-btn-primary.ant-btn-lg.ant-input-search-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .nav-item.dropdown {
     font-weight: 500;
     font-size: 16px;
