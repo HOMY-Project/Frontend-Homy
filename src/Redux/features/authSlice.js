@@ -8,6 +8,7 @@ const initialState = {
     isFetching: false,
     error: false,
     searchWord: null,
+    allProducts:null
   };
   // Create the authSlice, which will contain the reducer and the actions
 
@@ -38,10 +39,13 @@ const authSlice = createSlice({
       },
       clearSearchWord: (state) => {
         state.searchWord = null;
+      },
+      setAllProducts: (state, action) => {
+        state.allProducts = action.payload;
       }
       
     }
 });
 
 export default authSlice.reducer;
-export const { setUser, clearUser, setToken, loginFailure, loginStart, setSearchWord } = authSlice.actions;
+export const { setUser, clearUser, setToken, loginFailure, loginStart, setSearchWord, setAllProducts } = authSlice.actions;

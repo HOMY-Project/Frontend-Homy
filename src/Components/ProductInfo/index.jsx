@@ -10,7 +10,7 @@ import {
   Pagination,
 } from "antd";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addProduct } from '../../Redux/features/cartSlice';
 import { CheckCircleFilled } from "@ant-design/icons";
 import ImageGallery from "react-image-gallery";
@@ -31,6 +31,7 @@ function ProductInfo() {
   const [product, setProduct] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [btnText, setbtnText] = useState('add to cart') 
   const [quantity, setQuantity] = useState(0);
   const [rate, setRate] = useState([]);
   const [newAlbums, setNewAlbums] = useState([]);
@@ -39,8 +40,10 @@ function ProductInfo() {
   const [total, setTotal] = useState();
   const productId = window.location.href.split("/")[6];
   const { Option } = Select;
-
-  
+  const { user, token } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const pro = product[0];
+ 
   const images = [];
   var obj = {};
   for (var i = 0; i < newAlbums.length; i++) {
@@ -48,10 +51,25 @@ function ProductInfo() {
     obj.thumbnail = newAlbums[i];
     images.push(obj);
   }
-  const dispatch = useDispatch();
 
-  const handelAddProduct = (product) => {
-    quantity > 0 ? dispatch(addProduct({...product, quantity })) : message.error("Please select quantity");
+  const handelAddProduct = async (product) => {
+    if (token && quantity > 0 && product) {
+      const carts = [{...pro, quantity}];
+        try {
+        const { data: { message: msg } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${user.id}/cart`,{carts},
+        { headers: { token: `Bearer ${token}` }});
+        dispatch(addProduct({...product, quantity}));
+        message.success(msg)
+        } catch ({
+        response: {
+            data: { message: msg },
+        },
+        }) {
+        message.warning(msg);
+        }
+    }else{
+       return quantity > 0 ? ( dispatch(addProduct({...product, quantity}))) : message.error('please select quantity')
+    }
   }
 
   // const HandelSort = () => {
@@ -104,7 +122,7 @@ function ProductInfo() {
     return () => {
       source.cancel();
     };
-  }, []);
+  }, [btnText]);
 
   useEffect(() => {
     const source = axios.CancelToken.source();
@@ -280,9 +298,13 @@ function ProductInfo() {
                                   variant="primary"
                                   size="lg"
                                   className="addToCart"
-                                  onClick={() => handelAddProduct(prod)}
+                                  onClick={() => {
+                                  
+                                    handelAddProduct(prod)
+                                    setbtnText('added to cart')}
+                                  }
                                 >
-                                  Add to Cart{" "}
+                                  {btnText}{" "}
                                 </Button>
                                 <Button
                                   variant="primary"

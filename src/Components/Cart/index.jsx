@@ -12,7 +12,8 @@ import {
 } from "react-bootstrap";
 import { Button, Steps, Input, message, Popconfirm } from "antd";
 import Heading from "../Heading";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
+import { removeItem } from '../../Redux/features/cartSlice';
 import axios from "axios";
 import "../Order/index.css";
 import "./index.css";
@@ -23,6 +24,7 @@ const Cart = () => {
   const cart = useSelector((state) => state.cart);
   const { user, token } = useSelector((state) => state.auth);
   console.log(cart.products, "cart");
+  const dispatch = useDispatch();
 
   //increase counter
   const increase = () => {
@@ -34,47 +36,52 @@ const Cart = () => {
     setQuantity((count) => count - 1);
   };
 
-    useEffect(() => {
-        const source = axios.CancelToken.source();
-        if(token){
-            console.log(token, "token");
-        const getCartProducts = async () => {
-            try {
-            const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/${user.id}/cart`,
-                {
-                headers: { token: `Bearer ${token}` },
-                }, 
-                {
-                cancelToken: source.token,
-            });
-            console.log(data)
-            // setCartProduct(data);
-            // message.success(data);
-            } catch ({
-            response: {
-                data: { message: msg },
-            },
-            }) {
-            message.warning(msg);
-            }
-        };
-        getCartProducts();
-    }
-    return () => {
-        source.cancel();
-    };
-    }, [])
+  useEffect(() => {
+      const source = axios.CancelToken.source();
+      if(token){
+          console.log(token, "token");
+      const getCartProducts = async () => {
+          try {
+          const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/${user.id}/cart`,
+              {
+              headers: { token: `Bearer ${token}` },
+              }, 
+              {
+              cancelToken: source.token,
+          });
+          console.log(data)
+          // setCartProduct(data);
+          // message.success(data);
+          } catch ({
+          response: {
+              data: { message: msg },
+          },
+          }) {
+          message.warning(msg);
+          }
+      };
+      getCartProducts();
+  }
+  return () => {
+      source.cancel();
+  };
+  }, [])
+  
 
-    const handelDeleteProductCart = async (productId) =>{
-        try {
-        await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${user.id}/cart/${productId}`
-         , { headers: { token: `Bearer ${token}` } });
-         setCartProduct((prev) => prev.filter((item) => item.id !== productId));
-         message.success('product deleted successfully');
-        } catch ({ response: {data: { message: msg }} }) {
-          message.error(msg);
-        }
-      }   
+  const handelDeleteProductCart = async (productId) =>{
+    if (token) {
+      try {
+      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${user.id}/cart/${productId}`
+        , { headers: { token: `Bearer ${token}` } });
+        message.success('product deleted successfully');
+        dispatch(removeItem(productId));
+      } catch ({ response: {data: { message: msg }} }) {
+        message.error(msg);
+      }
+    }else{
+      dispatch(removeItem(productId));
+    }
+    }   
   const { Step } = Steps;
   return (
     <div>
