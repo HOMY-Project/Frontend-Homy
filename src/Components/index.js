@@ -16,6 +16,8 @@ import Slider from './Slider';
 import Orders from './Order';
 import SingleOrder from './Order/SingleOrder';
 import Cart from './Cart';
+import ResetPassword from './ResetPassword';
+import ForgetPassword from './ForgetPassword';
 
 export {
     AddaddressForm,
@@ -35,5 +37,7 @@ export {
     Slider,
     Orders,
     SingleOrder,
-    Cart
+    Cart,
+    ResetPassword,
+    ForgetPassword
 }
