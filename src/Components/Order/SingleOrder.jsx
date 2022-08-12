@@ -14,7 +14,8 @@ import { useSelector } from "react-redux";
 
 const SingleOrder = () => {
   const { orderDetails: { order_number, payment, products, addresses, phone } } = useSelector((state) => state.singleOrder);
-  const { subTotal } = useSelector((state) => state.singleOrder);
+  const { total } = useSelector((state) => state.singleOrder);
+  console.log(total)
 
   return (
     <div>
@@ -100,7 +101,7 @@ const SingleOrder = () => {
               <h3>Order Summary</h3>
               <Row style={{ marginTop: "6%" }} >
                 <Col lg="6"><p className="main-title-summary">Item Subtotal <span style={{ color: "#9a9a9a"}}> (4 Item) </span></p></Col>
-                <Col lg="6" ><p>{subTotal} KWD</p></Col>
+                <Col lg="6" ><p>{total} KWD</p></Col>
               </Row>
               <Row style={{ marginTop: "3%" }} >
                 <Col  lg="6"><p className="main-title-summary">Shipping</p><p style={{ color: "#9a9a9a"}}>Standart Delivery</p></Col>

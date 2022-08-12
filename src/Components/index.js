@@ -18,6 +18,7 @@ import SingleOrder from './Order/SingleOrder';
 import Cart from './Cart';
 import ResetPassword from './ResetPassword';
 import ForgetPassword from './ForgetPassword';
+import Shipment from './Shipment';
 
 export {
     AddaddressForm,
@@ -40,4 +41,5 @@ export {
     Cart,
     ResetPassword,
     ForgetPassword
+    Shipment
 }

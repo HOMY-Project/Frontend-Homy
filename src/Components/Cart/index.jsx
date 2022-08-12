@@ -12,46 +12,35 @@ import {
 } from "react-bootstrap";
 import { Button, Steps, Input, message, Popconfirm } from "antd";
 import Heading from "../Heading";
-import { useSelector,useDispatch } from "react-redux";
-import { removeItem } from '../../Redux/features/cartSlice';
+import { useSelector, useDispatch } from "react-redux";
+import { Link } from 'react-router-dom';
+import { removeItem, incrementQuantity, decrementQuantity } from '../../Redux/features/cartSlice';
 import axios from "axios";
 import "../Order/index.css";
 import "./index.css";
 
 const Cart = () => {
-  const [quantity, setQuantity] = useState(0);
-  const [CartProduct, setCartProduct] = useState([]);
+  const [product_id, setProductId ] = useState('');
+  const [prodQuantity, setprodQuantity] = useState('');
   const cart = useSelector((state) => state.cart);
   const { user, token } = useSelector((state) => state.auth);
   console.log(cart.products, "cart");
   const dispatch = useDispatch();
 
-  //increase counter
-  const increase = () => {
-    setQuantity((count) => count + 1);
-  };
-
-  //decrease counter
-  const decrease = () => {
-    setQuantity((count) => count - 1);
-  };
 
   useEffect(() => {
       const source = axios.CancelToken.source();
       if(token){
-          console.log(token, "token");
       const getCartProducts = async () => {
           try {
-          const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/${user.id}/cart`,
+           const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/${user.id}/cart`,
               {
               headers: { token: `Bearer ${token}` },
               }, 
               {
               cancelToken: source.token,
           });
-          console.log(data)
-          // setCartProduct(data);
-          // message.success(data);
+          console.log(data, 'cart prod');
           } catch ({
           response: {
               data: { message: msg },
@@ -73,8 +62,8 @@ const Cart = () => {
       try {
       await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${user.id}/cart/${productId}`
         , { headers: { token: `Bearer ${token}` } });
-        message.success('product deleted successfully');
         dispatch(removeItem(productId));
+        message.success('product deleted successfully');
       } catch ({ response: {data: { message: msg }} }) {
         message.error(msg);
       }
@@ -101,20 +90,22 @@ const Cart = () => {
             <div className="productContainer">
               {cart.products.map((prod) => (
                 <ListGroup.Item key={prod.id}>
+                  {setProductId(prod.id)}
+                  {setprodQuantity(prod.quantity)}
                   <Row style={{ alignItems: "center" }}>
-                    <Col md={2}>
+                    <Col md={3}>
                       <Image src={prod.image} alt={prod.name} fluid rounded />
                     </Col>
-                    <Col md={4}>
+                    <Col md={3}>
                       <span>{prod.name}</span>
                     </Col>
-                    <Col md={2}>
+                    <Col md={3}>
                       <div className="quantity-holder">
                         <InputGroup className="mb-3">
                           <Button
                             variant="outline-secondary"
                             id="button-addon1"
-                            onClick={() => increase()}
+                            onClick={() => dispatch(incrementQuantity(prod.id))}
                           >
                             +
                           </Button>
@@ -128,7 +119,7 @@ const Cart = () => {
                           <Button
                             variant="outline-secondary"
                             id="button-addon2"
-                            onClick={() => (quantity > 0 ? decrease() : 0)}
+                            onClick={() => dispatch(decrementQuantity(prod.id))}
                           >
                             -
                           </Button>
@@ -138,7 +129,7 @@ const Cart = () => {
                     <Col md={2}>
                         <span style={{ fontWeight: "bold" , fontSize: "15px" }}>KWD {prod.price * prod.quantity}</span>
                     </Col>
-                    <Col md={2}>
+                    <Col md={1}>
                     <Popconfirm
                           title="Are you sure to delete this task?"
                           onConfirm={() => {
@@ -185,11 +176,11 @@ const Cart = () => {
                 <Col lg="6">
                   <p className="main-title-summary">
                     Item Subtotal{" "}
-                    <span style={{ color: "#9a9a9a" }}> (4 Item) </span>
+                    <span style={{ color: "#9a9a9a" }}> ({cart.products.length } Item) </span>
                   </p>
                 </Col>
                 <Col lg="6">
-                  <p>24.00 KWD</p>
+                  <p>{cart.total} KWD</p>
                 </Col>
               </Row>
               <Row style={{ marginTop: "3%" }}>
@@ -208,12 +199,14 @@ const Cart = () => {
                 </Col>
                 <Col>
                   <p style={{ fontWeight: "bold", fontSize: "17px" }}>
-                    24.00 KWD
+                    {cart.total} KWD
                   </p>
                 </Col>
               </Row>
               <Row>
-                <Button type="primary">Checkout</Button>
+                <Link to={`/shipment/${product_id}/${prodQuantity}`}>
+                  <Button type="primary">Checkout</Button>
+                </Link>
               </Row>
             </Container>
           </Col>
