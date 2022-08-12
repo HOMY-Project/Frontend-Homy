@@ -16,6 +16,7 @@ import Slider from './Slider';
 import Orders from './Order';
 import SingleOrder from './Order/SingleOrder';
 import Cart from './Cart';
+import Shipment from './Shipment';
 
 export {
     AddaddressForm,
@@ -35,5 +36,6 @@ export {
     Slider,
     Orders,
     SingleOrder,
-    Cart
+    Cart,
+    Shipment
 }
