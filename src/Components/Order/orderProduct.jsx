@@ -3,14 +3,16 @@ import Col from "react-bootstrap/Col";
 import { Card, message } from "antd";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { setSubTotal } from "../../Redux/features/singleOrderSlice";
+import { setTotal } from "../../Redux/features/singleOrderSlice";
 
 const OrderProduct = ({ product }) => {
     const { Meta } = Card;
     const [prod, setProduct ] = useState([])
-    const [orderSubTotal , setProSubTotal] = useState(0);
+    const [price , setPrice] = useState(0);
     const dispatch = useDispatch();
-    console.log(orderSubTotal, 'order sub total')
+    const quantity = product[1]
+    console.log(price, 'order sub total')
+    console.log(quantity, 'quantity')
 
     useEffect(() => {
         const source = axios.CancelToken.source(); 
@@ -22,14 +24,13 @@ const OrderProduct = ({ product }) => {
               cancelToken: source.token,
             });
             setProduct(data);
-            setProSubTotal( (prev) => prev + (data[0].price * product[1]));
-            // console.log(orderSubTotal, 'order sub total')
-            dispatch(setSubTotal(orderSubTotal));
+            setPrice(data[0].price);
+            dispatch(setTotal(price, quantity));
           } catch ({
             response: {
               data: { message: msg },
             },
-          }) {
+          }) { 
             message.warning(msg);
           }
         };

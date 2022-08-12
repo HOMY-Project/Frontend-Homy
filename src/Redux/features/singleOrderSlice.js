@@ -4,16 +4,16 @@ const singleOrderSlice = createSlice({
     name: 'singleOrder',
     initialState: {
         orderDetails: [],
-        subTotal: 0
+        total: 0,
     },
     reducers:{
         setOrder: (state, action) => {
             state.orderDetails = action.payload;
         },
-        setSubTotal: (state, action) => {
-            state.subTotal = action.payload;
+        setTotal: (state, action) => {
+            state.total += action.payload.price * action.payload.quantity;
         }
     }
 })
 export default singleOrderSlice.reducer;
-export const { setOrder, setSubTotal } = singleOrderSlice.actions;
+export const { setOrder, setTotal } = singleOrderSlice.actions;

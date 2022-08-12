@@ -67,7 +67,7 @@ function MainNavbar() {
                 onSelect={onSelect}
                 onSearch={onSearch}
               >
-                 <Input.Search size="large" placeholder="Search" style={{  color: "#F8F9FA !important" }}enterButton />
+                 <Input.Search size="large" placeholder="Search" style={{ color: "#F8F9FA !important" }}enterButton />
                 </AutoComplete>
             </InputGroup>
           </Form>

@@ -19,7 +19,6 @@ const SuperDeals = () => {
       try {
         const { data: { data } } = await axios.get(url, { cancelToken: source.token });
         dispatch(setAllProducts(data));
-        console.log(data, "data");
         setSuperProducts(data);
       } catch ({
         response: {

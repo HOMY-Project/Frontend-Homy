@@ -1,5 +1,7 @@
 .productContainer .list-group-item {
     margin-top: 2%;
+    background-color: #fff;
+    padding: 12px;
 }
 .productContainer #button-addon2,.productContainer #button-addon1 {
     background: #0F6AD0;
