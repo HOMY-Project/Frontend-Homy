@@ -40,6 +40,6 @@ export {
     SingleOrder,
     Cart,
     ResetPassword,
-    ForgetPassword
+    ForgetPassword,
     Shipment
 }
