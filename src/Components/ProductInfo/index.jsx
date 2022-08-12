@@ -45,7 +45,7 @@ function ProductInfo() {
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const pro = product[0];
-
+  console.log(page, 'page')
 
   const images = [];
   var obj = {};
@@ -119,7 +119,7 @@ function ProductInfo() {
         setProduct(data);
         setNewAlbums(data[0].albums);
         setLoading(false);
-
+        console.log(data, "productInfo");
       } catch ({
         response: {
           data: { message: msg },
@@ -324,7 +324,7 @@ function ProductInfo() {
                                   aria-label="Example text with button addon"
                                   aria-describedby="basic-addon2"
                                   disabled
-                                  value={prod.quantity}
+                                  value={quantity}
                                 />
                                 <Button
                                   variant="outline-secondary"

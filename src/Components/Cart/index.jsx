@@ -10,21 +10,20 @@ import {
   Breadcrumb,
   InputGroup,
 } from "react-bootstrap";
-import { Button, Steps, Input, message, Popconfirm } from "antd";
+import { Button, Steps, Input, message, Popconfirm, Result } from "antd";
 import Heading from "../Heading";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from 'react-router-dom';
-import { removeItem, incrementQuantity, decrementQuantity } from '../../Redux/features/cartSlice';
+import { removeItem, incrementQuantity, decrementQuantity, addProductQuantity } from '../../Redux/features/cartSlice';
 import axios from "axios";
 import "../Order/index.css";
 import "./index.css";
+import empty from '../../assets/empty-cart-removebg-preview.png';
 
 const Cart = () => {
-  const [product_id, setProductId ] = useState('');
-  const [prodQuantity, setprodQuantity] = useState('');
   const cart = useSelector((state) => state.cart);
   const { user, token } = useSelector((state) => state.auth);
-  console.log(cart.products, "cart");
+  console.log(cart.total, "total");
   const dispatch = useDispatch();
 
 
@@ -74,6 +73,7 @@ const Cart = () => {
   const { Step } = Steps;
   return (
     <div>
+      {cart.products.length > 0 ? ( 
       <Container fluid style={{ marginTop: "3%" }} className="order-holder">
         <Breadcrumb>
           <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
@@ -90,8 +90,8 @@ const Cart = () => {
             <div className="productContainer">
               {cart.products.map((prod) => (
                 <ListGroup.Item key={prod.id}>
-                  {setProductId(prod.id)}
-                  {setprodQuantity(prod.quantity)}
+                  {console.log([prod.id, prod.quantity])}
+                  {/* {dispatch(addProductQuantity([prod.id, prod.quantity]))} */}
                   <Row style={{ alignItems: "center" }}>
                     <Col md={3}>
                       <Image src={prod.image} alt={prod.name} fluid rounded />
@@ -127,7 +127,7 @@ const Cart = () => {
                       </div>
                     </Col>
                     <Col md={2}>
-                        <span style={{ fontWeight: "bold" , fontSize: "15px" }}>KWD {prod.price * prod.quantity}</span>
+                        <span style={{ fontWeight: "bold" , fontSize: "15px" }}> {prod.price * prod.quantity} KWD</span>
                     </Col>
                     <Col md={1}>
                     <Popconfirm
@@ -176,7 +176,7 @@ const Cart = () => {
                 <Col lg="6">
                   <p className="main-title-summary">
                     Item Subtotal{" "}
-                    <span style={{ color: "#9a9a9a" }}> ({cart.products.length } Item) </span>
+                    <span style={{ color: "#9a9a9a" }}> ({cart.quantity } Item) </span>
                   </p>
                 </Col>
                 <Col lg="6">
@@ -199,12 +199,12 @@ const Cart = () => {
                 </Col>
                 <Col>
                   <p style={{ fontWeight: "bold", fontSize: "17px" }}>
-                    {cart.total} KWD
+                    {cart.total <1 ? '0' : cart.total} KWD
                   </p>
                 </Col>
               </Row>
               <Row>
-                <Link to={`/shipment/${product_id}/${prodQuantity}`}>
+                <Link to={`/shipment`}>
                   <Button type="primary">Checkout</Button>
                 </Link>
               </Row>
@@ -212,6 +212,13 @@ const Cart = () => {
           </Col>
         </Row>
       </Container>
+      ) : (
+        <Result
+        icon={<img src={empty} alt="empty-cart" style={{ width: '250px' }}/>}
+        title="Your cart is empty!"
+        extra={ <Link to="/"> <Button type="primary">Shop Now</Button> </Link>}
+      />
+      )}
     </div>
   );
 };

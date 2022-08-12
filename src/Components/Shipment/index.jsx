@@ -29,21 +29,22 @@ const Shipment = () => {
     const [block, setBlock] = useState("");
 
     const { Step } = Steps;
-
+    const { addProductQuantity } = useSelector((state) => state.cart);
     const handelShipment = async () =>{
         try {
           const {
-            data: { message : verifyMessage },
+            data
           } = await axios.post(
             `${process.env.REACT_APP_BACKEND_URL}/api/v1/order`,
             {
               name,
               email,
               phoneNumber,
-              addresses: [city, area, street, block, building]
+              addresses: [city, area, street, block, building],
+              products: addProductQuantity
             }
           );
-          message.success(verifyMessage);
+          message.success(data);
         } catch ({
           response: {
             data: { message: msg },
