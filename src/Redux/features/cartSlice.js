@@ -6,7 +6,6 @@ const cartSlice = createSlice({
         products: [],
         quantity: 0,
         total: 0,
-        ProductQuantity: [],
     },
     reducers:{
         addProduct: (state, action) => {
@@ -46,9 +45,6 @@ const cartSlice = createSlice({
             state.products = removeItem;
             state.quantity = state.products.length;
             state.total = state.products.reduce((total, item) => total + item.price, 0);
-        },
-        addProductQuantity: (state, action) => {
-            state.ProductQuantity.push(action.payload);
         }
     }
 })

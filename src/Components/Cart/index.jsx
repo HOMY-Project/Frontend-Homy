@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { CloseOutlined } from "@ant-design/icons";
 import {
   Container,
@@ -14,7 +14,7 @@ import { Button, Steps, Input, message, Popconfirm, Result } from "antd";
 import Heading from "../Heading";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from 'react-router-dom';
-import { removeItem, incrementQuantity, decrementQuantity, addProductQuantity } from '../../Redux/features/cartSlice';
+import { removeItem, incrementQuantity, decrementQuantity } from '../../Redux/features/cartSlice';
 import axios from "axios";
 import "../Order/index.css";
 import "./index.css";
@@ -23,7 +23,6 @@ import empty from '../../assets/empty-cart-removebg-preview.png';
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
   const { user, token } = useSelector((state) => state.auth);
-  console.log(cart.total, "total");
   const dispatch = useDispatch();
 
 
@@ -54,7 +53,7 @@ const Cart = () => {
       source.cancel();
   };
   }, [])
-  
+
 
   const handelDeleteProductCart = async (productId) =>{
     if (token) {
@@ -90,8 +89,6 @@ const Cart = () => {
             <div className="productContainer">
               {cart.products.map((prod) => (
                 <ListGroup.Item key={prod.id}>
-                  {console.log([prod.id, prod.quantity])}
-                  {/* {dispatch(addProductQuantity([prod.id, prod.quantity]))} */}
                   <Row style={{ alignItems: "center" }}>
                     <Col md={3}>
                       <Image src={prod.image} alt={prod.name} fluid rounded />
@@ -158,7 +155,7 @@ const Cart = () => {
           </Col>
           <Col lg="4" md="2" sm="12">
             <Container className="orderSummary">
-              <h3>Summary</h3>
+              <h3>Order Review</h3>
               <Row>
                 <Col>
                   <Input.Group compact>
