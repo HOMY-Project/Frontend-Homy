@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { AddaddressForm, OrderStatus,SignIn, Signup, AddressInfo, Header, Footer, SubFooter, ChangePassword,Cart, Orders, SingleOrder, Shipment, ForgetPassword, ResetPassword  } from './Components';
+import { AddaddressForm, OrderStatus,SignIn, Signup, PageNotFound, OrderConfirm, AddressInfo, Header, Footer, SubFooter, ChangePassword,Cart, Orders, SingleOrder, Shipment, ForgetPassword, ResetPassword  } from './Components';
 import { Home, AboutUs, ProductDetails, AccountInformation } from './Pages';
 import "./App.css";
 import "antd/dist/antd.min.css";
@@ -29,10 +29,12 @@ function App() {
                   <Route path="/changePassword" element={<ChangePassword />} />
                   <Route path="/singleOrder" element={<SingleOrder />} />
                   <Route path="/cart" element={<Cart />} />
+                  <Route path="/order-confirm" element={<OrderConfirm />} />
                   <Route path="/shipment" element={<Shipment />} />
-                  <Route path="/api/v1/product/:productId" element={<ProductDetails /> } />
                   <Route path="/forgetPassword" element={<ForgetPassword />} />
                   <Route path="/resetPassword/:token" element={<ResetPassword />} />
+                  <Route path="/api/v1/product/:productId" element={<ProductDetails /> } />
+                  <Route path="*" element={<PageNotFound />} />
                 </Routes>
             </div>
             </Content>

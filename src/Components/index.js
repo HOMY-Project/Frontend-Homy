@@ -19,6 +19,8 @@ import Cart from './Cart';
 import ResetPassword from './ResetPassword';
 import ForgetPassword from './ForgetPassword';
 import Shipment from './Shipment';
+import OrderConfirm from './Shipment/orderConfirm';
+import PageNotFound from './PageNotFound';
 
 export {
     AddaddressForm,
@@ -41,5 +43,7 @@ export {
     Cart,
     ResetPassword,
     ForgetPassword,
-    Shipment
+    Shipment,
+    OrderConfirm,
+    PageNotFound
 }

@@ -18,7 +18,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function MainNavbar() {
   const { user, allProducts } = useSelector((state) => state.auth);
   const { quantity } = useSelector((state) => state.cart)
-  console.log(quantity, "quantity");
   const [options, setOptions] = useState([]);
 
   const dispatch = useDispatch();

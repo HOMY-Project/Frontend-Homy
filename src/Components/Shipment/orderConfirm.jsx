@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { CloseOutlined } from "@ant-design/icons";
-import { v4 as uuidv4 } from "uuid";
+import React, { useState } from "react";
+import { CloseOutlined, SmileOutlined, EditFilled } from "@ant-design/icons";
 import {
   Container,
   Col,
@@ -8,64 +7,97 @@ import {
   Image,
   Row,
   Breadcrumb,
-  InputGroup,
 } from "react-bootstrap";
-import { Button, Steps, message, Radio, Input, Popconfirm } from "antd";
+import { Button, Steps, message, Popconfirm, notification, Modal } from "antd";
 import { useSelector, useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import {
   removeItem,
-  incrementQuantity,
-  decrementQuantity,
 } from "../../Redux/features/cartSlice";
 import { setBill } from "../../Redux/features/singleOrderSlice";
 import "../Order/index.css";
+import "./index.css";
 import paymentImg from "../../assets/payment.jpg";
 
-const Shipment = () => {
-  const [name, setname] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setphone] = useState("");
-  const [city, setCity] = useState("");
-  const [area, setArea] = useState("");
-  const [street, setStreet] = useState("");
-  const [building, setBuilding] = useState("");
-  const [block, setBlock] = useState("");
-  const [payment, setPayment] = useState("Knet");
-  const [validated, setValidated] = useState(false);
-  const { products, quantity, total } = useSelector((state) => state.cart);
+const OrderConfirm = () => {
+  const { bill } = useSelector((state) => state.singleOrder);
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  console.log(bill, "bill");
+  const [name, setName] = useState(bill.name);
+  const [email, setEmail] = useState(bill.email);
+  const [phone, setphone] = useState(bill.phone);
+  const [city, setCity] = useState(bill.addresses[0]);
+  const [area, setArea] = useState(bill.addresses[1]);
+  const [street, setStreet] = useState(bill.addresses[2]);
+  const [building, setBuilding] = useState(bill.addresses[3]);
+  const [block, setBlock] = useState(bill.addresses[4]);
+  const [payment, setPayment] = useState(bill.payment);
+  const { products, quantity, total } = useSelector((state) => state.cart);
 
   const { Step } = Steps;
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const handelShipment = async (event) => {
-    try {
-      const form = event.currentTarget;
-      if (form.checkValidity() === false) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-      setValidated(true);
-      dispatch(
-        setBill({
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const editBill = async (e) => {
+      e.preventDefault();
+    try{
+        dispatch(setBill(        
+          {
           name,
           email,
           phone,
           addresses: [city, area, street, block, building],
-          products: products.map((prod) => [prod.id, prod.quantity]),
+          products: bill.products,
           payment,
-          orderNumber: uuidv4(),
-          amount: total,
-        })
-      );
-      navigate("/order-confirm");
-    } catch (error) {
-      message.error(error);
+          orderNumber: bill.orderNumber,
+          amount: bill.amount,
+        }));
+        setIsModalVisible(false);
+        message.success("Bill updated successfully");
+    }catch(err){
+        message.error(err);
     }
   };
+  
+  const handelShipment = async () => {
+    try {
+      const {
+        data: { message: msg, data },
+      } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/order`, bill);
+      message.success(msg);
+      console.log(data, "data");
+      notification.open({
+        message: "Order Confirmed",
+        description: { msg },
+        icon: (
+          <SmileOutlined
+            style={{
+              color: "#108ee9",
+            }}
+          />
+        ),
+        placement: "top",
+      });
+      navigate("/")
+    } catch ({
+      response: {
+        data: { message: msg },
+      },
+    }) {
+      message.error(msg);
+    }
+    };
+    
 
   const handelDeleteProductCart = async (productId) => {
     if (token) {
@@ -94,7 +126,7 @@ const Shipment = () => {
           <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
           <Breadcrumb.Item href="/">Shopping Cart</Breadcrumb.Item>
         </Breadcrumb>
-        <Steps current={1} style={{ marginBottom: "3%" }}>
+        <Steps current={2} style={{ marginBottom: "3%" }}>
           <Step title="Review Order" />
           <Step title="Shipping & Payment" />
           <Step title="Confirm Order" />
@@ -102,89 +134,66 @@ const Shipment = () => {
         <Row>
           <Col lg="7" md="8" sm="12">
             <Row>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginBottom: "2%",
-                }}
-              >
+              <div>
                 <h3 style={{ fontSize: "20px", fontWeight: "bold" }}>
                   Checkout
                 </h3>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-evenly",
-                    alignItems: "center",
-                    width: "40%",
-                  }}
-                >
-                  <p style={{ marginBottom: "0", marginLeft: "2%" }}>
-                    Existing customer?
-                  </p>
-                  <Link to="/signup">
-                    {" "}
-                    <Button
-                      style={{
-                        color: "#1890FF !important",
-                        borderColor: "#1890FF !important",
-                      }}
-                    >
-                      Sign In
-                    </Button>{" "}
-                  </Link>
-                </div>
               </div>
               <hr style={{ color: "#ccc" }} />
-              <Col lg="7" md="8" sm="12">
-                <div>
-                  <div className="shippingInfo">
-                    <h3 style={{ fontSize: "18px", fontWeight: "bold" }}>
+              <Col lg="12" md="12" sm="12">
+                <div className="shippingInfo">
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <h3 style={{ fontSize: "17px", fontWeight: "bold" }}>
                       Shipping Information
                     </h3>
-                    <hr style={{ color: "#ccc" }} />
-                    <div>
-                      <Form style={{ marginTop: "2%" }} noValidate validated={true} onSubmit={handelShipment}>
-                        <Form.Group
-                          className="mb-3"
-                          controlId="validationCustom03"
-                          hasValidation
-                        >
+                    <Button type="default" style={{ color: "#40A9FF",fontSize:'20px', backgroundColor:'transparent', borderColor:'transparent' }} onClick={showModal}>
+                      <EditFilled />
+                    </Button>
+                  </div>
+                  <hr style={{ color: "#ccc" }} />
+                  <div className="shipping">
+                    <p>Full Name: {bill?.name}</p>
+                    <p>Email: {bill?.email}</p>
+                    <p>Phone: {bill?.phone}</p>
+                    {bill?.addresses.map((address, index) => (
+                      <p key={index}> {address}</p>
+                    ))}
+
+                    <Modal
+                      title="Update Bill"
+                      visible={isModalVisible}
+                      onOk={editBill}
+                      onCancel={handleCancel}
+                    >
+                      <Form style={{ marginTop: "2%" }}>
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
                           <Form.Label>Full Name</Form.Label>
                           <Form.Control
-                            type="text"
+                            type="email"
                             placeholder="Enter full Name"
                             value={name}
-                            onChange={(e) => setname(e.target.value)}
-                            required
+                            onChange={(e) => setName(e.target.value)}
                           />
-                          <Form.Control.Feedback type="invalid">
-                            Please provide a valid state.
-                          </Form.Control.Feedback>
                         </Form.Group>
-                        <Form.Group
-                          className="mb-3"
-                          controlId="validationCustom03"
-                          hasValidation
-                        >
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
                           <Form.Label>Email address</Form.Label>
                           <Form.Control
                             type="email"
                             placeholder="Enter email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            required
                           />
-                          <Form.Control.Feedback type="invalid">
-                            Please provide a valid state.
-                          </Form.Control.Feedback>
                         </Form.Group>
+
                         <Form.Group
-                          hasValidation
                           className="mb-3"
-                          controlId="validationCustom03"
+                          controlId="formBasicPassword"
                         >
                           <Form.Label>Phone Number</Form.Label>
                           <Form.Control
@@ -192,16 +201,11 @@ const Shipment = () => {
                             placeholder="Enter Order Number"
                             value={phone}
                             onChange={(e) => setphone(e.target.value)}
-                            required
                           />
-                          <Form.Control.Feedback type="invalid">
-                            Please provide a valid state.
-                          </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group
                           className="mb-3"
-                          controlId="validationCustom03"
-                          hasValidation
+                          controlId="formBasicPassword"
                         >
                           <Form.Label>City</Form.Label>
                           <Form.Control
@@ -209,30 +213,23 @@ const Shipment = () => {
                             placeholder="Enter City"
                             value={city}
                             onChange={(e) => setCity(e.target.value)}
-                            required
                           />
                         </Form.Group>
                         <Form.Group
-                          hasValidation
                           className="mb-3"
-                          controlId="validationCustom03"                   
-                          >
+                          controlId="formBasicPassword"
+                        >
                           <Form.Label>Area</Form.Label>
                           <Form.Control
                             type="text"
                             placeholder="Enter Area"
                             value={area}
                             onChange={(e) => setArea(e.target.value)}
-                            required
                           />
-                          <Form.Control.Feedback type="invalid">
-                            Please provide a valid state.
-                          </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group
                           className="mb-3"
-                          controlId="validationCustom03"      
-                          hasValidation
+                          controlId="formBasicPassword"
                         >
                           <Form.Label>Street</Form.Label>
                           <Form.Control
@@ -240,16 +237,11 @@ const Shipment = () => {
                             placeholder="Enter Street"
                             value={street}
                             onChange={(e) => setStreet(e.target.value)}
-                            required
                           />
-                          <Form.Control.Feedback type="invalid">
-                            Please provide a valid state.
-                          </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group
                           className="mb-3"
-                          controlId="validationCustom03"   
-                          hasValidation
+                          controlId="formBasicPassword"
                         >
                           <Form.Label>Block</Form.Label>
                           <Form.Control
@@ -257,16 +249,11 @@ const Shipment = () => {
                             placeholder="Enter Block"
                             value={block}
                             onChange={(e) => setBlock(e.target.value)}
-                            required
                           />
-                          <Form.Control.Feedback type="invalid">
-                            Please provide a valid state.
-                          </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group
-                          hasValidation
                           className="mb-3"
-                          controlId="validationCustom03"   
+                          controlId="formBasicPassword"
                         >
                           <Form.Label>House/Building No</Form.Label>
                           <Form.Control
@@ -276,43 +263,48 @@ const Shipment = () => {
                             onChange={(e) => setBuilding(e.target.value)}
                             required
                           />
-                          <Form.Control.Feedback type="invalid">
-                            Please choose a Building NO.
-                          </Form.Control.Feedback>
                         </Form.Group>
-
+                        <Form.Group
+                          className="mb-3"
+                          controlId="formBasicPassword"
+                        >
+                          <Form.Label>Payment</Form.Label>
+                          <Form.Control
+                            type="text"
+                            placeholder="Enter Building No"
+                            value={payment}
+                            onChange={(e) => setPayment(e.target.value)}
+                          />
+                        </Form.Group>
+                        <Form.Group>
+                        </Form.Group>
                       </Form>
-                    </div>
+                    </Modal>
                   </div>
                 </div>
               </Col>
-              <Col lg="4" md="8" sm="12">
+              <Col lg="12" md="12" sm="12" style={{marginTop: "3%" }}>
                 <div>
                   <div className="shippingInfo">
-                    <h3 style={{ fontSize: "18px", fontWeight: "bold" }}>
+                    <h3 style={{ fontSize: "17px", fontWeight: "bold" }}>
                       Payment Method
                     </h3>
                     <hr style={{ color: "#ccc" }} />
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Radio.Group
-                        onChange={(e) => setPayment(e.target.value)}
-                        value={payment}
-                      >
-                        <Radio defaultChecked value="Knet">
-                          Knet Payment
-                        </Radio>
-                      </Radio.Group>
+                    <div style={{ display: "flex" }}>
                       <img
                         alt="example"
                         src={paymentImg}
-                        style={{ width: "60px" }}
+                        style={{ width: "80px" }}
                       />
+                      <p
+                        style={{
+                          fontSize: "15px",
+                          fontWeight: "bold",
+                          marginLeft: "2%",
+                        }}
+                      >
+                        {bill.payment}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -322,6 +314,7 @@ const Shipment = () => {
           <Col lg="5" md="4" sm="12">
             <Container className="orderSummary">
               <h3>Order Review</h3>
+              <p>Order No : {bill.orderNumber}</p>
               <hr />
               {products.map((product) => (
                 <Row style={{ marginBottom: "2%" }}>
@@ -367,33 +360,7 @@ const Shipment = () => {
                       </Col>
                       <Col sm="5">
                         <div className="quantity-holder">
-                          <InputGroup className="mb-3">
-                            <Button
-                              variant="outline-secondary"
-                              id="button-addon1"
-                              onClick={() =>
-                                dispatch(incrementQuantity(product.id))
-                              }
-                            >
-                              +
-                            </Button>
-                            <Form.Control
-                              className="quantityInput"
-                              aria-label="Example text with button addon"
-                              aria-describedby="basic-addon2"
-                              disabled
-                              value={product.quantity}
-                            />
-                            <Button
-                              variant="outline-secondary"
-                              id="button-addon2"
-                              onClick={() =>
-                                dispatch(decrementQuantity(product.id))
-                              }
-                            >
-                              -
-                            </Button>
-                          </InputGroup>
+                          <p>Qty: {product.quantity}</p>
                         </div>
                       </Col>
                     </Row>
@@ -435,11 +402,9 @@ const Shipment = () => {
                 </Col>
               </Row>
               <Row>
-                <Form>
-              <Button type="submit" onClick={handelShipment} >
-                  Confirm Order Now
-              </Button>
-                </Form>
+                <Button type="primary" onClick={(e) => handelShipment(e)}>
+                  Complete Purchase
+                </Button>
               </Row>
             </Container>
           </Col>
@@ -449,4 +414,4 @@ const Shipment = () => {
   );
 };
 
-export default Shipment;
+export default OrderConfirm;
