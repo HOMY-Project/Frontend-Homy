@@ -21,6 +21,7 @@ import ForgetPassword from './ForgetPassword';
 import Shipment from './Shipment';
 import OrderConfirm from './Shipment/orderConfirm';
 import PageNotFound from './PageNotFound';
+import Wishlist from './Wishlist';
 
 export {
     AddaddressForm,
@@ -45,5 +46,6 @@ export {
     ForgetPassword,
     Shipment,
     OrderConfirm,
-    PageNotFound
+    PageNotFound,
+    Wishlist
 }

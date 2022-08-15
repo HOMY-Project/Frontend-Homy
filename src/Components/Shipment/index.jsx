@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
+import LocaleContext from '../../translations/LocaleContext';
 import { CloseOutlined } from "@ant-design/icons";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -7,10 +8,9 @@ import {
   Form,
   Image,
   Row,
-  Breadcrumb,
   InputGroup,
 } from "react-bootstrap";
-import { Button, Steps, message, Radio, Input, Popconfirm } from "antd";
+import { Button, Steps, message, Radio, Popconfirm, Breadcrumb } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -22,6 +22,7 @@ import {
 import { setBill } from "../../Redux/features/singleOrderSlice";
 import "../Order/index.css";
 import paymentImg from "../../assets/payment.jpg";
+import { useTranslation } from "react-i18next";
 
 const Shipment = () => {
   const [name, setname] = useState("");
@@ -38,6 +39,8 @@ const Shipment = () => {
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { locale } = useContext(LocaleContext);
 
   const { Step } = Steps;
 
@@ -90,14 +93,18 @@ const Shipment = () => {
   return (
     <div>
       <Container fluid style={{ marginTop: "3%" }} className="order-holder">
-        <Breadcrumb>
-          <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-          <Breadcrumb.Item href="/">Shopping Cart</Breadcrumb.Item>
-        </Breadcrumb>
-        <Steps current={1} style={{ marginBottom: "3%" }}>
-          <Step title="Review Order" />
-          <Step title="Shipping & Payment" />
-          <Step title="Confirm Order" />
+        <Breadcrumb style={{ marginBottom: "4%"}}>
+            <Breadcrumb.Item>
+              <a href="/">{t('Home')}</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="">{t('Shopping Cart')}</a>
+            </Breadcrumb.Item>
+        </Breadcrumb>        
+        <Steps current={1} style={{ marginBottom: "5%"}}>
+          <Step title={t("Review Order")} />
+          <Step title={t("Shipping & Payment")} />
+          <Step title={t("Confirm Order")} />
         </Steps>
         <Row>
           <Col lg="7" md="8" sm="12">
@@ -111,7 +118,7 @@ const Shipment = () => {
                 }}
               >
                 <h3 style={{ fontSize: "20px", fontWeight: "bold" }}>
-                  Checkout
+                  {t("Checkout")}
                 </h3>
                 <div
                   style={{
@@ -122,9 +129,9 @@ const Shipment = () => {
                   }}
                 >
                   <p style={{ marginBottom: "0", marginLeft: "2%" }}>
-                    Existing customer?
+                    {t("Existing customer?")}
                   </p>
-                  <Link to="/signup">
+                  <Link to="/signin">
                     {" "}
                     <Button
                       style={{
@@ -132,7 +139,7 @@ const Shipment = () => {
                         borderColor: "#1890FF !important",
                       }}
                     >
-                      Sign In
+                      {t("signIn")}
                     </Button>{" "}
                   </Link>
                 </div>
@@ -142,7 +149,7 @@ const Shipment = () => {
                 <div>
                   <div className="shippingInfo">
                     <h3 style={{ fontSize: "18px", fontWeight: "bold" }}>
-                      Shipping Information
+                      {t("Shipping")}
                     </h3>
                     <hr style={{ color: "#ccc" }} />
                     <div>
@@ -152,7 +159,7 @@ const Shipment = () => {
                           controlId="validationCustom03"
                           hasValidation
                         >
-                          <Form.Label>Full Name</Form.Label>
+                          <Form.Label>{t("Full Name")}</Form.Label>
                           <Form.Control
                             type="text"
                             placeholder="Enter full Name"
@@ -161,7 +168,7 @@ const Shipment = () => {
                             required
                           />
                           <Form.Control.Feedback type="invalid">
-                            Please provide a valid state.
+                            Please provide a valid full Name.
                           </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group
@@ -169,7 +176,7 @@ const Shipment = () => {
                           controlId="validationCustom03"
                           hasValidation
                         >
-                          <Form.Label>Email address</Form.Label>
+                          <Form.Label>{t("Email-address")}</Form.Label>
                           <Form.Control
                             type="email"
                             placeholder="Enter email"
@@ -178,7 +185,7 @@ const Shipment = () => {
                             required
                           />
                           <Form.Control.Feedback type="invalid">
-                            Please provide a valid state.
+                            Please provide a valid email.
                           </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group
@@ -186,7 +193,7 @@ const Shipment = () => {
                           className="mb-3"
                           controlId="validationCustom03"
                         >
-                          <Form.Label>Phone Number</Form.Label>
+                          <Form.Label>{t("Phone Number")}</Form.Label>
                           <Form.Control
                             type="text"
                             placeholder="Enter Order Number"
@@ -203,7 +210,7 @@ const Shipment = () => {
                           controlId="validationCustom03"
                           hasValidation
                         >
-                          <Form.Label>City</Form.Label>
+                          <Form.Label>{t("City")}</Form.Label>
                           <Form.Control
                             type="text"
                             placeholder="Enter City"
@@ -217,7 +224,7 @@ const Shipment = () => {
                           className="mb-3"
                           controlId="validationCustom03"                   
                           >
-                          <Form.Label>Area</Form.Label>
+                          <Form.Label>{t("Area")}</Form.Label>
                           <Form.Control
                             type="text"
                             placeholder="Enter Area"
@@ -226,7 +233,7 @@ const Shipment = () => {
                             required
                           />
                           <Form.Control.Feedback type="invalid">
-                            Please provide a valid state.
+                            Please provide a valid Area.
                           </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group
@@ -234,7 +241,7 @@ const Shipment = () => {
                           controlId="validationCustom03"      
                           hasValidation
                         >
-                          <Form.Label>Street</Form.Label>
+                          <Form.Label>{t("Street")}</Form.Label>
                           <Form.Control
                             type="text"
                             placeholder="Enter Street"
@@ -243,7 +250,7 @@ const Shipment = () => {
                             required
                           />
                           <Form.Control.Feedback type="invalid">
-                            Please provide a valid state.
+                            Please provide a valid street.
                           </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group
@@ -251,7 +258,7 @@ const Shipment = () => {
                           controlId="validationCustom03"   
                           hasValidation
                         >
-                          <Form.Label>Block</Form.Label>
+                          <Form.Label>{t("Block")}</Form.Label>
                           <Form.Control
                             type="text"
                             placeholder="Enter Block"
@@ -260,7 +267,7 @@ const Shipment = () => {
                             required
                           />
                           <Form.Control.Feedback type="invalid">
-                            Please provide a valid state.
+                            Please provide a valid block.
                           </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group
@@ -268,7 +275,7 @@ const Shipment = () => {
                           className="mb-3"
                           controlId="validationCustom03"   
                         >
-                          <Form.Label>House/Building No</Form.Label>
+                          <Form.Label>{t("Building")}</Form.Label>
                           <Form.Control
                             type="text"
                             placeholder="Enter Building No"
@@ -290,7 +297,7 @@ const Shipment = () => {
                 <div>
                   <div className="shippingInfo">
                     <h3 style={{ fontSize: "18px", fontWeight: "bold" }}>
-                      Payment Method
+                      {t("Payment Method")}
                     </h3>
                     <hr style={{ color: "#ccc" }} />
                     <div
@@ -321,7 +328,7 @@ const Shipment = () => {
           </Col>
           <Col lg="5" md="4" sm="12">
             <Container className="orderSummary">
-              <h3>Order Review</h3>
+            <h3 style={{ marginBottom: "5%"}}>{t('Order Review')}</h3>
               <hr />
               {products.map((product) => (
                 <Row style={{ marginBottom: "2%" }}>
@@ -370,7 +377,7 @@ const Shipment = () => {
                           <InputGroup className="mb-3">
                             <Button
                               variant="outline-secondary"
-                              id="button-addon1"
+                              id={locale === 'en' ? 'button-addon1' : 'button-addon2'}
                               onClick={() =>
                                 dispatch(incrementQuantity(product.id))
                               }
@@ -386,7 +393,7 @@ const Shipment = () => {
                             />
                             <Button
                               variant="outline-secondary"
-                              id="button-addon2"
+                              id={locale === 'en' ? 'button-addon2' : 'button-addon1'}
                               onClick={() =>
                                 dispatch(decrementQuantity(product.id))
                               }
@@ -403,10 +410,10 @@ const Shipment = () => {
               <Row style={{ marginTop: "6%" }}>
                 <Col lg="6">
                   <p className="main-title-summary">
-                    Item Subtotal{" "}
+                    {t("Item Subtotal")}{" "}
                     <span style={{ color: "#9a9a9a" }}>
                       {" "}
-                      ({quantity} Item){" "}
+                      ({quantity} {t("Item")}){" "}
                     </span>
                   </p>
                 </Col>
@@ -416,8 +423,8 @@ const Shipment = () => {
               </Row>
               <Row style={{ marginTop: "3%" }}>
                 <Col lg="6">
-                  <p className="main-title-summary">Shipping</p>
-                  <p style={{ color: "#9a9a9a" }}>Standart Delivery</p>
+                  <p className="main-title-summary">{t("Shipping")}</p>
+                  <p style={{ color: "#9a9a9a" }}>{t("Standart Delivery")}</p>
                 </Col>
                 <Col lg="6">
                   <p>Free</p>
@@ -426,7 +433,7 @@ const Shipment = () => {
               <Row>
                 <hr />
                 <Col>
-                  <p className="main-title-summary">Total</p>
+                  <p className="main-title-summary">{t("Total")}</p>
                 </Col>
                 <Col>
                   <p style={{ fontWeight: "bold", fontSize: "17px" }}>
@@ -437,7 +444,7 @@ const Shipment = () => {
               <Row>
                 <Form>
               <Button type="submit" onClick={handelShipment} >
-                  Confirm Order Now
+                  {t("Confirm Order Now")}
               </Button>
                 </Form>
               </Row>

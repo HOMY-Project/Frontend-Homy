@@ -10,6 +10,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser, setToken, loginStart, loginFailure } from '../../Redux/features/authSlice';
 import { CheckCircleTwoTone } from '@ant-design/icons';
+import { useTranslation } from "react-i18next";
 import './index.css';
 
  const SignIn = () => {
@@ -18,6 +19,7 @@ import './index.css';
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isFetching } = useSelector((state) => state.auth);
+  const { t  } = useTranslation();
 
   const signIn = async (e) => {
     e.preventDefault();
@@ -46,9 +48,9 @@ import './index.css';
     <div className="Auth-form-container">
       <form className="Auth-form">
         <div className="Auth-form-content">
-          <h3 className="Auth-form-title">Sign In</h3>
+          <h3 className="Auth-form-title">{t('signIn')}</h3>
           <div className="form-group mt-3">
-            <label>Email address</label>
+            <label>{t('Email-address')}</label>
             <input
               type="email"
               className="form-control mt-1"
@@ -58,7 +60,7 @@ import './index.css';
             />
           </div>
           <div className="form-group mt-3">
-            <label>Password</label>
+            <label>{t('Password')}</label>
             <input
               type="password"
               className="form-control mt-1"
@@ -69,23 +71,23 @@ import './index.css';
           </div>
           <div className="d-grid gap-2 mt-3 sec-password">
             <Form.Group className="" controlId="formBasicCheckbox">
-              <Form.Check type="checkbox" label="Save Password" />
+              <Form.Check type="checkbox" label={t("Save Password")} />
             </Form.Group>
             <p className="forgot-password text-right mt-2">
-              <Link to="/forgetPassword">Forgot password?</Link>
+              <Link to="/forgetPassword">{t('Forgot password')}</Link>
             </p>
           </div>
           <div className="d-grid gap-2 mt-3">
             <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#0F6AD0'}} onClick={(e) => signIn(e)}>
-              Sign In
+             {t('signIn')}
             </button>
           </div>
           <div className="d-grid gap-2 mt-3">
             <hr />
-            <p className=""> New Customer?</p>
+            <p className=""> {t('NewCustomer')} ? </p>
             <Link to="/signUp" className="new-customer-a">
               <button type="submit" className="btn btn-primary" disabled={isFetching} style={{ backgroundColor: '#fff', color: '#0F6AD0', width: '100%'}}>
-                Create An Account
+                {t('Create An Account')}
               </button>
             </Link>
           </div>

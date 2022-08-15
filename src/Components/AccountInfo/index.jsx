@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link } from 'react-router-dom'
-import Breadcrumb from "react-bootstrap/Breadcrumb";
-import { Form, Input, message } from "antd";
+import {  Container } from 'react-bootstrap';
+import { Form, Input, message, Breadcrumb } from "antd";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import Heading from "../Heading/index";
 import "../SignIn/index.css";
 import "./index.css";
@@ -15,7 +16,7 @@ const AccountInfo = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhoneNum] = useState("");
   const [edit, isEdit] = useState(true);
-
+  const { t } = useTranslation();
   useEffect(() => {
     const { name, email, phone } = user;
     setName(name);
@@ -52,12 +53,20 @@ const AccountInfo = () => {
   const { Item } = Form;
 
   return (
-    <><Breadcrumb style={{ marginTop : '2%', paddingLeft : '10%' }}>
-      <Breadcrumb.Item to="/">Home</Breadcrumb.Item>
-      <Breadcrumb.Item>Account</Breadcrumb.Item>
-      <Breadcrumb.Item active>Account Information</Breadcrumb.Item>
-    </Breadcrumb><div className="Auth-form-container accountInfo-form">
-        <Heading heading="Account Information" />
+    <Container fluid style={{ marginTop: "3%" }} className="order-holder">
+        <Breadcrumb style={{ marginBottom: "4%"}}>
+            <Breadcrumb.Item>
+              <a href="/">{t('Home')}</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="">{t('Account')}</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="">{t('Account Information')}</a>
+            </Breadcrumb.Item>
+        </Breadcrumb>
+        <div className="Auth-form-container accountInfo-form">
+        <Heading heading={t("Account Information")} />
         <Form
           name="basic"
           initialValues={user}
@@ -73,7 +82,7 @@ const AccountInfo = () => {
         >
           <div className="Auth-form-content">
             <div className="form-group mt-3">
-              <label>Full Name</label>
+              <label>{t("Full Name")}</label>
               <Item
                 className="form-control mt-1"
                 name="name"
@@ -95,7 +104,7 @@ const AccountInfo = () => {
             </div>
 
             <div className="form-group mt-3">
-              <label>Email address</label>
+              <label>{t("Email-address")}</label>
               <Item
                 name="email"
                 className="form-control mt-1"
@@ -117,7 +126,7 @@ const AccountInfo = () => {
             </div>
 
             <div className="form-group mt-3">
-              <label>Phone Number</label>
+              <label>{t("Phone Number")}</label>
               <Item
                 name="phone"
                 className="form-control mt-1"
@@ -144,7 +153,7 @@ const AccountInfo = () => {
                   style={{ backgroundColor: "#0F6AD0" }}
                   onClick={() => isEdit(false)}
                 >
-                  Edit Account
+                  {t("Edit Account")}
                 </button>
               </div>
             ) : (
@@ -156,7 +165,7 @@ const AccountInfo = () => {
                     style={{ backgroundColor: "#0F6AD0", marginRight: "2%" }}
                     onClick={() => editInfo()}
                   >
-                    Save Changes
+                    {t("Save Changes")}
                   </button>
                   <Link to="/changePassword">
                   <button
@@ -168,7 +177,7 @@ const AccountInfo = () => {
                       borderColor: "#0F6AD0",
                     }}
                   >
-                    Change Password
+                    {t("Change Password")}
                   </button>
                   </Link>
                 </div>
@@ -176,7 +185,8 @@ const AccountInfo = () => {
             )}
           </div>
         </Form>
-      </div></>
+      </div>
+      </Container>
   );
 };
 

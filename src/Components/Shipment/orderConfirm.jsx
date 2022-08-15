@@ -6,9 +6,9 @@ import {
   Form,
   Image,
   Row,
-  Breadcrumb,
 } from "react-bootstrap";
-import { Button, Steps, message, Popconfirm, notification, Modal } from "antd";
+import { useTranslation } from "react-i18next";
+import { Button, Steps, message, Popconfirm, notification, Modal, Breadcrumb } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +25,7 @@ const OrderConfirm = () => {
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log(bill, "bill");
+  const { t } = useTranslation();
   const [name, setName] = useState(bill.name);
   const [email, setEmail] = useState(bill.email);
   const [phone, setphone] = useState(bill.phone);
@@ -122,21 +122,25 @@ const OrderConfirm = () => {
   return (
     <div>
       <Container fluid style={{ marginTop: "3%" }} className="order-holder">
-        <Breadcrumb>
-          <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-          <Breadcrumb.Item href="/">Shopping Cart</Breadcrumb.Item>
-        </Breadcrumb>
-        <Steps current={2} style={{ marginBottom: "3%" }}>
-          <Step title="Review Order" />
-          <Step title="Shipping & Payment" />
-          <Step title="Confirm Order" />
+      <Breadcrumb style={{ marginBottom: "4%"}}>
+            <Breadcrumb.Item>
+              <a href="/">{t('Home')}</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="">{t('Shopping Cart')}</a>
+            </Breadcrumb.Item>
+        </Breadcrumb>        
+        <Steps current={1} style={{ marginBottom: "5%"}}>
+          <Step title={t("Review Order")} />
+          <Step title={t("Shipping & Payment")} />
+          <Step title={t("Confirm Order")} />
         </Steps>
         <Row>
           <Col lg="7" md="8" sm="12">
             <Row>
               <div>
                 <h3 style={{ fontSize: "20px", fontWeight: "bold" }}>
-                  Checkout
+                  {t("Checkout")}
                 </h3>
               </div>
               <hr style={{ color: "#ccc" }} />
@@ -150,7 +154,7 @@ const OrderConfirm = () => {
                     }}
                   >
                     <h3 style={{ fontSize: "17px", fontWeight: "bold" }}>
-                      Shipping Information
+                      {t("Shipping")}
                     </h3>
                     <Button type="default" style={{ color: "#40A9FF",fontSize:'20px', backgroundColor:'transparent', borderColor:'transparent' }} onClick={showModal}>
                       <EditFilled />
@@ -158,9 +162,9 @@ const OrderConfirm = () => {
                   </div>
                   <hr style={{ color: "#ccc" }} />
                   <div className="shipping">
-                    <p>Full Name: {bill?.name}</p>
-                    <p>Email: {bill?.email}</p>
-                    <p>Phone: {bill?.phone}</p>
+                    <p>{t("Full Name")}: {bill?.name}</p>
+                    <p>{t("Email-address")}: {bill?.email}</p>
+                    <p>{t("Phone Number")}: {bill?.phone}</p>
                     {bill?.addresses.map((address, index) => (
                       <p key={index}> {address}</p>
                     ))}
@@ -287,7 +291,7 @@ const OrderConfirm = () => {
                 <div>
                   <div className="shippingInfo">
                     <h3 style={{ fontSize: "17px", fontWeight: "bold" }}>
-                      Payment Method
+                      {t("Payment Method")}
                     </h3>
                     <hr style={{ color: "#ccc" }} />
                     <div style={{ display: "flex" }}>
@@ -313,7 +317,7 @@ const OrderConfirm = () => {
           </Col>
           <Col lg="5" md="4" sm="12">
             <Container className="orderSummary">
-              <h3>Order Review</h3>
+            <h3 style={{ marginBottom: "5%"}}>{t('Order Review')}</h3>
               <p>Order No : {bill.orderNumber}</p>
               <hr />
               {products.map((product) => (
@@ -360,7 +364,7 @@ const OrderConfirm = () => {
                       </Col>
                       <Col sm="5">
                         <div className="quantity-holder">
-                          <p>Qty: {product.quantity}</p>
+                          <p>{t("Qty")}: {product.quantity}</p>
                         </div>
                       </Col>
                     </Row>
@@ -370,10 +374,10 @@ const OrderConfirm = () => {
               <Row style={{ marginTop: "6%" }}>
                 <Col lg="6">
                   <p className="main-title-summary">
-                    Item Subtotal{" "}
+                    {t("Item Subtotal")}{" "}
                     <span style={{ color: "#9a9a9a" }}>
                       {" "}
-                      ({quantity} Item){" "}
+                      ({quantity} {t("Item")}){" "}
                     </span>
                   </p>
                 </Col>
@@ -383,8 +387,8 @@ const OrderConfirm = () => {
               </Row>
               <Row style={{ marginTop: "3%" }}>
                 <Col lg="6">
-                  <p className="main-title-summary">Shipping</p>
-                  <p style={{ color: "#9a9a9a" }}>Standart Delivery</p>
+                  <p className="main-title-summary">{t("Shipping")}</p>
+                  <p style={{ color: "#9a9a9a" }}>{t("Standart Delivery")}</p>
                 </Col>
                 <Col lg="6">
                   <p>Free</p>
@@ -393,7 +397,7 @@ const OrderConfirm = () => {
               <Row>
                 <hr />
                 <Col>
-                  <p className="main-title-summary">Total</p>
+                  <p className="main-title-summary">{t("Total")}</p>
                 </Col>
                 <Col>
                   <p style={{ fontWeight: "bold", fontSize: "17px" }}>
@@ -403,7 +407,7 @@ const OrderConfirm = () => {
               </Row>
               <Row>
                 <Button type="primary" onClick={(e) => handelShipment(e)}>
-                  Complete Purchase
+                 {t("Complete Purchase")}
                 </Button>
               </Row>
             </Container>

@@ -3,14 +3,15 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import axios from "axios";
 import { message } from "antd";
+import { useTranslation } from "react-i18next";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Heading from "../Heading";
 import './index.css';
 
 const Brands = () => {
-    const [brands, setBrands ] = useState([]);
-
+  const [brands, setBrands ] = useState([]);
+  const { t } = useTranslation();
   const responsive = {
     superLargeDesktop: {
       // the naming can be any, depends on you.
@@ -57,7 +58,7 @@ const Brands = () => {
   return (
     <div className="brands-holder">
     <Container fluid>
-    <Heading heading="Brands Currently Trending" />
+    <Heading heading={t("Brands Currently Trending")} />
         <Row>
         <Carousel responsive={responsive}>
             {brands.length > 0 && brands.map((brand) => (
