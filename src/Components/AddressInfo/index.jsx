@@ -269,7 +269,6 @@ const AddressInfo = () => {
                           handelDeleteAddress(item.id);
                         }}
                         onCancel={(e) => {
-                          console.log(e);
                           message.error("Click on No");
                         }}
                         okText="Yes"

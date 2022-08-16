@@ -35,7 +35,6 @@ const Wishlist = () => {
               {
               cancelToken: source.token,
           });
-          console.log(data, 'wishlist prod');
           } catch ({
           response: {
               data: { message: msg },
@@ -129,7 +128,6 @@ const Wishlist = () => {
                             handelDeleteProductWishlist(prod.id)
                           }}
                           onCancel={(e) => {
-                            console.log(e);
                             message.error('something went wrong');
                           }}
                           okText="Yes"

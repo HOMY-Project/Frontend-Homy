@@ -42,7 +42,6 @@ const Cart = () => {
               {
               cancelToken: source.token,
           });
-          console.log(data, 'cart prod');
           } catch ({
           response: {
               data: { message: msg },
@@ -143,7 +142,6 @@ const Cart = () => {
                             handelDeleteProductCart(prod.id)
                           }}
                           onCancel={(e) => {
-                            console.log(e);
                             message.error('something went wrong');
                           }}
                           okText="Yes"

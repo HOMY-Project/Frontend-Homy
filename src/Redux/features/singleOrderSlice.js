@@ -15,7 +15,6 @@ const singleOrderSlice = createSlice({
             state.total += action.payload.price * action.payload.quantity;
         },
         setBill: (state, action) => {
-            console.log(action.payload);
             state.bill= action.payload;
         },
     

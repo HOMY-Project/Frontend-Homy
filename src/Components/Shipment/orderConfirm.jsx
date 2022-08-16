@@ -75,7 +75,6 @@ const OrderConfirm = () => {
         data: { message: msg, data },
       } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/order`, bill);
       message.success(msg);
-      console.log(data, "data");
       notification.open({
         message: "Order Confirmed",
         description: { msg },
@@ -342,7 +341,6 @@ const OrderConfirm = () => {
                             handelDeleteProductCart(product.id);
                           }}
                           onCancel={(e) => {
-                            console.log(e);
                             message.error("something went wrong");
                           }}
                           okText="Yes"

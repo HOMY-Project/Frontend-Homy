@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { message, Radio, Slider, Checkbox, Result } from "antd";
+import { message, Radio, Slider, Checkbox, Result, Select, Pagination } from "antd";
 import { useTranslation } from "react-i18next";
 import { StarFilled } from '@ant-design/icons';
 import { useSelector, useDispatch } from "react-redux";
 import { Card, Button } from 'antd';
 import { Link } from 'react-router-dom';
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col,Form } from "react-bootstrap";
 import { addProduct } from '../../Redux/features/cartSlice';
 import '../SuperDeals/index.css';
 import "./index.css";
 import Heading from "../Heading";
 import { Breadcrumb } from "antd";
+const { Option } = Select;
 
 const Category = () => {
   const [Products, setProducts] = useState([]);
@@ -19,11 +20,11 @@ const Category = () => {
   const [brands, setBrands] = useState([]);
   const [place, setPlace] = useState(null);
   const [categoryName, setCategoryName ] = useState([]);
-  const [sortVal, setSortVal] = useState(null);
-  const [page, setPage] = useState(1);
   const [minPrice, setMin] = useState(0);
   const [maxPrice, setMax] = useState(0);
   const [subCate, setSubCate] = useState([]);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState();
   const dispatch = useDispatch();
   const { user, token } = useSelector((state) => state.auth);
   const [subCategory, setsubCategory] = useState("0");
@@ -55,15 +56,13 @@ const Category = () => {
         return dispatch(addProduct({ ...product, quantity:1 }))
         }
     };
-    ///api/v1/categories/:categoryId
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getProducts = async () => {
       const url = `${process.env.REACT_APP_BACKEND_URL}/api/v1/products?categoryId=${itemId}&&place=${place}&&page=${page}`;
-      console.log(url, "url");
       try {
         const {
-          data: { products },
+          data: { products, productsLength },
         } = await axios.post(
           url,
           {
@@ -77,7 +76,7 @@ const Category = () => {
           { cancelToken: source.token }
         );
         setProducts(products);
-        console.log(products, "products");
+        setTotal(productsLength);
       } catch ({
         response: {
           data: { message: msg },
@@ -149,7 +148,6 @@ const Category = () => {
           { cancelToken: source.token }
         );
         setCategoryName(data);
-        console.log(data, "data");
       } catch ({
         response: {
           data: { message: msg },
@@ -164,6 +162,16 @@ const Category = () => {
     };
   }, []);
 
+  const sortPrice = (value) =>{
+    setProducts(Products.sort((a, b) => {
+      if (value === "lowToHigh") {
+        return a.price - b.price;
+      } else if (value === "highToLow") {
+        return b.price - a.price;
+      }
+    }
+    ))
+  }
   return (
     <Container fluid style={{ marginTop: "3%" }} className="category-holder">
       <Breadcrumb style={{ marginBottom: "4%" }}>
@@ -229,16 +237,31 @@ const Category = () => {
           </div>
         </Col>
         <Col lg={9} ms={12}>
-          <Heading heading={t("Results for - ") + categoryName[0]?.name} />
-          {/* <div className="sort-holder">
-                    <div className="sort-by">
-                        <h5 className="filter-title"> Sort By </h5>
-                        <Select defaultValue="lucy" style={{ width: 120 }} onChange={(value) => setSortVal(value)}>
-                            <Option value="jack">Price: Low to High</Option>
-                            <Option value="lucy">Price: High to Low</Option>
-                        </Select>
-                    </div>
-                </div> */}
+        <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <h3 style={{ fontSize: "17px", fontWeight: "bold" }}>
+              {t("Results for - ") + categoryName[0]?.name}
+            </h3>
+            <div className="sort-by"          
+             style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: '20%'
+            }}>
+                <h5 className="filter-title"> {t("Sort By ")}</h5>
+                <Select defaultValue="highToLow" style={{ width: 120 }} onChange={(value) => sortPrice(value)}>
+                    <Option value="LowToHigh">Price: Low to High</Option>
+                    <Option value="highToLow">Price: High to Low</Option>
+                </Select>
+            </div>
+          </div>
+          <hr style={{ color: "#ccc" }} />
           <div className="product-holder">
             <Row>
               {Products.length > 0 ? Products.map((product) => (
@@ -287,6 +310,17 @@ const Category = () => {
                 </Col>
               )): 
                 <div className="no-product"> <Result title={t("There are no products in this category")}/> </div>}
+              {total > 3 && (
+              <div className="pagination-holder">
+                <Pagination
+                  defaultCurrent={1}
+                  total={total}
+                  pageSize="3"
+                  current={page}
+                  onChange={(value) => setPage(value)}
+                />
+              </div>
+            )}
             </Row>
           </div>
         </Col>

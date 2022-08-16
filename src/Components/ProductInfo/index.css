@@ -1,7 +1,7 @@
 @import "~react-image-gallery/styles/css/image-gallery.css";
 
 .productInfoCard-holder .ant-card {
-    background-color: #f0f2f5;
+    background-color: #ffffff;
 }
 .productInfoCard-holder .ant-card-meta-title {
     color: #18181A;
@@ -58,7 +58,7 @@ button.ant-btn.ant-btn-default.buyNow {
 }
 .productInfoCard-holder p.price {
     font-weight: 700;
-    font-size: 26px;
+    font-size: 20px;
     line-height: 40px;
 }
 .productInfoCard .quickOverview {
