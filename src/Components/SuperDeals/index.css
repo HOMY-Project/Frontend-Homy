@@ -6,25 +6,30 @@
     justify-content: space-between;
     align-items: center;
 }
-.superDeals .ant-card-meta-title {
+.superDeals .ant-card-meta-title,.category-holder .ant-card-meta-title {
     color: #18181A;
     font-weight: 600;
     font-size: 17px;
 }
-.superDeals .ant-card-meta-description {
+.superDeals .ant-card-meta-description ,.category-holder .ant-card-meta-description {
     color: #545454;
     font-weight: 400;
     font-size: 14px;
     height: 70px;
     overflow: hidden;
 }
-.superDeals .ant-card-cover {
+.superDeals .ant-card-cover,.category-holder .ant-card-cover{
     height: 300px;
 }
-.superDeals span.anticon.anticon-star {
+.category-holder .ant-card-cover{
+    height: auto;
+    margin-top: 3%;
+
+}
+span.anticon.anticon-star {
     color: #FFC416;
 }
-.superDeals button.ant-btn.ant-btn-default {
+.superDeals button.ant-btn.ant-btn-default,.category-holder button.ant-btn.ant-btn-default {
     background: #0F6AD0;
     color: #fff;
     border-color: #0F6AD0;
@@ -35,7 +40,7 @@ button.ant-btn.ant-btn-default.btn.btn-cart:hover {
     color: #0F6AD0;
     border-color: #0F6AD0;
 }
-.superDeals p.price {
+p.price {
     color: #0F6AD0;
     font-weight: 700;
     font-size: 17px;

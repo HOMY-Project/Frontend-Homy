@@ -1,0 +1,44 @@
+.category-holder .ant-radio-group.ant-radio-group-outline,.category-holder  .ant-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    min-height: 170px;
+}
+.category-holder .filter-holder {
+    background: #FFFFFF;
+    padding: 16px 24px;
+    border: 1px solid #E7E7E7;
+}
+
+.shopyNow-holder {
+    padding: 8px;
+    background: linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), #0F6AD0;
+
+}
+.shopyNow-holder h4{
+    font-weight: 600;
+    line-height: 40px;
+    color: #FFFFFF !important;
+    margin-bottom: 0;
+}
+.category-holder label.ant-radio-wrapper,.category-holder label.ant-checkbox-wrapper{
+    font-weight: 500;
+    font-size: 14px;
+    color: #737373;
+    margin-left:0
+}
+.filter-title{
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: #000000;
+    margin-bottom: 5%;
+}
+.filter{
+    border-bottom: 1px solid #E8E8E8;
+    padding-bottom: 10%;
+    padding-top: 8%;
+}
+.filter.by-brands{
+    border-bottom: none;
+}

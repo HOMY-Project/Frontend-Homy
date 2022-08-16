@@ -6,6 +6,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { useTranslation } from "react-i18next";
+import { Link } from 'react-router-dom';
 import "./index.css";
 
 function ShopByCate() {
@@ -57,6 +58,7 @@ function ShopByCate() {
             return (
               <Col key={index} style={{ display: 'flex', flexDirection: 'column' , alignItems: 'center' }}>
                 {" "}
+                  <Link to={`/api/products/${item.id}`}>
                 <div className="categoryImg-holder">
                   {" "}
                   <img
@@ -66,6 +68,7 @@ function ShopByCate() {
                     className="categoryImg"
                   />
                 </div>{" "}
+                </Link>
                 <p className="categoryName" style={{ marginTop: "5%", fontWeight: "bold" , fontSize: "16px" }}>{item.name}</p>
               </Col>
             );

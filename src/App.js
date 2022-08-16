@@ -5,7 +5,7 @@ import {Helmet} from "react-helmet";
 import ThemeProvider from 'react-bootstrap/ThemeProvider';
 import { Routes, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { AddaddressForm, OrderStatus,SignIn,Wishlist, Signup, PageNotFound, OrderConfirm, AddressInfo, Header, Footer, SubFooter, ChangePassword,Cart, Orders, SingleOrder, Shipment, ForgetPassword, ResetPassword  } from './Components';
+import { AddaddressForm, OrderStatus,SignIn,Wishlist, Signup, Category, PageNotFound, OrderConfirm, AddressInfo, Header, Footer, SubFooter, ChangePassword,Cart, Orders, SingleOrder, Shipment, ForgetPassword, ResetPassword  } from './Components';
 import { Home, AboutUs, ProductDetails, AccountInformation } from './Pages';
 import Loading from './Components/LoadingSpinner/index';
 import "./App.css";
@@ -50,6 +50,7 @@ function App() {
                       <Route path="/forgetPassword" element={<ForgetPassword />} />
                       <Route path="/resetPassword/:token" element={<ResetPassword />} />
                       <Route path="/api/v1/product/:productId" element={<ProductDetails /> } />
+                      <Route path="/api/products/:itemId" element={<Category />} />
                       <Route path="*" element={<PageNotFound />} />
                     </Routes>
                 </div>

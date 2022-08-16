@@ -39,6 +39,7 @@ function ProductInfo() {
   const [newAlbums, setNewAlbums] = useState([]);
   const [sort, setSort] = useState("Recent");
   const [page, setPage] = useState(1);
+  const [categoryName, setCategoryName ] = useState([]);
   const [total, setTotal] = useState();
   const [isWishlist, setIsWishlist] = useState(false);
   const productId = window.location.href.split("/")[6];
@@ -56,6 +57,32 @@ function ProductInfo() {
     images.push(obj);
   }
 
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+    const getCategoryName = async () => {
+      try {
+        const {
+          data: { data },
+        } = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/api/v1/categories/${productId}`,
+          { cancelToken: source.token }
+        );
+        setCategoryName(data);
+        console.log(data, "data");
+      } catch ({
+        response: {
+          data: { message: msg },
+        },
+      }) {
+        message.warning(msg);
+      }
+    };
+    getCategoryName();
+    return () => {
+      source.cancel();
+    };
+  }, []);
+  
   const handelAddProduct = async (product) => {
     if (token && quantity > 0 && product) {
       const carts = [{ ...pro, quantity }];
@@ -246,7 +273,7 @@ function ProductInfo() {
               <>
                 <Breadcrumb style={{ marginBottom: "4%" }} >
                   <Breadcrumb.Item to="/">Home</Breadcrumb.Item>
-                  <Breadcrumb.Item>Smart Lighting</Breadcrumb.Item>
+                  <Breadcrumb.Item>{categoryName[0]?.name}</Breadcrumb.Item>
                   <Breadcrumb.Item active>{prod.name}</Breadcrumb.Item>
                 </Breadcrumb>
                 {loading ? (

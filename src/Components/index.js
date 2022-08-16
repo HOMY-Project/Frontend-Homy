@@ -22,6 +22,7 @@ import Shipment from './Shipment';
 import OrderConfirm from './Shipment/orderConfirm';
 import PageNotFound from './PageNotFound';
 import Wishlist from './Wishlist';
+import Category from './Category';
 
 export {
     AddaddressForm,
@@ -32,6 +33,7 @@ export {
     Header,
     Footer,
     SubFooter,
+    Category,
     ChangePassword,
     Brands,
     WelcomeToHomy,

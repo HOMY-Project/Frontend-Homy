@@ -3,10 +3,10 @@ import LocaleContext from '../../translations/LocaleContext';
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { clearUser, setSearchWord } from "../../Redux/features/authSlice";
-import { clearCart, clearWishlist } from "../../Redux/features/cartSlice";
+import { clearCart } from "../../Redux/features/cartSlice";
 import { useTranslation } from "react-i18next";
 import { message, Badge, AutoComplete, Input } from "antd";
-import { Form,InputGroup, Container,  Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { Form,InputGroup, Container,  Nav, Navbar, NavDropdown,Button } from "react-bootstrap";
 import logo from "../../assets/logo.png";
 import "./media.css";
 import "./index.css";
@@ -60,6 +60,7 @@ function MainNavbar() {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
+
           <Form className="me-auto my-2 my-lg-0 searchForm">
             <InputGroup className="mb-6">
               <AutoComplete
@@ -79,6 +80,7 @@ function MainNavbar() {
               </AutoComplete>
             </InputGroup>
           </Form>
+
           <Nav className={locale === 'en' ? 'ms-auto scrollNav' : 'me-auto scrollNav'} navbarScroll>
             {user ? (
               <NavDropdown title={user.name} id="collasible-nav-dropdown">
@@ -103,13 +105,10 @@ function MainNavbar() {
                 </NavDropdown.Item>
               </NavDropdown>
             )}
-            <NavDropdown title={locale === 'en' ? 'English' : 'العربية'} id="basic-nav-dropdown">
-              <NavDropdown.Item href="#" onClick={() => changeLocale('en')}>English</NavDropdown.Item>
-              <NavDropdown.Item href="#" onClick={() => changeLocale('ar')}>العربية</NavDropdown.Item>
-            </NavDropdown>
-          {/* <Button className="lang-btn" onClick={() => setLanguage(i18n.language === 'ar' ? 'en' : 'ar')}>
-            {language === 'ar' ? 'En' : 'العربية'}
-          </Button> */}
+            <Nav.Item>
+              <Button variant="outline-primary" onClick={() => changeLocale(locale === 'ar' ? 'en' : "ar")} >{locale === 'ar' ? 'Ar' : "En"}</Button>
+            </Nav.Item>
+
             <Nav.Item>
               <Link to="/wishlist">
                 <box-icon name="heart"></box-icon>

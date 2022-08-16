@@ -26,7 +26,7 @@
     "Outdoor": "الخارجي",
     "Indoor": "الداخلي",
     "All" : "الكل",
-    "brands": "العلامات التجارية تتجه حاليًا",
+    "Brands": "الماركات",
     "Email-address": "البريد الإلكتروني",
     "Password": "كلمة المرور",
     "NewCustomer": "زبون جديد",
@@ -84,5 +84,12 @@
     "Confirm Order Now" : "تأكيد الطلب الآن",
     "Existing customer?" : "زبون موجود?",
     "Qty" : "الكمية",
-    "Complete Purchase" : "إكمال الشراء"
+    "Complete Purchase" : "إكمال الشراء",
+    "Reset Password" : "إعادة تعيين كلمة المرور",
+    "Update Password" : "تعديل كلمة المرور",
+    "Results for -": "نتائج البحث عن -",
+    "Shop by" : "تسوق حسب",
+    "Filter By": "تصفية حسب",
+    "There are no products in this category" : "لا توجد منتجات في هذا القسم",
+    "Price Range": "نطاق السعر"
 }
