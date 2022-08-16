@@ -14,18 +14,17 @@
     "search": "Search",
     "searchPlaceholder": "Search",
     "Shop By category": "Shop By Category",
-    "superDeals":"Super Deals",
+    "Super Deals":"Super Deals",
     "Top Sellers":"Top Sellers",
     "lastSec": "Smart home systems: the right solution for your home",
     "frTitle": "Save money and energy",
     "scTitle": "Make your smart home secure",
-    "Discover-Security-Cameras": "Discover Smart Lighting",
+    "Discover Security Cameras": "Discover Security Cameras",
     "frSubTitle": "A major advantage of turning your house into a smart home is energy efficiency. Ideally, you can save energy and money by using your household appliances in a more targeted – and thus more effective – way.",
     "scSubTitle" : "Your house and yard should always be adequately secured. Besides outdoor and indoor cameras, motion detectors, and door and window contacts, intelligent lighting control also offer additional protection.",
     "Outdoor": "Outdoor",
     "Indoor": "Indoor",
     "All" : "All",
-    "brands": "Brands Currently Trending",
     "Email-address": "Email address",
     "Password": "Password",
     "NewCustomer": "New Customer",
@@ -93,5 +92,6 @@
     "Shop by" : "Shop by",
     "Filter By": "Filter By",
     "There are no products in this category": "There are no products in this category",
-    "Price Range": "Price Range"
+    "Price Range": "Price Range",
+    "Sort By" : "Sort By" 
 }

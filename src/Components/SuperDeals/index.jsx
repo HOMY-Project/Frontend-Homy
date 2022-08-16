@@ -8,9 +8,11 @@ import { message } from 'antd';
 
 const SuperDeals = () => {
   const [superProducts, setSuperProducts] = useState([]);
+  const [topProducts, setTopProducts] = useState([]);
   const { searchWord } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const {t } = useTranslation();
+
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getProducts = async () => {
@@ -35,10 +37,34 @@ const SuperDeals = () => {
     };
   }, [searchWord]);
 
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+    const getTopProducts = async () => {
+      const url = searchWord !== undefined 
+      ? `${process.env.REACT_APP_BACKEND_URL}/api/v1/search?productName=${searchWord}`
+      : `${process.env.REACT_APP_BACKEND_URL}/api/v1/product/top-seller`;
+      try {
+        const { data: { data } } = await axios.get(url, { cancelToken: source.token });
+        dispatch(setAllProducts(data));
+        setTopProducts(data);
+      } catch ({
+        response: {
+          data: { message: msg },
+        },
+      }) {
+        message.warning(msg);
+      }
+    };
+    getTopProducts();
+    return () => {
+      source.cancel();
+    };
+  }, [searchWord]);
+
   return (
     <>
       <ProductCard products={superProducts} title={t("Super Deals")} />
-      <ProductCard products={superProducts} title={t("Top Sellers")} />
+      <ProductCard products={topProducts} title={t("Top Sellers")} />
     </>
   )
   

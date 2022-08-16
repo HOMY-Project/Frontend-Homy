@@ -9,7 +9,17 @@
     padding: 16px 24px;
     border: 1px solid #E7E7E7;
 }
-
+.category-holder .filter-title{
+    font-size: 16px;
+    font-weight: 600;
+    color: #000000;
+    margin-bottom: 0;
+}
+.category-holder .pagination-holder {
+    margin-top: 7%;
+    display: flex;
+    justify-content: center;
+}
 .shopyNow-holder {
     padding: 8px;
     background: linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), #0F6AD0;

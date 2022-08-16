@@ -26,7 +26,6 @@ const SignUp = () => {
         password,
         phone,
       });
-      console.log(data, 'sign up data');
       dispatch(setUser(data));
       dispatch(setToken(token));
 

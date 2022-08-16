@@ -34,20 +34,19 @@ function ProductInfo() {
   const [Recommended, setRecommended] = useState([]);
   const [loading, setLoading] = useState(false);
   const [add, setAdd] = useState(false);
+  const [sortVal, setSortVal] = useState('Recent');
   const [quantity, setQuantity] = useState(0);
   const [rate, setRate] = useState([]);
   const [newAlbums, setNewAlbums] = useState([]);
-  const [sort, setSort] = useState("Recent");
   const [page, setPage] = useState(1);
-  const [categoryName, setCategoryName ] = useState([]);
   const [total, setTotal] = useState();
+  const [categoryName, setCategoryName ] = useState([]);
   const [isWishlist, setIsWishlist] = useState(false);
   const productId = window.location.href.split("/")[6];
   const { Option } = Select;
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const pro = product[0];
-  console.log(page, 'page')
 
   const images = [];
   var obj = {};
@@ -68,7 +67,6 @@ function ProductInfo() {
           { cancelToken: source.token }
         );
         setCategoryName(data);
-        console.log(data, "data");
       } catch ({
         response: {
           data: { message: msg },
@@ -120,7 +118,6 @@ function ProductInfo() {
           { wishlists: [pro] },
           { headers: { token: `Bearer ${token}` } }
           );
-          console.log(product, 'before dis');
           setIsWishlist(true)
           dispatch(addWishlist(product));
           message.success(msg);
@@ -140,20 +137,16 @@ function ProductInfo() {
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getProducts = async () => {
-      const url = page
-        ? `${process.env.REACT_APP_BACKEND_URL}/api/v1/product/${productId}?page=${page}`
-        : `${process.env.REACT_APP_BACKEND_URL}/api/v1/product/${productId}`;
       try {
         setLoading(true);
         const {
           data: { data },
-        } = await axios.get(url, {
+        } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/product/${productId}`, {
           cancelToken: source.token,
         });
         setProduct(data);
         setNewAlbums(data[0].albums);
         setLoading(false);
-        console.log(data, "productInfo");
       } catch ({
         response: {
           data: { message: msg },
@@ -167,7 +160,7 @@ function ProductInfo() {
     return () => {
       source.cancel();
     };
-  }, [page]);
+  }, []);
 
   useEffect(() => {
     const source = axios.CancelToken.source();
@@ -175,14 +168,14 @@ function ProductInfo() {
       try {
         const {
           data: { data },
-        } = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/api/v1/product/${productId}/review`,
+        } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/product/${productId}/review?page=${page}`,
           {
             cancelToken: source.token,
           }
         );
         setReviews(data);
-        setTotal(data[0].count);
+        setTotal(data[0]?.count);
+          console.log(`${process.env.REACT_APP_BACKEND_URL}/api/v1/product/${productId}/review?page=${page}`, 'review');
       } catch ({
         response: {
           data: { message: msg },
@@ -195,7 +188,7 @@ function ProductInfo() {
     return () => {
       source.cancel();
     };
-  }, []);
+  }, [page]);
 
   useEffect(() => {
     const source = axios.CancelToken.source();
@@ -210,7 +203,6 @@ function ProductInfo() {
           }
         );
         setRate(data);
-        console.log(data, "rate");
       } catch ({
         response: {
           data: { message: msg },
@@ -237,7 +229,8 @@ function ProductInfo() {
             cancelToken: source.token,
           }
         );
-        setRecommended(data);
+      setRecommended(data);
+      console.log(data, 'rec');
       } catch ({
         response: {
           data: { message: msg },
@@ -255,14 +248,25 @@ function ProductInfo() {
   //increase counter
   const increase = () => {
     setQuantity((count) => count + 1);
-  };
+  }
 
  //decrease counter
  const decrease = () => {
   setQuantity((count) => count - 1);
 };
 
-
+const sortReviews = (value) =>{
+  setSortVal(value)
+  console.log(value);
+  setReviews(Recommended.sort((a, b) => {
+    if (value === "Recent") {
+      return a.createdat - b.createdat;
+    } else if (value === "Latest") {
+      return b.createdat - a.createdat;
+    }
+  }
+  ))
+}
 
   return (
     <div className="productInfoCard-holder">
@@ -465,12 +469,12 @@ function ProductInfo() {
                             Customers Comments
                           </h6>
                           <Select
-                            defaultValue="Most Recent"
+                            // defaultValue="Recent"
                             className="filter-select"
-                            value={sort}
-                            onChange={(value) => setSort(value)}
+                            value={sortVal}
+                            onChange={(value) => sortReviews(value)}
                           >
-                            <Option value="Recent">Most Recent</Option>
+                            <Option value="Recent">Recent</Option>
                             <Option value="Latest">Latest</Option>
                           </Select>
                         </div>
@@ -519,7 +523,7 @@ function ProductInfo() {
                               {total > 3 && (
                                 <div className="pagination-holder">
                                   <Pagination
-                                    defaultCurrent={0}
+                                    defaultCurrent={1}
                                     total={total}
                                     pageSize="3"
                                     current={page}

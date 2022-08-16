@@ -11,8 +11,6 @@ const OrderProduct = ({ product }) => {
     const [price , setPrice] = useState(0);
     const dispatch = useDispatch();
     const quantity = product[1]
-    console.log(price, 'order sub total')
-    console.log(quantity, 'quantity')
 
     useEffect(() => {
         const source = axios.CancelToken.source(); 

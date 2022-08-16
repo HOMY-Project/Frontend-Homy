@@ -29,7 +29,6 @@ import './index.css';
       , { email, password });
       dispatch(setUser(data));
       dispatch(setToken(token));
-      console.log(email, password);
       notification.open({
         message: 'Welcome back',
         description: {verifyMessage},

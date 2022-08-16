@@ -20,7 +20,8 @@ const Orders = () => {
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { t} = useTranslation();
+  const { t } = useTranslation();
+
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getOrders = async () => {
@@ -30,7 +31,6 @@ const Orders = () => {
           { cancelToken: source.token }
         );
         setData(data);
-        console.log(data, 'orders');
       } catch ({
         response: {
           data: { message: msg },
@@ -50,7 +50,6 @@ const Orders = () => {
       const { data: { data  } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/single-order/${id}`,
       { headers: { token: `Bearer ${token}` } });
       dispatch(setOrder(data));
-      console.log(data, 'data from order num');
       navigate('/singleOrder');
     } catch(err){
       console.error(err);

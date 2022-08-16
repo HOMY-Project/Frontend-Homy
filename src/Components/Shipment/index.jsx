@@ -352,7 +352,6 @@ const Shipment = () => {
                             handelDeleteProductCart(product.id);
                           }}
                           onCancel={(e) => {
-                            console.log(e);
                             message.error("something went wrong");
                           }}
                           okText="Yes"

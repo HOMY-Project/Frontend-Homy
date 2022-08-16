@@ -26,6 +26,9 @@
     margin-top: 3%;
 
 }
+.ant-card-cover img {
+    height: 100%;
+}
 span.anticon.anticon-star {
     color: #FFC416;
 }
