@@ -11,8 +11,8 @@ import {
 } from "antd";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import { useDispatch, useSelector } from "react-redux";
-import { addProduct } from "../../Redux/features/cartSlice";
-import { CheckCircleFilled } from "@ant-design/icons";
+import { addProduct, addWishlist } from "../../Redux/features/cartSlice";
+import { CheckCircleFilled, HeartOutlined, HeartFilled } from "@ant-design/icons";
 import ImageGallery from "react-image-gallery";
 import axios from "axios";
 import Heading from "../Heading/index";
@@ -39,13 +39,15 @@ function ProductInfo() {
   const [newAlbums, setNewAlbums] = useState([]);
   const [sort, setSort] = useState("Recent");
   const [page, setPage] = useState(1);
+  const [categoryName, setCategoryName ] = useState([]);
   const [total, setTotal] = useState();
+  const [isWishlist, setIsWishlist] = useState(false);
   const productId = window.location.href.split("/")[6];
   const { Option } = Select;
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const pro = product[0];
-
+  console.log(page, 'page')
 
   const images = [];
   var obj = {};
@@ -55,6 +57,32 @@ function ProductInfo() {
     images.push(obj);
   }
 
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+    const getCategoryName = async () => {
+      try {
+        const {
+          data: { data },
+        } = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/api/v1/categories/${productId}`,
+          { cancelToken: source.token }
+        );
+        setCategoryName(data);
+        console.log(data, "data");
+      } catch ({
+        response: {
+          data: { message: msg },
+        },
+      }) {
+        message.warning(msg);
+      }
+    };
+    getCategoryName();
+    return () => {
+      source.cancel();
+    };
+  }, []);
+  
   const handelAddProduct = async (product) => {
     if (token && quantity > 0 && product) {
       const carts = [{ ...pro, quantity }];
@@ -82,27 +110,33 @@ function ProductInfo() {
     }
   };
 
-  // const HandelSort = () => {
-  //   if(sort === 'Recent'){
-  //     product.sort((a, b) => b.id - a.id)
-  //   }
-  // }
-  // const filterProducts = () => {
-  //   let filteredProducts = products;
-  //   if (searchWords.length !== 0)
-  //     filteredProducts = filteredProducts.filter((product) =>
-  //       product.name.toLowerCase().includes(searchWords.toLowerCase())
-  //     );
-  //   if (categorySelected !== 'All')
-  //     filteredProducts = filteredProducts.filter(
-  //       (product) => product.category === categorySelected
-  //     );
-  //   if (sort === 'Newest') filteredProducts.sort((a, b) => b.id - a.id);
-  //   if (sort === 'Lowest') filteredProducts.sort((a, b) => a.price - b.price);
-  //   if (sort === 'Highest') filteredProducts.sort((a, b) => b.price - a.price);
-
-  //   return filteredProducts;
-  // };
+  const handelWishlist = async (product) => {
+    if (token && product && isWishlist === false) {
+      try {
+        const {
+          data: { message: msg },
+        } = await axios.post(
+          `${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${user.id}/wishlist`,
+          { wishlists: [pro] },
+          { headers: { token: `Bearer ${token}` } }
+          );
+          console.log(product, 'before dis');
+          setIsWishlist(true)
+          dispatch(addWishlist(product));
+          message.success(msg);
+      } catch ({
+        response: {
+          data: { message: msg },
+        },
+      }) {
+        message.warning(msg);
+      }
+    } else {
+      return isWishlist === false
+        ? dispatch(addWishlist({ ...product }))
+        : message.warning("this product is already added");
+    }
+  };
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getProducts = async () => {
@@ -119,7 +153,7 @@ function ProductInfo() {
         setProduct(data);
         setNewAlbums(data[0].albums);
         setLoading(false);
-
+        console.log(data, "productInfo");
       } catch ({
         response: {
           data: { message: msg },
@@ -217,15 +251,18 @@ function ProductInfo() {
       source.cancel();
     };
   }, []);
+
   //increase counter
   const increase = () => {
     setQuantity((count) => count + 1);
   };
 
-  //decrease counter
-  const decrease = () => {
-    setQuantity((count) => count - 1);
-  };
+ //decrease counter
+ const decrease = () => {
+  setQuantity((count) => count - 1);
+};
+
+
 
   return (
     <div className="productInfoCard-holder">
@@ -234,9 +271,9 @@ function ProductInfo() {
           product.map((prod) => {
             return (
               <>
-                <Breadcrumb style={{ marginBottom: "4%" }}>
+                <Breadcrumb style={{ marginBottom: "4%" }} >
                   <Breadcrumb.Item to="/">Home</Breadcrumb.Item>
-                  <Breadcrumb.Item>Smart Lighting</Breadcrumb.Item>
+                  <Breadcrumb.Item>{categoryName[0]?.name}</Breadcrumb.Item>
                   <Breadcrumb.Item active>{prod.name}</Breadcrumb.Item>
                 </Breadcrumb>
                 {loading ? (
@@ -254,7 +291,16 @@ function ProductInfo() {
                   <>
                     <Row>
                       <Col>
-                        <ImageGallery items={images} thumbnailPosition="left" />
+                        { images ? <ImageGallery items={images} 
+                        thumbnailPosition="left" 
+                        showPlayButton={false}
+                        renderCustomControls={() => (
+                          <div className="image-gallery-custom-action">
+                              <button className="image-gallery-heart-holder" onClick={() => handelWishlist(prod)}> 
+                              {isWishlist ? <HeartFilled style={{fontSize: '22px', color: "red"}}/> : <HeartOutlined style={{fontSize: '22px'}}/>} </button>
+                          </div>
+                        )}
+                        /> : null}
                       </Col>
                       <Col>
                         <div>
@@ -321,10 +367,11 @@ function ProductInfo() {
                                 </Button>
                                 <Form.Control
                                   className="quantityInput"
+                                  style={{border: 'none !important'}}
                                   aria-label="Example text with button addon"
                                   aria-describedby="basic-addon2"
                                   disabled
-                                  value={prod.quantity}
+                                  value={quantity}
                                 />
                                 <Button
                                   variant="outline-secondary"

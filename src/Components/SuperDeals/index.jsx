@@ -3,13 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setAllProducts } from '../../Redux/features/authSlice';
 import axios from "axios";
 import ProductCard from "./ProductCard";
+import { useTranslation } from "react-i18next";
 import { message } from 'antd';
 
 const SuperDeals = () => {
   const [superProducts, setSuperProducts] = useState([]);
   const { searchWord } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
+  const {t } = useTranslation();
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getProducts = async () => {
@@ -36,8 +37,8 @@ const SuperDeals = () => {
 
   return (
     <>
-      <ProductCard products={superProducts} title="Super Deals" />
-      <ProductCard products={superProducts} title="Top Sellers" />
+      <ProductCard products={superProducts} title={t("Super Deals")} />
+      <ProductCard products={superProducts} title={t("Top Sellers")} />
     </>
   )
   

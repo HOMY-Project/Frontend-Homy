@@ -1,15 +1,15 @@
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Input, Space, Table, message, Tag } from 'antd';
+import { Button, Input, Space, Table, message, Tag, Breadcrumb } from 'antd';
 import React, { useRef, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { setOrder } from "../../Redux/features/singleOrderSlice";
 import Highlighter from 'react-highlight-words';
-import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Container from 'react-bootstrap/Container';
 import Heading from '../Heading';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from "react-i18next";
 import './index.css';
 
 const Orders = () => {
@@ -20,6 +20,7 @@ const Orders = () => {
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { t} = useTranslation();
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getOrders = async () => {
@@ -154,7 +155,7 @@ const Orders = () => {
 
   const columns = [
     {
-      title: 'Order',
+      title: t('Orders'),
       dataIndex: 'order_number',
       key: 'order_number',
       width: '20%',
@@ -162,7 +163,7 @@ const Orders = () => {
       render: (order_number) => <Button type="submit" onClick={() => getSingleOrder(order_number) }>{order_number}</Button>
     },
     {
-      title: 'Date',
+      title: t('Date'),
       dataIndex: 'createdat',
       key: 'createdat',
       width: '20%',
@@ -171,7 +172,7 @@ const Orders = () => {
       ),
     },
     {
-      title: 'Amount',
+      title: t('Amount'),
       dataIndex: 'amount',
       key: 'amount',
       ...getColumnSearchProps('amount'),
@@ -179,7 +180,7 @@ const Orders = () => {
       sortDirections: ['descend', 'ascend'],
     },
     {
-        title: 'Status',
+        title: t('Status'),
         dataIndex: 'status',
         key: 'status',
         ...getColumnSearchProps('status'),
@@ -188,18 +189,24 @@ const Orders = () => {
         )
       },
       {
-        title: 'Review',
+        title: t('Review'),
         dataIndex: 'Review',
         key: 'Review',
       },
   ];
   return (
     <Container fluid style={{ marginTop: '3%' }} className="order-holder">
-        <Breadcrumb>
-        <Breadcrumb.Item href="/">Account</Breadcrumb.Item>
-        <Breadcrumb.Item active>Orders</Breadcrumb.Item>
+
+        <Breadcrumb style={{ marginBottom: "4%"}}>
+            <Breadcrumb.Item>
+              <a href="/">{t('Account')}</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="">{t('Orders')}</a>
+            </Breadcrumb.Item>
         </Breadcrumb>
-        <Heading heading="All Orders" />
+        <Heading heading={t("All Orders")} />
+
         <Table columns={columns} dataSource={data} />
   </Container>
   )

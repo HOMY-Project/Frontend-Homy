@@ -94,13 +94,16 @@
 
 /* // Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) { 
-    .me-auto.navbar-nav.navbar-nav-scroll.scrollNav {
+    .me-auto.navbar-nav.navbar-nav-scroll.scrollNav,.ms-auto.scrollNav.navbar-nav.navbar-nav-scroll {
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 25%;
+        width: 38%;
     }
     .me-auto.navbar-nav .nav-item {
         margin-right: 5%;
+    }
+    .ms-auto.scrollNav.navbar-nav.navbar-nav-scroll>.nav-item {
+        margin-left: 5%;
     }
  }

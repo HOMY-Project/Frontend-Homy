@@ -5,12 +5,15 @@ import { message, Radio } from "antd";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { useTranslation } from "react-i18next";
+import { Link } from 'react-router-dom';
 import "./index.css";
 
 function ShopByCate() {
 
   const [category, setCategories] = useState([]);
   const [filterVal, setFilterVal] = useState(null);
+  const { t } = useTranslation();
 
   const filterValChange = (e) => {
       setFilterVal(e.target.value);
@@ -41,13 +44,13 @@ function ShopByCate() {
 
   return (
     <div style={{ padding: "0px 4%" }} className="shopByCate-holder">
-      <Heading heading="Shop By category" />
+      <Heading heading={t("Shop By category")} />
       <Container fluid>
       <Row style={{ marginBottom: "3%" }} >
             <Radio.Group value={filterVal} onChange={filterValChange}>
-                  <Radio.Button value={null}>All</Radio.Button>
-                  <Radio.Button value="out">Outdoor</Radio.Button>
-                  <Radio.Button value="in">Indoor</Radio.Button>
+                  <Radio.Button value={null}>{t('All')}</Radio.Button>
+                  <Radio.Button value="out">{t('Outdoor')}</Radio.Button>
+                  <Radio.Button value="in">{t('Indoor')}</Radio.Button>
             </Radio.Group>
       </Row>
         <Row>
@@ -55,6 +58,7 @@ function ShopByCate() {
             return (
               <Col key={index} style={{ display: 'flex', flexDirection: 'column' , alignItems: 'center' }}>
                 {" "}
+                  <Link to={`/api/products/${item.id}`}>
                 <div className="categoryImg-holder">
                   {" "}
                   <img
@@ -64,6 +68,7 @@ function ShopByCate() {
                     className="categoryImg"
                   />
                 </div>{" "}
+                </Link>
                 <p className="categoryName" style={{ marginTop: "5%", fontWeight: "bold" , fontSize: "16px" }}>{item.name}</p>
               </Col>
             );

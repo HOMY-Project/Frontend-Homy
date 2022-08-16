@@ -1,15 +1,12 @@
-import React,{useState} from "react";
+import React, { useState, useContext } from "react";
+import LocaleContext from '../../translations/LocaleContext';
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { clearUser, setSearchWord } from "../../Redux/features/authSlice";
 import { clearCart } from "../../Redux/features/cartSlice";
+import { useTranslation } from "react-i18next";
 import { message, Badge, AutoComplete, Input } from "antd";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
+import { Form,InputGroup, Container,  Nav, Navbar, NavDropdown,Button } from "react-bootstrap";
 import logo from "../../assets/logo.png";
 import "./media.css";
 import "./index.css";
@@ -17,32 +14,38 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 function MainNavbar() {
   const { user, allProducts } = useSelector((state) => state.auth);
-  const { quantity } = useSelector((state) => state.cart)
-
+  const { quantity } = useSelector((state) => state.cart);
   const [options, setOptions] = useState([]);
-
+  const { t, i18n  } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { locale } = useContext(LocaleContext);
+
+  function changeLocale (l) {
+    if (locale !== l) {
+      i18n.changeLanguage(l);
+    }
+  }
 
   const onSelect = (data) => {
-     const proId = allProducts.filter((item) => item.name === data)[0].id
-      navigate(`/api/v1/product/${proId}`);
+    const proId = allProducts.filter((item) => item.name === data)[0].id;
+    navigate(`/api/v1/product/${proId}`);
   };
-
-
   const onSearch = (searchText) => {
-    dispatch(setSearchWord(searchText))
+    dispatch(setSearchWord(searchText));
     setOptions(
-      !searchText ? [] : allProducts?.map(product => ({
-        value: product.name,
-      }
-    ))
+      !searchText
+        ? []
+        : allProducts?.map((product) => ({
+            value: product.name,
+          }))
     );
   };
 
   const logout = () => {
     dispatch(clearUser());
     dispatch(clearCart());
+    // dispatch(clearWishlist())
     message.success("Logged out successfully");
     navigate("/");
   };
@@ -57,46 +60,57 @@ function MainNavbar() {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
+
           <Form className="me-auto my-2 my-lg-0 searchForm">
             <InputGroup className="mb-6">
               <AutoComplete
                 options={options}
                 style={{
-                  width: '90%',
+                  width: "90%",
                 }}
                 onSelect={onSelect}
                 onSearch={onSearch}
               >
-                 <Input.Search size="large" placeholder="Search" style={{ color: "#F8F9FA !important" }}enterButton />
-                </AutoComplete>
+                <Input.Search
+                  size="large"
+                  placeholder={t("searchPlaceholder")}
+                  style={{ color: "#F8F9FA !important" }}
+                  enterButton
+                />
+              </AutoComplete>
             </InputGroup>
           </Form>
-          <Nav className="me-auto scrollNav" navbarScroll>
+
+          <Nav className={locale === 'en' ? 'ms-auto scrollNav' : 'me-auto scrollNav'} navbarScroll>
             {user ? (
               <NavDropdown title={user.name} id="collasible-nav-dropdown">
                 <NavDropdown.Item>
-                  <Link to="/myAccount">My account</Link>
+                  <Link to="/myAccount">{t('myAccount')}</Link>
                 </NavDropdown.Item>
                 <NavDropdown.Item>
-                  <Link to="/addressInfo">My address</Link>
+                  <Link to="/addressInfo">{t('myAddress')}</Link>
                 </NavDropdown.Item>
                 <NavDropdown.Item>
-                  <Link to="/myOrders">My orders</Link>
+                  <Link to="/myOrders">{t('myOrders')}</Link>
                 </NavDropdown.Item>
-                <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
+                <NavDropdown.Item onClick={logout}>{t('logout')}</NavDropdown.Item>
               </NavDropdown>
             ) : (
-              <NavDropdown title="Account" id="collasible-nav-dropdown">
+              <NavDropdown title={t('myAccount')} id="collasible-nav-dropdown">
                 <NavDropdown.Item>
-                  <Link to="/signIn">Sign In</Link>
+                  <Link to="/signIn">{t('signIn')}</Link>
                 </NavDropdown.Item>
                 <NavDropdown.Item>
-                  <Link to="/myOrders">My orders</Link>
+                  <Link to="/myOrders">{t('myOrders')}</Link>
                 </NavDropdown.Item>
               </NavDropdown>
             )}
             <Nav.Item>
-              <Link to="/Wishlist">
+              <Button variant="outline-primary" onClick={() => changeLocale(locale === 'ar' ? 'en' : "ar")} >{locale === 'ar' ? 'Ar' : "En"}</Button>
+            </Nav.Item>
+
+            <Nav.Item>
+              <Link to="/wishlist">
                 <box-icon name="heart"></box-icon>
               </Link>
             </Nav.Item>

@@ -1,0 +1,29 @@
+.wishlistContainer .list-group-item {
+    margin-top: 2%;
+    background-color: #fff;
+    padding: 12px;
+}
+.wishlistContainer .col-md-1 , .wishlistContainer .col-md-2{
+    display: flex;
+    align-items: center;
+    justify-self: center;
+}
+.wishlistContainer button.btn.btn-cartIcon {
+    border: none;
+    background: #2196f357 !important;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* font-size: 11px; */
+    padding: 8px;
+}
+.btn.btn-cancelIcon{
+    border: none;
+    background: #f3212157 !important;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 11px;
+}

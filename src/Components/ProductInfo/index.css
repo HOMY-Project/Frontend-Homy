@@ -128,3 +128,29 @@ button.ant-btn.ant-btn-default.buyNow {
     color: #0f6ad0;
     font-size: 18px;
 }
+.image-gallery-heart-holder {
+    left: 4%;
+    top: 7%;
+    transform: translateY(-50%);
+    background: #f9f9f933 !important;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+}
+.image-gallery-heart-holder :hover {
+    color: #337ab7;
+}
+.image-gallery-heart-holder {
+    color: #fff;
+    transition: all .3s ease-out;
+    appearance: none;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    outline: none;
+    position: absolute;
+    z-index: 4;
+    filter: drop-shadow(0 2px 2px #1a1a1a);
+}

@@ -13,6 +13,17 @@
     border-radius: 4px;
     padding: 16px;
 }
+.quantity-holder #button-addon1 {
+    background: #0F6AD0;
+    border-radius: 0px 4px 4px 0px;
+    transform: matrix(-1, 0, 0, 1, 0, 0);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+}
+#button-addon2 {
+    transform: matrix(1, 0, 0, 1, 0, 0) !important;
+}
 .ant-descriptions-item-container .ant-descriptions-item-content, .ant-descriptions-item-container .ant-descriptions-item-label {
     align-items: center !important;
 }

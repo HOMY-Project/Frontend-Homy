@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { setUser, setToken } from '../../Redux/features/authSlice';
 import { Form, Input, message } from "antd";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import "../SignIn/index.css";
 
 const SignUp = () => {
@@ -13,6 +14,7 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [phone, setPhoneNum] = useState("");
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const signup = async () => {
     try {
@@ -59,10 +61,10 @@ const SignUp = () => {
         onFinish={() => signup()}
       >
         <div className="Auth-form-content">
-          <h3 className="Auth-form-title">Sign Up</h3>
+          <h3 className="Auth-form-title">{t('signUp')}</h3>
 
           <div className="form-group mt-3">
-            <label>Full Name</label>
+            <label>{t('Full Name')}</label>
             <Item
               className="form-control mt-1"
               name="fullName"
@@ -83,7 +85,7 @@ const SignUp = () => {
             </Item>
           </div>
           <div className="form-group mt-3">
-            <label>Email address</label>
+            <label>{t('Email-address')}</label>
             <Item
               name="email"
               className="form-control mt-1"
@@ -105,20 +107,13 @@ const SignUp = () => {
           </div>
 
           <div className="form-group mt-3">
-            <label>Password</label>
+            <label>{t('Password')}</label>
             <Item
               name="Password"
               className="form-control mt-1"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               rules={[
-                // {
-                //   // password Should be combination of numbers & alphabets and one special character
-                //   pattern:
-                //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{4,}$/,
-                //   message:
-                //     "Password must contain at least one lowercase letter, uppercase letter, number, and special character",
-                // },
                 {
                   required: true,
                   message: "Please input your Passsword",
@@ -131,7 +126,7 @@ const SignUp = () => {
           </div>
 
           <div className="form-group mt-3">
-            <label>Phone Number</label>
+            <label>{t('Phone Number')}</label>
             <Item
               name="phone"
               className="form-control mt-1"
@@ -156,13 +151,13 @@ const SignUp = () => {
               style={{ backgroundColor: "#0F6AD0" }}
               onClick={() => signup}
             >
-              Sign Up
+              {t('signUp')}
             </button>
           </div>
 
           <div className="d-grid gap-2 mt-3">
             <hr />
-            <p className=""> Already Have an Account?</p>
+            <p className=""> {t('Already Have an Account?')}</p>
             <Link to="/signIn" className="new-customer-a">
               <button
                 type="submit"
@@ -173,7 +168,7 @@ const SignUp = () => {
                   width: "100%",
                 }}
               >
-                Sign In
+                {t('signIn')}
               </button>
             </Link>
           </div>

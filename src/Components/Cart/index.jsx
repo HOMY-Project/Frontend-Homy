@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useContext } from "react";
+import LocaleContext from '../../translations/LocaleContext';
 import { CloseOutlined } from "@ant-design/icons";
 import {
   Container,
@@ -7,10 +8,11 @@ import {
   Image,
   ListGroup,
   Row,
-  Breadcrumb,
+  // Breadcrumb,
   InputGroup,
 } from "react-bootstrap";
-import { Button, Steps, Input, message, Popconfirm } from "antd";
+import { Button, Steps, Input, message, Popconfirm, Result, Breadcrumb } from "antd";
+import { useTranslation } from "react-i18next";
 import Heading from "../Heading";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from 'react-router-dom';
@@ -18,16 +20,16 @@ import { removeItem, incrementQuantity, decrementQuantity } from '../../Redux/fe
 import axios from "axios";
 import "../Order/index.css";
 import "./index.css";
+import empty from '../../assets/empty-cart-removebg-preview.png';
+
 
 const Cart = () => {
-  const [product_id, setProductId ] = useState('');
-  const [prodQuantity, setprodQuantity] = useState('');
+  const { locale } = useContext(LocaleContext);
   const cart = useSelector((state) => state.cart);
   const { user, token } = useSelector((state) => state.auth);
-  console.log(cart.products, "cart");
   const dispatch = useDispatch();
-
-
+  const { t } = useTranslation();
+  
   useEffect(() => {
       const source = axios.CancelToken.source();
       if(token){
@@ -55,7 +57,7 @@ const Cart = () => {
       source.cancel();
   };
   }, [])
-  
+
 
   const handelDeleteProductCart = async (productId) =>{
     if (token) {
@@ -74,29 +76,33 @@ const Cart = () => {
   const { Step } = Steps;
   return (
     <div>
+      {cart.products.length > 0 ? ( 
       <Container fluid style={{ marginTop: "3%" }} className="order-holder">
-        <Breadcrumb>
-          <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-          <Breadcrumb.Item href="/">Shopping Cart</Breadcrumb.Item>
+        <Breadcrumb style={{ marginBottom: "4%"}}>
+            <Breadcrumb.Item>
+              <a href="/">{t('Home')}</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="">{t('Shopping Cart')}</a>
+            </Breadcrumb.Item>
         </Breadcrumb>
+
         <Steps current={0}>
-          <Step title="Review Order" />
-          <Step title="Shipping & Payment" />
-          <Step title="Confirm Order" />
+          <Step title={t("Review Order")} />
+          <Step title={t("Shipping & Payment")} />
+          <Step title={t("Confirm Order")} />
         </Steps>
-        <Heading heading={cart.products.length + "Items in your Cart"} />
+        <Heading heading={cart.products.length + " " + t("Items in your Cart")} />
         <Row>
           <Col lg="8" md="10" sm="12">
             <div className="productContainer">
               {cart.products.map((prod) => (
                 <ListGroup.Item key={prod.id}>
-                  {setProductId(prod.id)}
-                  {setprodQuantity(prod.quantity)}
                   <Row style={{ alignItems: "center" }}>
                     <Col md={3}>
                       <Image src={prod.image} alt={prod.name} fluid rounded />
                     </Col>
-                    <Col md={3}>
+                    <Col md={2}>
                       <span>{prod.name}</span>
                     </Col>
                     <Col md={3}>
@@ -104,13 +110,14 @@ const Cart = () => {
                         <InputGroup className="mb-3">
                           <Button
                             variant="outline-secondary"
-                            id="button-addon1"
+                            id={locale === 'en' ? 'button-addon1' : 'button-addon2'}
                             onClick={() => dispatch(incrementQuantity(prod.id))}
                           >
                             +
                           </Button>
                           <Form.Control
                             className="quantityInput"
+                            style={{border: 'none !important'}}
                             aria-label="Example text with button addon"
                             aria-describedby="basic-addon2"
                             disabled
@@ -118,7 +125,7 @@ const Cart = () => {
                           />
                           <Button
                             variant="outline-secondary"
-                            id="button-addon2"
+                            id={locale === 'en' ? 'button-addon2' : 'button-addon1'}
                             onClick={() => dispatch(decrementQuantity(prod.id))}
                           >
                             -
@@ -127,9 +134,9 @@ const Cart = () => {
                       </div>
                     </Col>
                     <Col md={2}>
-                        <span style={{ fontWeight: "bold" , fontSize: "15px" }}>KWD {prod.price * prod.quantity}</span>
+                        <span style={{ fontWeight: "bold" , fontSize: "15px" }}> {prod.price * prod.quantity} KWD</span>
                     </Col>
-                    <Col md={1}>
+                    <Col md={2}>
                     <Popconfirm
                           title="Are you sure to delete this task?"
                           onConfirm={() => {
@@ -145,7 +152,7 @@ const Cart = () => {
                         <Button
                             type="button"
                             variant="light"
-                            className="btn btn-danger Cart-btn"
+                            className="btn btn-cancelIcon"
                         >
                             <CloseOutlined />
                         </Button>
@@ -158,7 +165,7 @@ const Cart = () => {
           </Col>
           <Col lg="4" md="2" sm="12">
             <Container className="orderSummary">
-              <h3>Summary</h3>
+              <h3 style={{ marginBottom: "5%"}}>{t('Order Review')}</h3>
               <Row>
                 <Col>
                   <Input.Group compact>
@@ -166,17 +173,17 @@ const Cart = () => {
                       style={{
                         width: "calc(125% - 200px)",
                       }}
-                      defaultValue="Have Promo code?"
+                      defaultValue={t("Have Promo code?")}
                     />
-                    <Button type="primary">Checkout</Button>
+                    <Button type="primary">{t('Checkout')}</Button>
                   </Input.Group>
                 </Col>
               </Row>
               <Row style={{ marginTop: "6%" }}>
                 <Col lg="6">
                   <p className="main-title-summary">
-                    Item Subtotal{" "}
-                    <span style={{ color: "#9a9a9a" }}> ({cart.products.length } Item) </span>
+                  {t('Item Subtotal')}{" "}
+                    <span style={{ color: "#9a9a9a" }}> ({cart.quantity } {t('Item')}) </span>
                   </p>
                 </Col>
                 <Col lg="6">
@@ -185,8 +192,8 @@ const Cart = () => {
               </Row>
               <Row style={{ marginTop: "3%" }}>
                 <Col lg="6">
-                  <p className="main-title-summary">Shipping</p>
-                  <p style={{ color: "#9a9a9a" }}>Standart Delivery</p>
+                  <p className="main-title-summary">{t('Shipping')}</p>
+                  <p style={{ color: "#9a9a9a" }}>{t('Standart Delivery')}</p>
                 </Col>
                 <Col lg="6">
                   <p>Free</p>
@@ -195,23 +202,30 @@ const Cart = () => {
               <Row>
                 <hr />
                 <Col>
-                  <p className="main-title-summary">Total</p>
+                  <p className="main-title-summary">{t('Total')}</p>
                 </Col>
                 <Col>
                   <p style={{ fontWeight: "bold", fontSize: "17px" }}>
-                    {cart.total} KWD
+                    {cart.total <1 ? '0' : cart.total} KWD
                   </p>
                 </Col>
               </Row>
               <Row>
-                <Link to={`/shipment/${product_id}/${prodQuantity}`}>
-                  <Button type="primary">Checkout</Button>
+                <Link to={`/shipment`}>
+                  <Button type="primary">{t('Checkout')}</Button>
                 </Link>
               </Row>
             </Container>
           </Col>
         </Row>
       </Container>
+      ) : (
+        <Result
+        icon={<img src={empty} alt="empty-cart" style={{ width: '250px' }}/>}
+        title="Your cart is empty!"
+        extra={ <Link to="/"> <Button type="primary">{t('Shop Now')}</Button> </Link>}
+      />
+      )}
     </div>
   );
 };

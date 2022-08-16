@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { StarFilled } from '@ant-design/icons';
 import { useSelector, useDispatch } from "react-redux";
-import { Card, Button } from 'antd';
+import { useTranslation } from "react-i18next";
+import { Card, Button, message } from 'antd';
 import { Link } from 'react-router-dom';
 import Heading from "../Heading/index";
+import axios from "axios";
 import './index.css';
 import { addProduct } from '../../Redux/features/cartSlice';
 const { Meta } = Card;
@@ -14,11 +16,33 @@ const { Meta } = Card;
 
 function ProductCard({ products, title }) {
   const dispatch = useDispatch();
-  
-  const handelAddProduct = (product) => {
-     dispatch(addProduct({...product , quantity: 1}));
-  }
-  
+  const { user, token } = useSelector((state) => state.auth);
+  const { t } = useTranslation();
+
+  const handelAddProduct = async (product) => {
+    if (token &&  product) {
+    const carts = [{ ...product, quantity:1 }];
+    try {
+        const {
+        data: { message: msg },
+        } = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${user.id}/cart`,
+        { carts },
+        { headers: { token: `Bearer ${token}` } }
+        );
+        dispatch(addProduct({ ...product, quantity:1 }));
+        message.success(msg);
+    } catch ({
+        response: {
+        data: { message: msg },
+        },
+    }) {
+        message.warning(msg);
+    }
+    } else {
+    return dispatch(addProduct({ ...product, quantity:1 }))
+    }
+};
   const responsive = {
       superLargeDesktop: {
         // the naming can be any, depends on you.
