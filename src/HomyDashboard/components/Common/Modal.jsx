@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Modal } from 'antd';
 
-const HomyModal = ({ content, btnText, ModalTitle,isModalVisible, setIsModalVisible }) => {
+const HomyModal = ({ content, btnText, ModalTitle,isModalVisible, setIsModalVisible, SubmitBtn }) => {
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -20,7 +20,14 @@ const HomyModal = ({ content, btnText, ModalTitle,isModalVisible, setIsModalVisi
      <Button type="primary" onClick={showModal}>
         {btnText}
       </Button>
-      <Modal title={ModalTitle} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+      <Modal title={ModalTitle} visible={isModalVisible} 
+      onOk={handleOk} 
+      onCancel={handleCancel}
+      footer={[
+        null
+        // SubmitBtn()
+      ]}
+      >
         {content}
       </Modal>
     </>
