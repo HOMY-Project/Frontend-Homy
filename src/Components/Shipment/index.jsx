@@ -23,6 +23,8 @@ import { setBill } from "../../Redux/features/singleOrderSlice";
 import "../Order/index.css";
 import paymentImg from "../../assets/payment.jpg";
 import { useTranslation } from "react-i18next";
+import Header from '../Header';
+import MainFooter from '../Footer';
 
 const Shipment = () => {
   const [name, setname] = useState("");
@@ -92,365 +94,367 @@ const Shipment = () => {
   };
   return (
     <div>
-      <Container fluid style={{ marginTop: "3%" }} className="order-holder">
-        <Breadcrumb style={{ marginBottom: "4%"}}>
-            <Breadcrumb.Item>
-              <a href="/">{t('Home')}</a>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <a href="">{t('Shopping Cart')}</a>
-            </Breadcrumb.Item>
-        </Breadcrumb>        
-        <Steps current={1} style={{ marginBottom: "5%"}}>
-          <Step title={t("Review Order")} />
-          <Step title={t("Shipping & Payment")} />
-          <Step title={t("Confirm Order")} />
-        </Steps>
-        <Row>
-          <Col lg="7" md="8" sm="12">
-            <Row>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginBottom: "2%",
-                }}
-              >
-                <h3 style={{ fontSize: "20px", fontWeight: "bold" }}>
-                  {t("Checkout")}
-                </h3>
+      <Header />
+        <Container fluid style={{ marginTop: "3%" }} className="order-holder">
+          <Breadcrumb style={{ marginBottom: "4%"}}>
+              <Breadcrumb.Item>
+                <a href="/">{t('Home')}</a>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                <a href="/cart">{t('Shopping Cart')}</a>
+              </Breadcrumb.Item>
+          </Breadcrumb>        
+          <Steps current={1} style={{ marginBottom: "5%"}}>
+            <Step title={t("Review Order")} />
+            <Step title={t("Shipping & Payment")} />
+            <Step title={t("Confirm Order")} />
+          </Steps>
+          <Row>
+            <Col lg="7" md="8" sm="12">
+              <Row>
                 <div
                   style={{
                     display: "flex",
-                    justifyContent: "space-evenly",
+                    justifyContent: "space-between",
                     alignItems: "center",
-                    width: "40%",
+                    marginBottom: "2%",
                   }}
                 >
-                  <p style={{ marginBottom: "0", marginLeft: "2%" }}>
-                    {t("Existing customer?")}
-                  </p>
-                  <Link to="/signin">
-                    {" "}
-                    <Button
-                      style={{
-                        color: "#1890FF !important",
-                        borderColor: "#1890FF !important",
-                      }}
-                    >
-                      {t("signIn")}
-                    </Button>{" "}
-                  </Link>
-                </div>
-              </div>
-              <hr style={{ color: "#ccc" }} />
-              <Col lg="7" md="8" sm="12">
-                <div>
-                  <div className="shippingInfo">
-                    <h3 style={{ fontSize: "18px", fontWeight: "bold" }}>
-                      {t("Shipping")}
-                    </h3>
-                    <hr style={{ color: "#ccc" }} />
-                    <div>
-                      <Form style={{ marginTop: "2%" }} noValidate validated={true} onSubmit={handelShipment}>
-                        <Form.Group
-                          className="mb-3"
-                          controlId="validationCustom03"
-                          hasValidation
-                        >
-                          <Form.Label>{t("Full Name")}</Form.Label>
-                          <Form.Control
-                            type="text"
-                            placeholder="Enter full Name"
-                            value={name}
-                            onChange={(e) => setname(e.target.value)}
-                            required
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            Please provide a valid full Name.
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group
-                          className="mb-3"
-                          controlId="validationCustom03"
-                          hasValidation
-                        >
-                          <Form.Label>{t("Email-address")}</Form.Label>
-                          <Form.Control
-                            type="email"
-                            placeholder="Enter email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            Please provide a valid email.
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group
-                          hasValidation
-                          className="mb-3"
-                          controlId="validationCustom03"
-                        >
-                          <Form.Label>{t("Phone Number")}</Form.Label>
-                          <Form.Control
-                            type="text"
-                            placeholder="Enter Order Number"
-                            value={phone}
-                            onChange={(e) => setphone(e.target.value)}
-                            required
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            Please provide a valid state.
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group
-                          className="mb-3"
-                          controlId="validationCustom03"
-                          hasValidation
-                        >
-                          <Form.Label>{t("City")}</Form.Label>
-                          <Form.Control
-                            type="text"
-                            placeholder="Enter City"
-                            value={city}
-                            onChange={(e) => setCity(e.target.value)}
-                            required
-                          />
-                        </Form.Group>
-                        <Form.Group
-                          hasValidation
-                          className="mb-3"
-                          controlId="validationCustom03"                   
-                          >
-                          <Form.Label>{t("Area")}</Form.Label>
-                          <Form.Control
-                            type="text"
-                            placeholder="Enter Area"
-                            value={area}
-                            onChange={(e) => setArea(e.target.value)}
-                            required
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            Please provide a valid Area.
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group
-                          className="mb-3"
-                          controlId="validationCustom03"      
-                          hasValidation
-                        >
-                          <Form.Label>{t("Street")}</Form.Label>
-                          <Form.Control
-                            type="text"
-                            placeholder="Enter Street"
-                            value={street}
-                            onChange={(e) => setStreet(e.target.value)}
-                            required
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            Please provide a valid street.
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group
-                          className="mb-3"
-                          controlId="validationCustom03"   
-                          hasValidation
-                        >
-                          <Form.Label>{t("Block")}</Form.Label>
-                          <Form.Control
-                            type="text"
-                            placeholder="Enter Block"
-                            value={block}
-                            onChange={(e) => setBlock(e.target.value)}
-                            required
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            Please provide a valid block.
-                          </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group
-                          hasValidation
-                          className="mb-3"
-                          controlId="validationCustom03"   
-                        >
-                          <Form.Label>{t("Building")}</Form.Label>
-                          <Form.Control
-                            type="text"
-                            placeholder="Enter Building No"
-                            value={building}
-                            onChange={(e) => setBuilding(e.target.value)}
-                            required
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            Please choose a Building NO.
-                          </Form.Control.Feedback>
-                        </Form.Group>
-
-                      </Form>
-                    </div>
-                  </div>
-                </div>
-              </Col>
-              <Col lg="4" md="8" sm="12">
-                <div>
-                  <div className="shippingInfo">
-                    <h3 style={{ fontSize: "18px", fontWeight: "bold" }}>
-                      {t("Payment Method")}
-                    </h3>
-                    <hr style={{ color: "#ccc" }} />
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Radio.Group
-                        onChange={(e) => setPayment(e.target.value)}
-                        value={payment}
+                  <h3 style={{ fontSize: "20px", fontWeight: "bold" }}>
+                    {t("Checkout")}
+                  </h3>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-evenly",
+                      alignItems: "center",
+                      width: "40%",
+                    }}
+                  >
+                    <p style={{ marginBottom: "0", marginLeft: "2%" }}>
+                      {t("Existing customer?")}
+                    </p>
+                    <Link to="/signin">
+                      {" "}
+                      <Button
+                        style={{
+                          color: "#1890FF !important",
+                          borderColor: "#1890FF !important",
+                        }}
                       >
-                        <Radio defaultChecked value="Knet">
-                          Knet Payment
-                        </Radio>
-                      </Radio.Group>
-                      <img
-                        alt="example"
-                        src={paymentImg}
-                        style={{ width: "60px" }}
-                      />
-                    </div>
+                        {t("signIn")}
+                      </Button>{" "}
+                    </Link>
                   </div>
                 </div>
-              </Col>
-            </Row>
-          </Col>
-          <Col lg="5" md="4" sm="12">
-            <Container className="orderSummary">
-            <h3 style={{ marginBottom: "5%"}}>{t('Order Review')}</h3>
-              <hr />
-              {products.map((product) => (
-                <Row style={{ marginBottom: "2%" }}>
-                  <Col sm="3">
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      fluid
-                      rounded
-                    />
-                  </Col>
-                  <Col sm="9">
-                    <Row>
-                      <Col sm="10">
-                        <p style={{ fontWeight: "bold" }}>{product.name}</p>
-                      </Col>
-                      <Col sm="2">
-                        <Popconfirm
-                          title="Are you sure to delete this task?"
-                          onConfirm={() => {
-                            handelDeleteProductCart(product.id);
-                          }}
-                          onCancel={(e) => {
-                            message.error("something went wrong");
-                          }}
-                          okText="Yes"
-                          cancelText="No"
-                        >
-                          <Button
-                            type="button"
-                            variant="light"
-                            className="btn btn-danger Cart-btn"
+                <hr style={{ color: "#ccc" }} />
+                <Col lg="7" md="8" sm="12">
+                  <div>
+                    <div className="shippingInfo">
+                      <h3 style={{ fontSize: "18px", fontWeight: "bold" }}>
+                        {t("Shipping")}
+                      </h3>
+                      <hr style={{ color: "#ccc" }} />
+                      <div>
+                        <Form style={{ marginTop: "2%" }} noValidate validated={true} onSubmit={handelShipment}>
+                          <Form.Group
+                            className="mb-3"
+                            controlId="validationCustom03"
+                            hasValidation
                           >
-                            <CloseOutlined />
-                          </Button>
-                        </Popconfirm>
-                      </Col>
-                    </Row>
-                    <Row style={{ alignItems: "center " }}>
-                      <Col sm="5">
-                        <p>{product.price * product.quantity} KWD</p>
-                      </Col>
-                      <Col sm="5">
-                        <div className="quantity-holder">
-                          <InputGroup className="mb-3">
-                            <Button
-                              variant="outline-secondary"
-                              id={locale === 'en' ? 'button-addon1' : 'button-addon2'}
-                              onClick={() =>
-                                dispatch(incrementQuantity(product.id))
-                              }
-                            >
-                              +
-                            </Button>
+                            <Form.Label>{t("Full Name")}</Form.Label>
                             <Form.Control
-                              className="quantityInput"
-                              aria-label="Example text with button addon"
-                              aria-describedby="basic-addon2"
-                              disabled
-                              value={product.quantity}
+                              type="text"
+                              placeholder="Enter full Name"
+                              value={name}
+                              onChange={(e) => setname(e.target.value)}
+                              required
                             />
-                            <Button
-                              variant="outline-secondary"
-                              id={locale === 'en' ? 'button-addon2' : 'button-addon1'}
-                              onClick={() =>
-                                dispatch(decrementQuantity(product.id))
-                              }
+                            <Form.Control.Feedback type="invalid">
+                              Please provide a valid full Name.
+                            </Form.Control.Feedback>
+                          </Form.Group>
+                          <Form.Group
+                            className="mb-3"
+                            controlId="validationCustom03"
+                            hasValidation
+                          >
+                            <Form.Label>{t("Email-address")}</Form.Label>
+                            <Form.Control
+                              type="email"
+                              placeholder="Enter email"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                              required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                              Please provide a valid email.
+                            </Form.Control.Feedback>
+                          </Form.Group>
+                          <Form.Group
+                            hasValidation
+                            className="mb-3"
+                            controlId="validationCustom03"
+                          >
+                            <Form.Label>{t("Phone Number")}</Form.Label>
+                            <Form.Control
+                              type="text"
+                              placeholder="Enter Order Number"
+                              value={phone}
+                              onChange={(e) => setphone(e.target.value)}
+                              required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                              Please provide a valid state.
+                            </Form.Control.Feedback>
+                          </Form.Group>
+                          <Form.Group
+                            className="mb-3"
+                            controlId="validationCustom03"
+                            hasValidation
+                          >
+                            <Form.Label>{t("City")}</Form.Label>
+                            <Form.Control
+                              type="text"
+                              placeholder="Enter City"
+                              value={city}
+                              onChange={(e) => setCity(e.target.value)}
+                              required
+                            />
+                          </Form.Group>
+                          <Form.Group
+                            hasValidation
+                            className="mb-3"
+                            controlId="validationCustom03"                   
                             >
-                              -
+                            <Form.Label>{t("Area")}</Form.Label>
+                            <Form.Control
+                              type="text"
+                              placeholder="Enter Area"
+                              value={area}
+                              onChange={(e) => setArea(e.target.value)}
+                              required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                              Please provide a valid Area.
+                            </Form.Control.Feedback>
+                          </Form.Group>
+                          <Form.Group
+                            className="mb-3"
+                            controlId="validationCustom03"      
+                            hasValidation
+                          >
+                            <Form.Label>{t("Street")}</Form.Label>
+                            <Form.Control
+                              type="text"
+                              placeholder="Enter Street"
+                              value={street}
+                              onChange={(e) => setStreet(e.target.value)}
+                              required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                              Please provide a valid street.
+                            </Form.Control.Feedback>
+                          </Form.Group>
+                          <Form.Group
+                            className="mb-3"
+                            controlId="validationCustom03"   
+                            hasValidation
+                          >
+                            <Form.Label>{t("Block")}</Form.Label>
+                            <Form.Control
+                              type="text"
+                              placeholder="Enter Block"
+                              value={block}
+                              onChange={(e) => setBlock(e.target.value)}
+                              required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                              Please provide a valid block.
+                            </Form.Control.Feedback>
+                          </Form.Group>
+                          <Form.Group
+                            hasValidation
+                            className="mb-3"
+                            controlId="validationCustom03"   
+                          >
+                            <Form.Label>{t("Building")}</Form.Label>
+                            <Form.Control
+                              type="text"
+                              placeholder="Enter Building No"
+                              value={building}
+                              onChange={(e) => setBuilding(e.target.value)}
+                              required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                              Please choose a Building NO.
+                            </Form.Control.Feedback>
+                          </Form.Group>
+
+                        </Form>
+                      </div>
+                    </div>
+                  </div>
+                </Col>
+                <Col lg="4" md="8" sm="12">
+                  <div>
+                    <div className="shippingInfo">
+                      <h3 style={{ fontSize: "18px", fontWeight: "bold" }}>
+                        {t("Payment Method")}
+                      </h3>
+                      <hr style={{ color: "#ccc" }} />
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Radio.Group
+                          onChange={(e) => setPayment(e.target.value)}
+                          value={payment}
+                        >
+                          <Radio defaultChecked value="Knet">
+                            Knet Payment
+                          </Radio>
+                        </Radio.Group>
+                        <img
+                          alt="example"
+                          src={paymentImg}
+                          style={{ width: "60px" }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </Col>
+            <Col lg="5" md="4" sm="12">
+              <Container className="orderSummary">
+              <h3 style={{ marginBottom: "5%"}}>{t('Order Review')}</h3>
+                <hr />
+                {products.map((product) => (
+                  <Row style={{ marginBottom: "2%" }}>
+                    <Col sm="3">
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        fluid
+                        rounded
+                      />
+                    </Col>
+                    <Col sm="9">
+                      <Row>
+                        <Col sm="10">
+                          <p style={{ fontWeight: "bold" }}>{product.name}</p>
+                        </Col>
+                        <Col sm="2">
+                          <Popconfirm
+                            title="Are you sure to delete this task?"
+                            onConfirm={() => {
+                              handelDeleteProductCart(product.id);
+                            }}
+                            onCancel={(e) => {
+                              message.error("something went wrong");
+                            }}
+                            okText="Yes"
+                            cancelText="No"
+                          >
+                            <Button
+                              type="button"
+                              variant="light"
+                              className="btn btn-danger Cart-btn"
+                            >
+                              <CloseOutlined />
                             </Button>
-                          </InputGroup>
-                        </div>
-                      </Col>
-                    </Row>
+                          </Popconfirm>
+                        </Col>
+                      </Row>
+                      <Row style={{ alignItems: "center " }}>
+                        <Col sm="5">
+                          <p>{product.price * product.quantity} KWD</p>
+                        </Col>
+                        <Col sm="5">
+                          <div className="quantity-holder">
+                            <InputGroup className="mb-3">
+                              <Button
+                                variant="outline-secondary"
+                                id={locale === 'en' ? 'button-addon1' : 'button-addon2'}
+                                onClick={() =>
+                                  dispatch(incrementQuantity(product.id))
+                                }
+                              >
+                                +
+                              </Button>
+                              <Form.Control
+                                className="quantityInput"
+                                aria-label="Example text with button addon"
+                                aria-describedby="basic-addon2"
+                                disabled
+                                value={product.quantity}
+                              />
+                              <Button
+                                variant="outline-secondary"
+                                id={locale === 'en' ? 'button-addon2' : 'button-addon1'}
+                                onClick={() =>
+                                  dispatch(decrementQuantity(product.id))
+                                }
+                              >
+                                -
+                              </Button>
+                            </InputGroup>
+                          </div>
+                        </Col>
+                      </Row>
+                    </Col>
+                  </Row>
+                ))}
+                <Row style={{ marginTop: "6%" }}>
+                  <Col lg="6">
+                    <p className="main-title-summary">
+                      {t("Item Subtotal")}{" "}
+                      <span style={{ color: "#9a9a9a" }}>
+                        {" "}
+                        ({quantity} {t("Item")}){" "}
+                      </span>
+                    </p>
+                  </Col>
+                  <Col lg="6">
+                    <p>{total} KWD</p>
                   </Col>
                 </Row>
-              ))}
-              <Row style={{ marginTop: "6%" }}>
-                <Col lg="6">
-                  <p className="main-title-summary">
-                    {t("Item Subtotal")}{" "}
-                    <span style={{ color: "#9a9a9a" }}>
-                      {" "}
-                      ({quantity} {t("Item")}){" "}
-                    </span>
-                  </p>
-                </Col>
-                <Col lg="6">
-                  <p>{total} KWD</p>
-                </Col>
-              </Row>
-              <Row style={{ marginTop: "3%" }}>
-                <Col lg="6">
-                  <p className="main-title-summary">{t("Shipping")}</p>
-                  <p style={{ color: "#9a9a9a" }}>{t("Standart Delivery")}</p>
-                </Col>
-                <Col lg="6">
-                  <p>Free</p>
-                </Col>
-              </Row>
-              <Row>
-                <hr />
-                <Col>
-                  <p className="main-title-summary">{t("Total")}</p>
-                </Col>
-                <Col>
-                  <p style={{ fontWeight: "bold", fontSize: "17px" }}>
-                    {total < 1 ? "0" : total} KWD
-                  </p>
-                </Col>
-              </Row>
-              <Row>
-                <Form>
-              <Button type="submit" onClick={handelShipment} >
-                  {t("Confirm Order Now")}
-              </Button>
-                </Form>
-              </Row>
-            </Container>
-          </Col>
-        </Row>
-      </Container>
+                <Row style={{ marginTop: "3%" }}>
+                  <Col lg="6">
+                    <p className="main-title-summary">{t("Shipping")}</p>
+                    <p style={{ color: "#9a9a9a" }}>{t("Standart Delivery")}</p>
+                  </Col>
+                  <Col lg="6">
+                    <p>Free</p>
+                  </Col>
+                </Row>
+                <Row>
+                  <hr />
+                  <Col>
+                    <p className="main-title-summary">{t("Total")}</p>
+                  </Col>
+                  <Col>
+                    <p style={{ fontWeight: "bold", fontSize: "17px" }}>
+                      {total < 1 ? "0" : total} KWD
+                    </p>
+                  </Col>
+                </Row>
+                <Row>
+                  <Form>
+                <Button type="submit" onClick={handelShipment} >
+                    {t("Confirm Order Now")}
+                </Button>
+                  </Form>
+                </Row>
+              </Container>
+            </Col>
+          </Row>
+        </Container>
+      <MainFooter />
     </div>
   );
 };

@@ -2,7 +2,6 @@ import { SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Space, Table, message, Tag, Breadcrumb } from 'antd';
 import React, { useRef, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { setOrder } from "../../Redux/features/singleOrderSlice";
 import Highlighter from 'react-highlight-words';
 import Container from 'react-bootstrap/Container';
@@ -11,6 +10,8 @@ import axios from "axios";
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from "react-i18next";
 import './index.css';
+import Header from '../Header';
+import MainFooter from '../Footer';
 
 const Orders = () => {
   const [searchText, setSearchText] = useState('');
@@ -194,20 +195,19 @@ const Orders = () => {
       },
   ];
   return (
-    <Container fluid style={{ marginTop: '3%' }} className="order-holder">
+    <><Header /><Container fluid style={{ marginTop: '3%' }} className="order-holder">
+      <Breadcrumb style={{ marginBottom: "4%" }}>
+        <Breadcrumb.Item>
+          <a href="/">{t('Account')}</a>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <a href="/myOrders">{t('Orders')}</a>
+        </Breadcrumb.Item>
+      </Breadcrumb>
+      <Heading heading={t("All Orders")} />
 
-        <Breadcrumb style={{ marginBottom: "4%"}}>
-            <Breadcrumb.Item>
-              <a href="/">{t('Account')}</a>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <a href="">{t('Orders')}</a>
-            </Breadcrumb.Item>
-        </Breadcrumb>
-        <Heading heading={t("All Orders")} />
-
-        <Table columns={columns} dataSource={data} />
-  </Container>
+      <Table columns={columns} dataSource={data} />
+    </Container><MainFooter /></>
   )
   ;
 };

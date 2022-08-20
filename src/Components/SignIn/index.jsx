@@ -1,5 +1,5 @@
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import {
   message, notification,
 } from 'antd';
@@ -8,9 +8,11 @@ import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
-import { setUser, setToken, loginStart, loginFailure } from '../../Redux/features/authSlice';
+import { setUser, setToken, loginStart, loginFailure, setPermission } from '../../Redux/features/authSlice';
 import { CheckCircleTwoTone } from '@ant-design/icons';
 import { useTranslation } from "react-i18next";
+import Header from '../Header';
+import MainFooter from '../Footer';
 import './index.css';
 
  const SignIn = () => {
@@ -18,7 +20,7 @@ import './index.css';
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isFetching } = useSelector((state) => state.auth);
+  const { isFetching, user } = useSelector((state) => state.auth);
   const { t  } = useTranslation();
 
   const signIn = async (e) => {
@@ -36,15 +38,20 @@ import './index.css';
           <CheckCircleTwoTone twoToneColor="#52c41a" />
         ),
       });
-      navigate("/");
+      if(data.role) {
+      const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/permission-role?roleId=${user.role}`);
+      dispatch(setPermission(data));
+      console.log(data, 'permission role');
+      }
+      await user.role === 1 ? navigate('/') : navigate('/dashboard');
     } catch ({ response: { data: { message: msg } } }) {
       message.error(msg);
       dispatch(loginFailure());
     }
   };
-
+  
   return (
-    <div className="Auth-form-container">
+    <><Header /><div className="Auth-form-container">
       <form className="Auth-form">
         <div className="Auth-form-content">
           <h3 className="Auth-form-title">{t('signIn')}</h3>
@@ -55,8 +62,7 @@ import './index.css';
               className="form-control mt-1"
               placeholder="Enter email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)} required
-            />
+              onChange={(e) => setEmail(e.target.value)} required />
           </div>
           <div className="form-group mt-3">
             <label>{t('Password')}</label>
@@ -65,8 +71,7 @@ import './index.css';
               className="form-control mt-1"
               placeholder="Enter password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)} required 
-            />
+              onChange={(e) => setPassword(e.target.value)} required />
           </div>
           <div className="d-grid gap-2 mt-3 sec-password">
             <Form.Group className="" controlId="formBasicCheckbox">
@@ -77,22 +82,22 @@ import './index.css';
             </p>
           </div>
           <div className="d-grid gap-2 mt-3">
-            <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#0F6AD0'}} onClick={(e) => signIn(e)}>
-             {t('signIn')}
+            <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#0F6AD0' }} onClick={(e) => signIn(e)}>
+              {t('signIn')}
             </button>
           </div>
           <div className="d-grid gap-2 mt-3">
             <hr />
-            <p className=""> {t('NewCustomer')} ? </p>
+            <p className=""> {t('NewCustomer')}?</p>
             <Link to="/signUp" className="new-customer-a">
-              <button type="submit" className="btn btn-primary" disabled={isFetching} style={{ backgroundColor: '#fff', color: '#0F6AD0', width: '100%'}}>
+              <button type="submit" className="btn btn-primary" disabled={isFetching} style={{ backgroundColor: '#fff', color: '#0F6AD0', width: '100%' }}>
                 {t('Create An Account')}
               </button>
             </Link>
           </div>
         </div>
       </form>
-    </div>
+    </div><MainFooter /></>
   )
 }
 export default SignIn;

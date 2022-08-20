@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Container, Form, Alert } from "react-bootstrap";
 import { Descriptions, message, Button, Modal, Popconfirm, Breadcrumb } from "antd";
 import LoadingSpinner from "../LoadingSpinner";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "./index.css";
+import Header from '../Header';
+import MainFooter from '../Footer';
 
 const AddressInfo = () => {
   const [address, setAddress] = useState([]);
@@ -19,6 +20,7 @@ const AddressInfo = () => {
   const [block, setBlock] = useState("");
   const { user, token } = useSelector((state) => state.auth);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  console.log(address, 'address');
   const { t } = useTranslation();
   const userId = user.id;
 
@@ -113,6 +115,7 @@ const AddressInfo = () => {
         );
         setAddress(data);
         setLoading(false);
+
       } catch ({
         response: {
           data: { message: msg },
@@ -127,13 +130,14 @@ const AddressInfo = () => {
 
   return (
     <div className="AddressInfo-holder">
+      <Header />
       <Container fluid style={{ marginTop: "3%" }}>
         <Breadcrumb style={{ marginBottom: "4%"}}>
             <Breadcrumb.Item>
               <a href="/">{t('Home')}</a>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <a href="">{t('Account')}</a>
+              <a href="/account">{t('Account')}</a>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
               <a href="">{t('Addresses Information')}</a>
@@ -150,7 +154,7 @@ const AddressInfo = () => {
           >
             <LoadingSpinner />
           </div>
-        ) : address.length > 0 ? (
+        ) : address?.length > 0 ? (
           <div className="AddressInfo-container">
             {address.map((item) => (
               <Descriptions
@@ -299,6 +303,7 @@ const AddressInfo = () => {
           </Button>
         </Link>
       </Container>
+      <MainFooter/>
     </div>
   );
 };

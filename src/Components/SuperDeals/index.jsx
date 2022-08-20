@@ -9,9 +9,25 @@ import { message } from 'antd';
 const SuperDeals = () => {
   const [superProducts, setSuperProducts] = useState([]);
   const [topProducts, setTopProducts] = useState([]);
+  const [TopProArr , setTopProArr] = useState([]);
   const { searchWord } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const {t } = useTranslation();
+
+  const getTopSellerPro = async () => {
+    try{
+      if(topProducts){
+        for (const key in topProducts) {
+          const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/product/${topProducts[key]}`);
+          console.log(data[0], 'product data');
+          setTopProArr((prev) => [...prev, data[0]]);
+        }
+      }
+    }catch(err){
+      message.error(err.message);
+    }
+  }
+  
 
   useEffect(() => {
     const source = axios.CancelToken.source();
@@ -20,9 +36,10 @@ const SuperDeals = () => {
       ? `${process.env.REACT_APP_BACKEND_URL}/api/v1/search?productName=${searchWord}`
       : `${process.env.REACT_APP_BACKEND_URL}/api/v1/product/super`;
       try {
-        const { data: { data } } = await axios.get(url, { cancelToken: source.token });
+        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/product/super`, { cancelToken: source.token });
         dispatch(setAllProducts(data));
         setSuperProducts(data);
+
       } catch ({
         response: {
           data: { message: msg },
@@ -40,13 +57,11 @@ const SuperDeals = () => {
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getTopProducts = async () => {
-      const url = searchWord !== undefined 
-      ? `${process.env.REACT_APP_BACKEND_URL}/api/v1/search?productName=${searchWord}`
-      : `${process.env.REACT_APP_BACKEND_URL}/api/v1/product/top-seller`;
       try {
-        const { data: { data } } = await axios.get(url, { cancelToken: source.token });
+        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/top-seller`, { cancelToken: source.token });
         dispatch(setAllProducts(data));
         setTopProducts(data);
+        getTopSellerPro();
       } catch ({
         response: {
           data: { message: msg },
@@ -59,12 +74,12 @@ const SuperDeals = () => {
     return () => {
       source.cancel();
     };
-  }, [searchWord]);
+  }, []);
 
   return (
     <>
       <ProductCard products={superProducts} title={t("Super Deals")} />
-      <ProductCard products={topProducts} title={t("Top Sellers")} />
+      <ProductCard products={TopProArr} title={t("Top Sellers")} />
     </>
   )
   

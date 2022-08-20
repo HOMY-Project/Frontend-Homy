@@ -6,25 +6,31 @@ import track from '../assets/track.png';
 import hr from '../assets/24hr.png';
 import giftFeature from '../assets/giftFeature.png';  
 import '../Components/Header/media.css';
+import Header from '../Components/Header';
+import MainFooter from '../Components/Footer';
 
 function AboutUs() {
   return (
+    <>
+    <Header />
     <div className="aboutus-holder">
       <WelcomeToHomy />
-      <div className="site-card-wrapper" style={{ marginTop: "4%" , padding:" 0 10%" }}>
+      <div className="site-card-wrapper" style={{ marginTop: "4%", padding: " 0 10%" }}>
         <Row gutter={16}>
           <Col span={8}>
-            <FeaturedCard featuredImg={track} featuredTitle = "Fast Delivery" />
+            <FeaturedCard featuredImg={track} featuredTitle="Fast Delivery" />
           </Col>
           <Col span={8}>
-            <FeaturedCard featuredImg={hr} featuredTitle = "Available 24 Hours"/>
+            <FeaturedCard featuredImg={hr} featuredTitle="Available 24 Hours" />
           </Col>
           <Col span={8}>
-             <FeaturedCard featuredImg={giftFeature} featuredTitle = "Quality Products"/>
+            <FeaturedCard featuredImg={giftFeature} featuredTitle="Quality Products" />
           </Col>
         </Row>
       </div>
     </div>
+    <MainFooter />
+    </>
   );
 }
 

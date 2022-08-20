@@ -6,6 +6,8 @@ import { Form, Input, message } from "antd";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import "../SignIn/index.css";
+import Header from '../Header';
+import MainFooter from '../Footer';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -43,7 +45,7 @@ const SignUp = () => {
   const { Item } = Form;
   const { Password } = Input;
   return (
-    <div className="Auth-form-container signUp-form">
+    <><Header /><div className="Auth-form-container signUp-form">
       <Form
         name="basic"
         labelCol={{
@@ -173,7 +175,7 @@ const SignUp = () => {
           </div>
         </div>
       </Form>
-    </div>
+    </div><MainFooter /></>
   );
 };
 

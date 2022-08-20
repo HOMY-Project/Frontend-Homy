@@ -56,7 +56,7 @@ function ShopByCate() {
         <Row>
           {category.map((item, index) => {
             return (
-              <Col key={index} style={{ display: 'flex', flexDirection: 'column' , alignItems: 'center' }}>
+              <Col key={item.id} style={{ display: 'flex', flexDirection: 'column' , alignItems: 'center' }}>
                 {" "}
                   <Link to={`/api/products/${item.id}`}>
                 <div className="categoryImg-holder">

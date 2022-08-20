@@ -10,7 +10,8 @@ import OrderProduct from './orderProduct';
 import "./index.css";
 import paymentImg from "../../assets/payment.jpg";
 import { useSelector } from "react-redux";
-
+import Header from '../Header';
+import MainFooter from '../Footer';
 
 const SingleOrder = () => {
   const { orderDetails: { order_number, payment, products, addresses, phone } } = useSelector((state) => state.singleOrder);
@@ -19,8 +20,8 @@ const SingleOrder = () => {
 
   return (
     <div>
+      <Header />
       <Container fluid style={{ marginTop: "3%" }} className="order-holder">
-
         <Breadcrumb style={{ marginBottom: "4%"}}>
             <Breadcrumb.Item>
               <a href="/">{t('Home')}</a>
@@ -125,6 +126,7 @@ const SingleOrder = () => {
           </Col>
         </Row>
       </Container>
+      <MainFooter />
     </div>
   );
 };
