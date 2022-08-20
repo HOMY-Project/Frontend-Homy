@@ -3,8 +3,8 @@ import Signup from "./Signup";
 import OrderStatus from './OrderStatus';
 import AddressInfo from './AddressInfo';
 import SignIn from "./SignIn";
-import Header from "./Header";
-import Footer from './Footer/MainFooter';
+import Header from './Header';
+import MainFooter from './Footer';
 import SubFooter from "./Footer/SubFooter";
 import ChangePassword from './AccountInfo/ChangePassword';
 import Brands from './Brands';
@@ -31,7 +31,7 @@ export {
     AddressInfo,
     SignIn,
     Header,
-    Footer,
+    MainFooter,
     SubFooter,
     Category,
     ChangePassword,

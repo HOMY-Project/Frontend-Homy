@@ -19,6 +19,8 @@ import { setBill } from "../../Redux/features/singleOrderSlice";
 import "../Order/index.css";
 import "./index.css";
 import paymentImg from "../../assets/payment.jpg";
+import Header from '../Header';
+import MainFooter from '../Footer';
 
 const OrderConfirm = () => {
   const { bill } = useSelector((state) => state.singleOrder);
@@ -72,7 +74,7 @@ const OrderConfirm = () => {
   const handelShipment = async () => {
     try {
       const {
-        data: { message: msg, data },
+        data: { message: msg },
       } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/order`, bill);
       message.success(msg);
       notification.open({
@@ -120,13 +122,14 @@ const OrderConfirm = () => {
   };
   return (
     <div>
+      <Header />
       <Container fluid style={{ marginTop: "3%" }} className="order-holder">
       <Breadcrumb style={{ marginBottom: "4%"}}>
             <Breadcrumb.Item>
               <a href="/">{t('Home')}</a>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <a href="">{t('Shopping Cart')}</a>
+              <a href="/cart">{t('Shopping Cart')}</a>
             </Breadcrumb.Item>
         </Breadcrumb>        
         <Steps current={1} style={{ marginBottom: "5%"}}>
@@ -164,8 +167,8 @@ const OrderConfirm = () => {
                     <p>{t("Full Name")}: {bill?.name}</p>
                     <p>{t("Email-address")}: {bill?.email}</p>
                     <p>{t("Phone Number")}: {bill?.phone}</p>
-                    {bill?.addresses.map((address, index) => (
-                      <p key={index}> {address}</p>
+                    {bill?.addresses.map((address) => (
+                      <p key={address}> {address}</p>
                     ))}
 
                     <Modal
@@ -412,6 +415,7 @@ const OrderConfirm = () => {
           </Col>
         </Row>
       </Container>
+      <MainFooter />
     </div>
   );
 };

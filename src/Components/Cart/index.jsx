@@ -21,7 +21,8 @@ import axios from "axios";
 import "../Order/index.css";
 import "./index.css";
 import empty from '../../assets/empty-cart-removebg-preview.png';
-
+import Header from '../Header';
+import MainFooter from '../Footer';
 
 const Cart = () => {
   const { locale } = useContext(LocaleContext);
@@ -75,6 +76,7 @@ const Cart = () => {
   const { Step } = Steps;
   return (
     <div>
+      <Header />
       {cart.products.length > 0 ? ( 
       <Container fluid style={{ marginTop: "3%" }} className="order-holder">
         <Breadcrumb style={{ marginBottom: "4%"}}>
@@ -224,6 +226,7 @@ const Cart = () => {
         extra={ <Link to="/"> <Button type="primary">{t('Shop Now')}</Button> </Link>}
       />
       )}
+      <MainFooter />
     </div>
   );
 };

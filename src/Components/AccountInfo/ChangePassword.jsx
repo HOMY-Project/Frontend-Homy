@@ -7,6 +7,9 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux';
 import { CheckCircleTwoTone } from '@ant-design/icons';
+import Header from '../Header';
+import MainFooter from '../Footer';
+
 import '../SignIn/index.css';
 
  const ChangePassword = () => {
@@ -36,7 +39,7 @@ import '../SignIn/index.css';
   };
 
   return (
-    <div className="Auth-form-container">
+    <><Header /><div className="Auth-form-container">
       <form className="Auth-form">
         <div className="Auth-form-content">
           <h3 className="Auth-form-title">Change Password</h3>
@@ -48,8 +51,7 @@ import '../SignIn/index.css';
               placeholder="Enter your old password"
               value={oldPassword}
               onChange={(e) => setoldPassword(e.target.value)}
-              required
-            />
+              required />
           </div>
           <div className="form-group mt-3">
             <label>New Password</label>
@@ -59,17 +61,16 @@ import '../SignIn/index.css';
               placeholder="Enter your new password"
               value={newPassword}
               onChange={(e) => setnewPassword(e.target.value)}
-              required
-            />
+              required />
           </div>
           <div className="d-grid gap-2 mt-3">
-            <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#0F6AD0'}} onClick={(e) => changePass(e)}>
+            <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#0F6AD0' }} onClick={(e) => changePass(e)}>
               Save
             </button>
           </div>
         </div>
       </form>
-    </div>
+    </div><MainFooter /></>
   )
 }
 export default ChangePassword;

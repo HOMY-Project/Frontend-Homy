@@ -7,6 +7,8 @@ import axios from "axios";
 import Heading from "../Heading/index";
 import Container from "react-bootstrap/Container";
 import './index.css';
+import Header from '../Header';
+import MainFooter from '../Footer';
 
 const AddaddressForm = () => {
     const [city, setCity] = useState("");
@@ -50,7 +52,7 @@ const AddaddressForm = () => {
 
 
   return (
-    <Container fluid style={{ marginTop: "3%" }}>
+    <><Header /><Container fluid style={{ marginTop: "3%" }}>
       <Breadcrumb>
         <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
         <Breadcrumb.Item>Account</Breadcrumb.Item>
@@ -134,62 +136,62 @@ const AddaddressForm = () => {
             </div>
             <div className="block-building-holder">
 
-                <div className="form-group mt-3">
+              <div className="form-group mt-3">
                 <label>Block</label>
                 <Item
-                    name="Block"
-                    className="form-control mt-1"
-                    value={block}
-                    onChange={(e) => setBlock(e.target.value)}
-                    rules={[
+                  name="Block"
+                  className="form-control mt-1"
+                  value={block}
+                  onChange={(e) => setBlock(e.target.value)}
+                  rules={[
                     {
-                        type: "text",
-                        message: "The input is not valid Block name!",
+                      type: "text",
+                      message: "The input is not valid Block name!",
                     },
                     {
-                        required: true,
-                        message: "Please input your Block name!",
+                      required: true,
+                      message: "Please input your Block name!",
                     },
-                    ]}
+                  ]}
                 >
-                    <Input />
+                  <Input />
                 </Item>
-                </div>
+              </div>
 
-                <div className="form-group mt-3">
+              <div className="form-group mt-3">
                 <label>House/Building No</label>
                 <Item
-                    name="building"
-                    className="form-control mt-1"
-                    value={building}
-                    placeholder="Street 75"
-                    onChange={(e) => setBuilding(e.target.value)}
-                    rules={[
+                  name="building"
+                  className="form-control mt-1"
+                  value={building}
+                  placeholder="Street 75"
+                  onChange={(e) => setBuilding(e.target.value)}
+                  rules={[
                     {
-                        required: true,
-                        message: "Please input your building name!",
+                      required: true,
+                      message: "Please input your building name!",
                     },
-                    ]}
+                  ]}
                 >
-                    <Input />
+                  <Input />
                 </Item>
-                </div>
+              </div>
             </div>
 
-              <div className="d-grid gap-2 mt-3">
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  style={{ backgroundColor: "#0F6AD0" }}
-                  onClick={() => handelAdd()}
-                >
-                  Save Changes
-                </button>
-              </div>
+            <div className="d-grid gap-2 mt-3">
+              <button
+                type="submit"
+                className="btn btn-primary"
+                style={{ backgroundColor: "#0F6AD0" }}
+                onClick={() => handelAdd()}
+              >
+                Save Changes
+              </button>
+            </div>
           </div>
         </Form>
       </div>
-    </Container>
+    </Container><MainFooter /></>
   );
 };
 

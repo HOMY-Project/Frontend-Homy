@@ -56,7 +56,7 @@ const Subnav = () => {
               >
                   {subcategory.length > 0 && subcategory.map((subitem, index) => {
                       return (
-                          <Menu.Item key={index}>{subitem.name}</Menu.Item>
+                          <Menu.Item key={subitem.id}>{subitem.name}</Menu.Item>
                       );
                   })}
               </Menu.SubMenu>

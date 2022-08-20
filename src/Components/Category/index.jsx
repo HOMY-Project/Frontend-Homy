@@ -7,12 +7,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { Card, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col,Form } from "react-bootstrap";
+import Header from '../Header';
+import MainFooter from '../Footer';
 import { addProduct } from '../../Redux/features/cartSlice';
 import '../SuperDeals/index.css';
 import "./index.css";
-import Heading from "../Heading";
 import { Breadcrumb } from "antd";
 const { Option } = Select;
+
 
 const Category = () => {
   const [Products, setProducts] = useState([]);
@@ -173,7 +175,7 @@ const Category = () => {
     ))
   }
   return (
-    <Container fluid style={{ marginTop: "3%" }} className="category-holder">
+    <><Header /><Container fluid style={{ marginTop: "3%" }} className="category-holder">
       <Breadcrumb style={{ marginBottom: "4%" }}>
         <Breadcrumb.Item>
           <a href="/">{t("Home")}</a>
@@ -204,8 +206,7 @@ const Category = () => {
                 {" "}
                 {t("Price Range")}{" "}
               </h5>
-              <Slider range  min={0} max={1000} onChange={(value) => (setMin(value[0]), setMax(value[1]))} 
-                />
+              <Slider range min={0} max={1000} onChange={(value) => (setMin(value[0]), setMax(value[1]))} />
             </div>
             <div className="filter by-category">
               <h5 className="filter-title"> {categoryName[0]?.name} </h5>
@@ -237,7 +238,7 @@ const Category = () => {
           </div>
         </Col>
         <Col lg={9} ms={12}>
-        <div
+          <div
             style={{
               display: "flex",
               justifyContent: "space-between",
@@ -247,85 +248,81 @@ const Category = () => {
             <h3 style={{ fontSize: "17px", fontWeight: "bold" }}>
               {t("Results for - ") + categoryName[0]?.name}
             </h3>
-            <div className="sort-by"          
-             style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              width: '20%'
-            }}>
-                <h5 className="filter-title"> {t("Sort By ")}</h5>
-                <Select defaultValue="highToLow" style={{ width: 120 }} onChange={(value) => sortPrice(value)}>
-                    <Option value="LowToHigh">Price: Low to High</Option>
-                    <Option value="highToLow">Price: High to Low</Option>
-                </Select>
+            <div className="sort-by"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: '20%'
+              }}>
+              <h5 className="filter-title"> {t("Sort By ")}</h5>
+              <Select defaultValue="highToLow" style={{ width: 120 }} onChange={(value) => sortPrice(value)}>
+                <Option value="LowToHigh">Price: Low to High</Option>
+                <Option value="highToLow">Price: High to Low</Option>
+              </Select>
             </div>
           </div>
           <hr style={{ color: "#ccc" }} />
           <div className="product-holder">
             <Row>
               {Products.length > 0 ? Products.map((product) => (
-                <Col lg={4} md={6} sm={12} xs={12} style={{marginBottom: '4%'}}>
-                    <div key={product.id}>
+                <Col lg={4} md={6} sm={12} xs={12} style={{ marginBottom: '4%' }}>
+                  <div key={product.id}>
                     <Card
-                        bordered={false}
-                        cover={<img alt="example" src={product.image} />}
+                      bordered={false}
+                      cover={<img alt="example" src={product.image} />}
                     >
-                        <Meta
-                        title={
-                            <Link to={`/api/v1/product/${product.id}`}>
-                            {" "}
-                            {product.name}{" "}
-                            </Link>
-                        }
-                        description={product.quick_overview}
-                        />
-                        <div
+                      <Meta
+                        title={<Link to={`/api/v1/product/${product.id}`}>
+                          {" "}
+                          {product.name}{" "}
+                        </Link>}
+                        description={product.quick_overview} />
+                      <div
                         style={{
-                            display: "flex",
-                            alignItems: "center",
-                            marginBottom: "2%",
-                            marginTop: "3%",
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: "2%",
+                          marginTop: "3%",
                         }}
-                        >
+                      >
                         <StarFilled />{" "}
                         <span style={{ marginLeft: "2%" }}>5.0</span>
-                        </div>
-                        <div className="price-holder">
+                      </div>
+                      <div className="price-holder">
                         <p className="price">{product.price} KWD</p>
                         <p className="discount">{product.discount} KWD</p>
-                        </div>
-                        <div className="d-grid gap-2">
+                      </div>
+                      <div className="d-grid gap-2">
                         <Button
-                            variant="primary"
-                            size="lg"
-                            className="btn btn-cart"
-                            onClick={() => handelAddProduct(product)}
+                          variant="primary"
+                          size="lg"
+                          className="btn btn-cart"
+                          onClick={() => handelAddProduct(product)}
                         >
-                            Add to Cart{" "}
+                          Add to Cart{" "}
                         </Button>
-                        </div>
+                      </div>
                     </Card>
-                    </div>
+                  </div>
                 </Col>
-              )): 
-                <div className="no-product"> <Result title={t("There are no products in this category")}/> </div>}
+              )) :
+                <div className="no-product"> <Result title={t("There are no products in this category")} /> </div>}
               {total > 3 && (
-              <div className="pagination-holder">
-                <Pagination
-                  defaultCurrent={1}
-                  total={total}
-                  pageSize="3"
-                  current={page}
-                  onChange={(value) => setPage(value)}
-                />
-              </div>
-            )}
+                <div className="pagination-holder">
+                  <Pagination
+                    defaultCurrent={1}
+                    total={total}
+                    pageSize="3"
+                    current={page}
+                    onChange={(value) => setPage(value)} />
+                </div>
+              )}
             </Row>
           </div>
         </Col>
       </Row>
-    </Container>
+    </Container><MainFooter /></>
   );
 };
 

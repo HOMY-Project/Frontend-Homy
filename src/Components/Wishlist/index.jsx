@@ -17,6 +17,8 @@ import axios from "axios";
 import "../Order/index.css";
 import "./index.css";
 import empty from '../../assets/wishlistnotfound.jpg';
+import Header from '../Header';
+import MainFooter from '../Footer';
 
 const Wishlist = () => {
   const cart = useSelector((state) => state.cart);
@@ -28,7 +30,7 @@ const Wishlist = () => {
       if(token){
       const getCartProducts = async () => {
           try {
-           const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/${user.id}/wishlist`,
+           await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/${user.id}/wishlist`,
               {
               headers: { token: `Bearer ${token}` },
               }, 
@@ -90,6 +92,7 @@ const Wishlist = () => {
     }   
   return (
     <div>
+      <Header />
       {cart.wishlist.length > 0 ? ( 
       <Container fluid style={{ marginTop: "3%" }} className="order-holder">
         <Breadcrumb style={{ marginBottom: "4%"}}>
@@ -97,7 +100,7 @@ const Wishlist = () => {
               <a href="/">{t('Home')}</a>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <a href="">{t('Wishlist')}</a>
+              <a href="/wishlist">{t('Wishlist')}</a>
             </Breadcrumb.Item>
         </Breadcrumb>
         <Heading heading={cart.wishlist.length +" "+ t("Items in your Wishlist")} />
@@ -154,6 +157,7 @@ const Wishlist = () => {
         extra={ <Link to="/"> <Button type="primary">{t("Shop Now")}</Button> </Link>}
       />
       )}
+      <MainFooter />
     </div>
   );
 };

@@ -3,7 +3,7 @@ import LocaleContext from '../../translations/LocaleContext';
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { clearUser, setSearchWord } from "../../Redux/features/authSlice";
-import { clearCart } from "../../Redux/features/cartSlice";
+// import { clearCart } from "../../Redux/features/cartSlice";
 import { useTranslation } from "react-i18next";
 import { message, Badge, AutoComplete, Input } from "antd";
 import { Form,InputGroup, Container,  Nav, Navbar, NavDropdown,Button } from "react-bootstrap";
@@ -44,7 +44,7 @@ function MainNavbar() {
 
   const logout = () => {
     dispatch(clearUser());
-    dispatch(clearCart());
+    // dispatch(clearCart());
     // dispatch(clearWishlist())
     message.success("Logged out successfully");
     navigate("/");
