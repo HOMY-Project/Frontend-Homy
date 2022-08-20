@@ -22,10 +22,12 @@ const Roles = () => {
   const [data, setData] = useState([]);
   const [name, setName] = useState('');
   const [pages, setPages ] = useState([]);
+  const [permissions, setPermissions] = useState([]);
   const { token, user } = useSelector((state) => state.auth);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { Option } = Select;
 
+  // get Roles
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getRoles = async () => {
@@ -48,6 +50,7 @@ const Roles = () => {
     };
   });
 
+  // get pages
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getPages = async () => {
@@ -69,7 +72,30 @@ const Roles = () => {
       source.cancel();
     };
   });
-  
+
+  // get permissions
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+    const getPermissions = async () => {
+      try {
+        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/permissions`, {
+          headers: { token: `Bearer ${token}` },
+        },{ cancelToken: source.token });
+        setPermissions(data);
+      } catch ({
+        response: {
+          data: { message: msg },
+        },
+      }) {
+        message.warning(msg);
+      }
+    };
+    getPermissions();
+    return () => {
+      source.cancel();
+    };
+  });
+
   const onFinish = async (values) => {
     try {
       const { data: {message: msg } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/roles`
@@ -130,18 +156,15 @@ const Roles = () => {
                 <Select
                   placeholder="Select Permission"
                 >
-                  <Option value={1} label="Get" key="1">
-                    Get
-                </Option>
-                <Option value={2} label="Post" key="2">
-                    Post
-                </Option>
-                <Option value={3} label="Put" key="3">
-                    Put
-                </Option>
-                <Option value={4} label="Delete" key="4">
-                    Delete
-                </Option>
+                {permissions.map((permission) => {
+                  return(
+                    <Option value={permission.id} label={permission.name} key={permission.id}>
+                      <div className="demo-option-label-item">
+                        {permission.name}
+                      </div>
+                    </Option>
+                  )
+              })}
                 </Select>
                 </Form.Item>
                 <Form.Item
@@ -161,7 +184,7 @@ const Roles = () => {
               {pages.map((page) => {
                 if(page.name !== 'roles' && page.name !== 'profile' && page.name !== 'users'){
                   return(
-                    <Option value={page.id} label={page.name}>
+                    <Option value={page.id} label={page.name} key={page.id}>
                       <div className="demo-option-label-item">
                         {page.name}
                       </div>

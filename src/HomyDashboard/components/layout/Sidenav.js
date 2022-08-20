@@ -174,6 +174,7 @@ function Sidenav({ color }) {
             <span className="label">Dashboard</span>
           </NavLink>
         </Menu.Item>
+        {user && user.role === 2 && (
         <Menu.Item key="2">
           <NavLink to="/users">
             <span
@@ -187,6 +188,7 @@ function Sidenav({ color }) {
             <span className="label">Users</span>
           </NavLink>
         </Menu.Item>
+        )}
         <Menu.Item key="3">
           <NavLink to="/products">
             <span
