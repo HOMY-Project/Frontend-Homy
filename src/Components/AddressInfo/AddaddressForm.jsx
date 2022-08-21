@@ -25,7 +25,7 @@ const AddaddressForm = () => {
 
       try {
         const {
-          data: { message : verifyMessage },
+          data: { message: msg},
         } = await axios.post(
           `${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${user.id}/address`,
           {
@@ -39,7 +39,7 @@ const AddaddressForm = () => {
             headers: { token: `Bearer ${token}` },
           }
         );
-        message.success(verifyMessage);
+        message.success(msg);
         navigate("/addressInfo");
       } catch ({
         response: {

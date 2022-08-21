@@ -13,7 +13,7 @@ class Home extends Component {
                 <SuperDeals />
                 <SmartSystems />
                 <WelcomeToHomy />
-                <Brands /> 
+                <Brands />  
                 <MainFooter />
             </div>
         );

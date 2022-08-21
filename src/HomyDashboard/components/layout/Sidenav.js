@@ -1,6 +1,6 @@
 // import { useState } from "react";
 import { Menu, Button } from "antd";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
 import { useSelector, useDispatch } from "react-redux";
 import { clearUser } from "../../../Redux/features/authSlice";
@@ -9,7 +9,8 @@ function Sidenav({ color }) {
   const page = pathname.replace("/", "");
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
+  
   const dashboard = [
     <svg
       width="20"
@@ -152,6 +153,7 @@ function Sidenav({ color }) {
   ];
   const signout = () => {
     dispatch(clearUser());
+    // navigate('/')
   }
   return (
     <>
@@ -299,12 +301,12 @@ function Sidenav({ color }) {
             <span className="label">Profile</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="12">
+        {/* <Menu.Item key="12">
           <NavLink to="/sign-in">
             <span className="icon">{signin}</span>
             <span className="label">Sign In</span>
           </NavLink>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item key="13"  onClick={() => signout()}>
           <NavLink to="/">
             <span className="icon">{signup}</span>

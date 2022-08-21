@@ -11,44 +11,44 @@ const HomyTable = ({ columnsNames, data, setData }) => {
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState('');
   
-  const isEditing = (record) => record.key === editingKey;
-  // console.log(editingKey, 'editingkey');
+  // const isEditing = (record) => record.key === editingKey;
+  // // console.log(editingKey, 'editingkey');
 
-  const edit = (record) => {
-    form.setFieldsValue({
-      image: '',
-      name: '',
-      place: '',
-      ...record,
-    });
-    setEditingKey(record.key);
+  // const edit = (record) => {
+  //   form.setFieldsValue({
+  //     image: '',
+  //     name: '',
+  //     place: '',
+  //     ...record,
+  //   });
+  //   setEditingKey(record.key);
 
-  };
+  // };
 
-  const cancel = () => {
-    setEditingKey('');
-  };
+  // const cancel = () => {
+  //   setEditingKey('');
+  // };
 
-  const save = async (key) => {
-    try {
-      const row = await form.validateFields();
-      const newData = [...data];
-      const index = newData.findIndex((item) => key === item.key);
+  // const save = async (key) => {
+  //   try {
+  //     const row = await form.validateFields();
+  //     const newData = [...data];
+  //     const index = newData.findIndex((item) => key === item.key);
 
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, { ...item, ...row });
-        setData(newData);
-        setEditingKey('');
-      } else {
-        newData.push(row);
-        setData(newData);
-        setEditingKey('');
-      }
-    } catch (errInfo) {
-      console.log('Validate Failed:', errInfo);
-    }
-  }; 
+  //     if (index > -1) {
+  //       const item = newData[index];
+  //       newData.splice(index, 1, { ...item, ...row });
+  //       setData(newData);
+  //       setEditingKey('');
+  //     } else {
+  //       newData.push(row);
+  //       setData(newData);
+  //       setEditingKey('');
+  //     }
+  //   } catch (errInfo) {
+  //     console.log('Validate Failed:', errInfo);
+  //   }
+  // }; 
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div
@@ -135,117 +135,144 @@ const HomyTable = ({ columnsNames, data, setData }) => {
   });
 
   const columns = [
-    {
-      title: columnsNames[0],
-      dataIndex: columnsNames[0],
-      key: columnsNames[0],
-      width: '20%',
-      editable: true,
-      render: (status) => (
-        <Avatar
-        className="shape-avatar"
-        shape="square"
-        size={50}
-        src={status}
-      />
-    )
-    },
-    {
-      title: columnsNames[1],
-      dataIndex: columnsNames[1],
-      key: columnsNames[1],
-      width: '20%',
-      editable: true,
-      ...getColumnSearchProps(columnsNames[1]),
-    },
-    {
-      title: columnsNames[2],
-      dataIndex: columnsNames[2],
-      key: columnsNames[2],
-      width: '20%',
-      editable: true,
-      ...getColumnSearchProps(columnsNames[1]),
 
-    },
-    {
-      title: 'operation',
-      dataIndex: 'operation',
-      render: (_, record) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <span>
-            <Typography.Link
-              onClick={() => save(record.key)}
-              style={{
-                marginRight: 8,
-              }}
-            >
-              Save
-            </Typography.Link>
-            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <a>Cancel</a>
-            </Popconfirm>
-          </span>
-        ) : (
-          <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
-            Edit
-          </Typography.Link>
-        );
-      },
-    },
+    // {
+    //   title: columnsNames[0],
+    //   dataIndex: columnsNames[0],
+    //   key: columnsNames[0],
+    //   width: '20%',
+    //   editable: true,
+    //   render: (status) => (
+    //     <Avatar
+    //     className="shape-avatar"
+    //     shape="square"
+    //     size={50}
+    //     src={status}
+    //   />
+    // )
+    // },
+    // {
+    //   title: columnsNames[1],
+    //   dataIndex: columnsNames[1],
+    //   key: columnsNames[1],
+    //   width: '20%',
+    //   editable: true,
+    //   ...getColumnSearchProps(columnsNames[1]),
+    // },
+    // {
+    //   title: columnsNames[2],
+    //   dataIndex: columnsNames[2],
+    //   key: columnsNames[2],
+    //   width: '20%',
+    //   editable: true,
+    //   ...getColumnSearchProps(columnsNames[1]),
+
+    // },
+    // {
+    //   title: 'operation',
+    //   dataIndex: 'operation',
+    //   render: (_, record) => {
+    //     const editable = isEditing(record);
+    //     return editable ? (
+    //       <span>
+    //         <Typography.Link
+    //           onClick={() => save(record.key)}
+    //           style={{
+    //             marginRight: 8,
+    //           }}
+    //         >
+    //           Save
+    //         </Typography.Link>
+    //         <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
+    //           <a>Cancel</a>
+    //         </Popconfirm>
+    //       </span>
+    //     ) : (
+    //       <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
+    //         Edit
+    //       </Typography.Link>
+    //     );
+    //   },
+    // },
   ];
-
-  const mergedColumns = columns.map((col) => {
-    if (!col.editable) {
-      return col;
+  columnsNames.map((item, index) => {
+    if(item === 'image'){
+      columns.push({
+        title: item,
+        dataIndex: item,
+        key: item,
+        width: '20%',
+        editable: true,
+        render: (status) => (
+          <Avatar
+          className="shape-avatar"
+          shape="square"
+          size={50}
+          src={status}
+        />
+      )
+      })
     }
-
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        inputType: col.dataIndex === 'age' ? 'number' : 'text',
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-      }),
-    };
+    columns.push({
+      title: item,
+      dataIndex: item,
+      key: item,
+      width: '20%',
+      editable: true,
+      ...getColumnSearchProps(item),
+    });
   });
+  // const mergedColumns = columns.map((col) => {
+  //   if (!col.editable) {
+  //     return col;
+  //   }
 
-  const EditableCell = ({
-    editing,
-    dataIndex,
-    title,
-    inputType,
-    record,
-    index,
-    children,
-    ...restProps
-  }) => {
-    const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
-    return (
-      <td {...restProps}>
-        {editing ? (
-          <Form.Item
-            name={dataIndex}
-            style={{
-              margin: 0,
-            }}
-            rules={[
-              {
-                required: true,
-                message: `Please Input ${title}!`,
-              },
-            ]}
-          >
-            {inputNode}
-          </Form.Item>
-        ) : (
-          children
-        )}
-      </td>
-    );
-  };
+  //   return {
+  //     ...col,
+  //     onCell: (record) => ({
+  //       record,
+  //       inputType: col.dataIndex === 'age' ? 'number' : 'text',
+  //       dataIndex: col.dataIndex,
+  //       title: col.title,
+  //       editing: isEditing(record),
+  //     }),
+  //   };
+  // });
+
+  // const EditableCell = ({
+  //   editing,
+  //   dataIndex,
+  //   title,
+  //   inputType,
+  //   record,
+  //   index,
+  //   children,
+  //   ...restProps
+  // }) => {
+  //   const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+  //   return (
+  //     <td {...restProps}>
+  //       {editing ? (
+  //         <Form.Item
+  //           name={dataIndex}
+  //           style={{
+  //             margin: 0,
+  //           }}
+  //           rules={[
+  //             {
+  //               required: true,
+  //               message: `Please Input ${title}!`,
+  //             },
+  //           ]}
+  //         >
+  //           {inputNode}
+  //         </Form.Item>
+  //       ) : (
+  //         children
+  //       )}
+  //     </td>
+  //   );
+  // };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -284,19 +311,20 @@ const HomyTable = ({ columnsNames, data, setData }) => {
   return (
     <Form form={form} component={false}>
     <Table 
-    columns={mergedColumns} 
+    // columns={mergedColumns} 
+    columns={columns}
     dataSource={data} 
     bordered
-    components={{
-      body: {
-        cell: EditableCell,
-      },
-    }}
-    rowClassName="editable-row"
-    pagination={{
-      onChange: cancel,
-    }}
-    />;
+    // components={{
+    //   body: {
+    //     cell: EditableCell,
+    //   },
+    // }}
+    // rowClassName="editable-row"
+    // pagination={{
+    //   onChange: cancel,
+    // }}
+    />
     </Form>
   )
 };

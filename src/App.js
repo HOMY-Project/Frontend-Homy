@@ -48,7 +48,7 @@ function App() {
             }} />
 
             <Layout >
-              <Content>
+              <Content> 
                 <Routes>
                 {user && user.role !== 1 && ( 
                 <Route exact path='/' element={<Main/>}>
@@ -62,11 +62,9 @@ function App() {
                     <Route  path="banners" element={<Banners />} />
                     <Route  path="rtl" element={<Rtl />} />
                     <Route  path="profile" element={<Profile />} />
-                    <Route from="*" to="/dashboard" />
+                    <Route from="*" to="/" />
                 </Route>
                 )}
-                {user && user.role === 1 && (
-                <>
                 <Route exact path="/" element={<Home />} />
                 <Route path="/aboutus" element={<AboutUs />} />
                 <Route path="/signIn" element={<SignIn />} />
@@ -86,8 +84,6 @@ function App() {
                 <Route path="/api/v1/product/:productId" element={<ProductDetails />} />
                 <Route path="/api/products/:itemId" element={<Category />} />
                 <Route exact path="*" element={<PageNotFound />} />
-                </>
-                  )}
             </Routes>
               </Content>
             </Layout>

@@ -26,9 +26,7 @@ const AccountInfo = () => {
 
   const editInfo = async () => {
     try {
-      const {
-        data: { message: verifyMessage },
-      } = await axios.put(
+     await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${user.id}/update`,
         {
           name,
@@ -40,7 +38,9 @@ const AccountInfo = () => {
         }
       );
       isEdit(true);
-      message.success(verifyMessage);
+      message.success(
+        t("accountInfo.success")
+      );
     } catch ({
       response: {
         data: { message: msg },

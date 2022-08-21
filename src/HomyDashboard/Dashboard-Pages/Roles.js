@@ -48,7 +48,7 @@ const Roles = () => {
     return () => {
       source.cancel();
     };
-  });
+  }, []);
 
   // get pages
   useEffect(() => {
@@ -71,7 +71,7 @@ const Roles = () => {
     return () => {
       source.cancel();
     };
-  });
+  }, []);
 
   // get permissions
   useEffect(() => {
@@ -94,7 +94,7 @@ const Roles = () => {
     return () => {
       source.cancel();
     };
-  });
+  }, []);
 
   const onFinish = async (values) => {
     try {
