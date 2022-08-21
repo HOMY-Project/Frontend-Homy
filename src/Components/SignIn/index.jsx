@@ -27,23 +27,23 @@ import './index.css';
     e.preventDefault();
     dispatch(loginStart());
     try {
-      const { data: { data, message: verifyMessage, token } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/signin`
+      const { data: { data, message: msg, token } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/signin`
       , { email, password });
+        console.log(data, 'sign');
       dispatch(setUser(data));
       dispatch(setToken(token));
       notification.open({
         message: 'Welcome back',
-        description: {verifyMessage},
+        description: {msg},
         icon: (
           <CheckCircleTwoTone twoToneColor="#52c41a" />
         ),
       });
       if(data.role) {
-      const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/permission-role?roleId=${user.role}`);
-      dispatch(setPermission(data));
-      console.log(data, 'permission role');
+        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/permission-role?roleId=${user.role}`);
+        dispatch(setPermission(data));
+        navigate('/')
       }
-      await user.role === 1 ? navigate('/') : navigate('/dashboard');
     } catch ({ response: { data: { message: msg } } }) {
       message.error(msg);
       dispatch(loginFailure());

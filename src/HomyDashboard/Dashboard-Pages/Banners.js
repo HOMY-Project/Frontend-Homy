@@ -18,11 +18,10 @@ const Banners = () => {
     const source = axios.CancelToken.source();
     const getUsers = async () => {
       try {
-        const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/banners`, {
+        const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/banners`, {
           headers: { token: `Bearer ${token}` },
         },{ cancelToken: source.token });
         setData(data);
-        console.log(data, 'banners');
       } catch ({
         response: {
           data: { message: msg },

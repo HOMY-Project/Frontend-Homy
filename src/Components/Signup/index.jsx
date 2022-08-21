@@ -21,7 +21,7 @@ const SignUp = () => {
   const signup = async () => {
     try {
       const {
-        data: { data, message: verifyMessage, token },
+        data: { data, message: msg, token },
       } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/signup`, {
         name,
         email,
@@ -31,7 +31,7 @@ const SignUp = () => {
       dispatch(setUser(data));
       dispatch(setToken(token));
 
-      message.success(`Welcome ${name}, ${verifyMessage}`);
+      message.success(`Welcome ${name}, ${msg}`);
       navigate("/");
     } catch ({
       response: {

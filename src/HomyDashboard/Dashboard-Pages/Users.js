@@ -10,25 +10,26 @@ import {
   Input,
   Select,
   Button,
-  Divider,
-  Space
 } from "antd";
 
 import HomyTable from '../components/Common/table';
+import HomyModal from '../components/Common/Modal';
 
 const Users = () => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [roles, setRole] = useState('');
   const [data, setData] = useState([]);
   const { token, user } = useSelector((state) => state.auth);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const { Option } = Select;
 
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getUsers = async () => {
       try {
-        const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/users-employess`, {
+        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/users-employees`, {
           headers: { token: `Bearer ${token}` },
         },{ cancelToken: source.token });
         setData(data);
@@ -47,6 +48,29 @@ const Users = () => {
     };
   }, []);
 
+    // get Roles
+    useEffect(() => {
+      const source = axios.CancelToken.source();
+      const getRoles = async () => {
+        try {
+          const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/roles`, {
+            headers: { token: `Bearer ${token}` },
+          },{ cancelToken: source.token });
+          setRole(data);
+        } catch ({
+          response: {
+            data: { message: msg },
+          },
+        }) {
+          message.warning(msg);
+        }
+      };
+      getRoles();
+      return () => {
+        source.cancel();
+      };
+    });
+    
   const onFinish = async (values) => {
     try {
       const { data: {message: msg } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/roles`
@@ -99,7 +123,32 @@ const Users = () => {
         ]}>
         <Input placeholder="Role Password" type="password" value={password} onChange={(e)=> setPassword(e.target.value)}/>
       </Form.Item>
-      
+      <Form.Item
+              label="ٌRole"
+              name='role'
+              rules={[
+                {
+                  required: true,
+                  message: 'Missing role name',
+                },
+              ]}
+            >
+            <Select
+              placeholder="Select Page"
+            >
+          {/* {roles.map((item) => {
+            if(item.role !== 'admin'){
+              return(
+                <Option value={item.id} label={item.role} key={item.id}>
+                  <div className="demo-option-label-item">
+                    {item.name}
+                  </div>
+                </Option>
+              )
+            }
+          })} */}
+        </Select>
+        </Form.Item>
 
       <Form.Item>
         <Button type="primary" htmlType="submit">
@@ -122,8 +171,8 @@ const Users = () => {
               extra={
                 <>
                   {user.role === 2 && <HomyModal content={content()} 
-                  btnText="Add Role" 
-                  ModalTitle="Add New Role" 
+                  btnText="Add User" 
+                  ModalTitle="Add New User" 
                   isModalVisible={isModalVisible}
                   setIsModalVisible={setIsModalVisible}
                   /> } 
@@ -132,8 +181,8 @@ const Users = () => {
             >
               <div className="table-responsive">
                 <HomyTable
-                  columnsNames={['image','name', 'place']}
-                  // data={data}
+                  columnsNames={['id','name', 'email', 'phone', 'role']}
+                  data={data}
                   className="ant-border-space"
                 />
               </div>

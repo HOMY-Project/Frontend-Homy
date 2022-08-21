@@ -13,9 +13,9 @@ const  ForgetPassword = () => {
     const Reset = async (e) => {
         e.preventDefault();
         try {
-          const { data: { message: verifyMessage } } = await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/v1/forget-password`
+          const { data: { message: msg } } = await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/v1/forget-password`
           , { email });
-          setSuccess(verifyMessage);
+          setSuccess(msg);
         } catch ({ response: { data: { message: msg } } }) {
           setError(msg);
         }

@@ -19,7 +19,6 @@ const SuperDeals = () => {
       if(topProducts){
         for (const key in topProducts) {
           const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/product/${topProducts[key]}`);
-          console.log(data[0], 'product data');
           setTopProArr((prev) => [...prev, data[0]]);
         }
       }
@@ -28,7 +27,7 @@ const SuperDeals = () => {
     }
   }
   
-
+  // get super pro
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getProducts = async () => {
@@ -54,6 +53,7 @@ const SuperDeals = () => {
     };
   }, [searchWord]);
 
+  // get top seller pro
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getTopProducts = async () => {
@@ -74,7 +74,7 @@ const SuperDeals = () => {
     return () => {
       source.cancel();
     };
-  }, []);
+  },[]);
 
   return (
     <>

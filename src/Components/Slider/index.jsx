@@ -13,10 +13,11 @@ const Slider = () => {
         const {
           data: { data },
         } = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/api/v1/banaras`,
+          `${process.env.REACT_APP_BACKEND_URL}/api/v1/banners`,
           { cancelToken: source.token }
         );
         setSlider(data);
+        console.log(data, 'data');
       } catch ({
         response: {
           data: { message: msg },
