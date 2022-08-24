@@ -10,6 +10,7 @@ const initialState = {
     searchWord: null,
     allProducts:null,
     permission: null,
+    editItemId: null,
   };
   // Create the authSlice, which will contain the reducer and the actions
 
@@ -29,6 +30,9 @@ const authSlice = createSlice({
       },
       setPermission : (state, action) =>{
         state.permission = action.payload;
+      },
+      setItemId : (state, action) =>{
+        state.editItemId = action.editItemId;
       },
       clearUser: (state) => {
         state.token = null;
@@ -52,4 +56,4 @@ const authSlice = createSlice({
 });
 
 export default authSlice.reducer;
-export const { setUser, clearUser, setToken, loginFailure, loginStart, setSearchWord, setAllProducts, setPermission } = authSlice.actions;
+export const { setUser, clearUser, setToken, loginFailure, loginStart, setSearchWord, setAllProducts, setPermission, setItemId } = authSlice.actions;

@@ -153,7 +153,7 @@ function Sidenav({ color }) {
   ];
   const signout = () => {
     dispatch(clearUser());
-    // navigate('/')
+    navigate('/')
   }
   return (
     <>
@@ -301,17 +301,9 @@ function Sidenav({ color }) {
             <span className="label">Profile</span>
           </NavLink>
         </Menu.Item>
-        {/* <Menu.Item key="12">
-          <NavLink to="/sign-in">
-            <span className="icon">{signin}</span>
-            <span className="label">Sign In</span>
-          </NavLink>
-        </Menu.Item> */}
-        <Menu.Item key="13"  onClick={() => signout()}>
-          <NavLink to="/">
+        <Menu.Item key="13"  onClick={() => signout()} style={{paddingLeft: '16px !important'}}>
             <span className="icon">{signup}</span>
             <span className="label">Sign Out</span>
-          </NavLink>
         </Menu.Item>
       </Menu>
       <div className="aside-footer">

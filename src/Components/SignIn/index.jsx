@@ -27,23 +27,24 @@ import './index.css';
     e.preventDefault();
     dispatch(loginStart());
     try {
-      const { data: { data, message: msg, token } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/signin`
+      const { data: { data, token } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/signin`
       , { email, password });
-        console.log(data, 'sign');
       dispatch(setUser(data));
       dispatch(setToken(token));
       notification.open({
         message: 'Welcome back',
-        description: {msg},
+        description: `happy shopping ${data.name}`,
         icon: (
           <CheckCircleTwoTone twoToneColor="#52c41a" />
         ),
       });
-      if(data.role) {
-        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/permission-role?roleId=${user.role}`);
-        dispatch(setPermission(data));
-        navigate('/')
-      }
+      
+      // if(data.role) {
+        const { data: { data: permissionData } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/permission-role?roleId=${data.role}`);
+        console.log(permissionData, 'permission-role');
+        dispatch(setPermission(permissionData));
+      // }
+      navigate('/')
     } catch ({ response: { data: { message: msg } } }) {
       message.error(msg);
       dispatch(loginFailure());

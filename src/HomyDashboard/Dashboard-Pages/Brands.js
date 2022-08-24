@@ -606,7 +606,7 @@ function Brands() {
               </div>
             </Card>
 
-            {/* <Card
+            <Card
               bordered={false}
               className="criclebox tablespace mb-24"
               title="Projects Table"
@@ -639,7 +639,7 @@ function Brands() {
                   </Button>
                 </Upload>
               </div>
-            </Card> */}
+            </Card>
           </Col>
         </Row>
       </div>
