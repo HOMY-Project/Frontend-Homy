@@ -9,3 +9,7 @@
 thead{
     text-transform: capitalize;
 }
+.ant-card-extra {
+    display: flex;
+    justify-content: space-evenly;
+}
