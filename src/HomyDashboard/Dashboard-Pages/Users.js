@@ -19,11 +19,14 @@ const Users = () => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [roles, setRole] = useState('');
   const [data, setData] = useState([]);
+  const [roleName, setRoleName ] = useState('');
   const { token, user } = useSelector((state) => state.auth);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { Option } = Select;
+
 
   useEffect(() => {
     const source = axios.CancelToken.source();
@@ -56,6 +59,7 @@ const Users = () => {
           const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/roles`, {
             headers: { token: `Bearer ${token}` },
           },{ cancelToken: source.token });
+          console.log(data, 'roles');
           setRole(data);
         } catch ({
           response: {
@@ -69,14 +73,13 @@ const Users = () => {
       return () => {
         source.cancel();
       };
-    });
+    },[]);
     
-  const onFinish = async (values) => {
+  const onFinish = async () => {
     try {
-      const { data: {message: msg } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/roles`
+      const { data: {message: msg } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/employee`
       , { 
-        name: name,
-        permissionPage: values.permissionPage
+        name, email, password, roleId:roleName , phone
       },         
       {
         headers: { token: `Bearer ${token}` },
@@ -123,6 +126,15 @@ const Users = () => {
         ]}>
         <Input placeholder="Role Password" type="password" value={password} onChange={(e)=> setPassword(e.target.value)}/>
       </Form.Item>
+      <Form.Item label="Phone" required tooltip="This is a required field"       
+      rules={[
+          {
+            required: true,
+            message: 'Missing Phone Number',
+          },
+        ]}>
+        <Input placeholder="Phone Number" type="text" value={phone} onChange={(e)=> setPhone(e.target.value)}/>
+      </Form.Item>
       <Form.Item
               label="ٌRole"
               name='role'
@@ -132,21 +144,22 @@ const Users = () => {
                   message: 'Missing role name',
                 },
               ]}
-            >
+              >
             <Select
-              placeholder="Select Page"
+              onChange={(value)=> setRoleName(value)}
+              placeholder="Select Role Name"
             >
-          {/* {roles.map((item) => {
+          {roles && roles.map((item) => {
             if(item.role !== 'admin'){
               return(
                 <Option value={item.id} label={item.role} key={item.id}>
                   <div className="demo-option-label-item">
-                    {item.name}
+                    {item.role}
                   </div>
                 </Option>
               )
             }
-          })} */}
+          })}
         </Select>
         </Form.Item>
 
@@ -181,9 +194,10 @@ const Users = () => {
             >
               <div className="table-responsive">
                 <HomyTable
-                  columnsNames={['id','name', 'email', 'phone', 'role']}
+                  columnsNames={['userid','name', 'email', 'phone', 'role']}
                   data={data}
                   className="ant-border-space"
+                  content={null}
                 />
               </div>
             </Card>

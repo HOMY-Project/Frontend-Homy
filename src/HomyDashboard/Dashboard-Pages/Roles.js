@@ -236,7 +236,7 @@ const Roles = () => {
             >
               <div className="table-responsive">
                 <HomyTable
-                  columnsNames={['image','id','role']}
+                  columnsNames={['id','role']}
                   data={data}
                   className="ant-border-space"
                 />

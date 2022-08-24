@@ -6,3 +6,6 @@
     justify-content: flex-end;
     /* margin-top: 7%; */
 }
+thead{
+    text-transform: capitalize;
+}

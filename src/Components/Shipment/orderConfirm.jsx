@@ -99,7 +99,6 @@ const OrderConfirm = () => {
     }
     };
     
-
   const handelDeleteProductCart = async (productId) => {
     if (token) {
       try {
