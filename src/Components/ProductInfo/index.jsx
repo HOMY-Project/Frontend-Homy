@@ -134,6 +134,7 @@ function ProductInfo() {
         : message.warning("this product is already added");
     }
   };
+  
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getProducts = async () => {

@@ -14,6 +14,7 @@ import {
 
 import HomyTable from '../components/Common/table';
 import HomyModal from '../components/Common/Modal';
+import ExportBtn from '../components/Common/ExportBtn';
 
 const Users = () => {
   const [name, setName] = useState('');
@@ -189,6 +190,7 @@ const Users = () => {
                   isModalVisible={isModalVisible}
                   setIsModalVisible={setIsModalVisible}
                   /> } 
+                  <ExportBtn data={data}/>
                 </>
               }
             >
@@ -197,7 +199,7 @@ const Users = () => {
                   columnsNames={['userid','name', 'email', 'phone', 'role']}
                   data={data}
                   className="ant-border-space"
-                  content={null}
+                  
                 />
               </div>
             </Card>
