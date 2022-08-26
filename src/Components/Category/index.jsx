@@ -23,7 +23,7 @@ const Category = () => {
   const [place, setPlace] = useState(null);
   const [categoryName, setCategoryName ] = useState([]);
   const [minPrice, setMin] = useState(0);
-  const [maxPrice, setMax] = useState(0);
+  const [maxPrice, setMax] = useState(1000);
   const [subCate, setSubCate] = useState([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState();
@@ -206,7 +206,7 @@ const Category = () => {
                 {" "}
                 {t("Price Range")}{" "}
               </h5>
-              <Slider range min={0} max={1000} onChange={(value) => (setMin(value[0]), setMax(value[1]))} />
+              <Slider  range min={0} max={1000} onChange={(value) => (setMin(value[0]), setMax(value[1]))} />
             </div>
             <div className="filter by-category">
               <h5 className="filter-title"> {categoryName[0]?.name} </h5>

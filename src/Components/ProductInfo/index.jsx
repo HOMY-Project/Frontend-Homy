@@ -176,7 +176,7 @@ function ProductInfo() {
         );
         setReviews(data);
         setTotal(data[0]?.count);
-          console.log(`${process.env.REACT_APP_BACKEND_URL}/api/v1/product/${productId}/review?page=${page}`, 'review');
+          console.log(data, 'review');
       } catch ({
         response: {
           data: { message: msg },
@@ -225,13 +225,12 @@ function ProductInfo() {
         const {
           data: { data },
         } = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/api/v1/products/${product[0].category_id}/recommended`,
+          `${process.env.REACT_APP_BACKEND_URL}/api/v1/products/${product[0]?.category_id}/recommended`,
           {
             cancelToken: source.token,
           }
         );
       setRecommended(data);
-      console.log(data, 'rec');
       } catch ({
         response: {
           data: { message: msg },
@@ -244,7 +243,7 @@ function ProductInfo() {
     return () => {
       source.cancel();
     };
-  }, []);
+  }, [product]);
 
   //increase counter
   const increase = () => {

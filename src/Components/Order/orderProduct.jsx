@@ -12,31 +12,32 @@ const OrderProduct = ({ product }) => {
     const dispatch = useDispatch();
     const quantity = product[1]
 
-    useEffect(() => {
-        const source = axios.CancelToken.source(); 
-        const getProduct = async () => {
-          try {
-            const {
-              data: { data },
-            } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/product/${product[0]}`, {
-              cancelToken: source.token,
-            });
-            setProduct(data);
-            setPrice(data[0].price);
-            dispatch(setTotal(price, quantity));
-          } catch ({
-            response: {
-              data: { message: msg },
-            },
-          }) { 
-            message.warning(msg);
-          }
-        };
-        getProduct();
-        return () => {
-          source.cancel();
-        };
-      }, []);
+  useEffect(() => {
+      const source = axios.CancelToken.source(); 
+      const getProduct = async () => {
+        try {
+          const {
+            data: { data },
+          } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/product/${product[0]}`, {
+            cancelToken: source.token,
+          });
+          setProduct(data);
+          setPrice(data[0].price);
+          dispatch(setTotal(price, quantity));
+        } catch ({
+          response: {
+            data: { message: msg },
+          },
+        }) { 
+          message.warning(msg);
+        }
+      };
+      getProduct();
+      return () => {
+        source.cancel();
+      };
+    }, []);
+
   return (
       <Col lg="5" md="6" sm="12" style={{ marginBottom: "2%" }}>
         <Card bordered={false} cover={<img alt="example" src={prod[0]?.image} />}>

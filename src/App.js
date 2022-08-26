@@ -21,7 +21,9 @@ import {
   Roles,
   Rtl,
   Profile,
-  Categories
+  Categories,
+  SubCategories,
+  PromoCodes
 } from './HomyDashboard/Dashboard-Pages';
 import Main from './HomyDashboard/components/layout/Main';
 import "./HomyDashboard/assets/styles/main.css";
@@ -56,6 +58,8 @@ function App() {
                     <Route  path="users" element={<Users />} />
                     <Route  path="orders" element={<OrdersList />} />
                     <Route  path="categories" element={<Categories />} />
+                    <Route path="sub-categories" element={<SubCategories />} />
+                    <Route path="promoCode" element={<PromoCodes />} />
                     <Route  path="products" element={<Products />} />
                     <Route  path="brands" element={<Brands />} />
                     <Route  path="roles" element={<Roles />} />

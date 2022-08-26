@@ -217,6 +217,32 @@ function Sidenav({ color }) {
             <span className="label">Categories</span>
           </NavLink>
         </Menu.Item>
+        <Menu.Item key="12">
+          <NavLink to="/sub-categories">
+            <span
+              className="icon"
+              style={{
+                background: page === "tables" ? color : "",
+              }}
+            >
+              {tables}
+            </span>
+            <span className="label">SubCategories</span>
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item key="14">
+          <NavLink to="/promoCode">
+            <span
+              className="icon"
+              style={{
+                background: page === "tables" ? color : "",
+              }}
+            >
+              {tables}
+            </span>
+            <span className="label">Promo Codes</span>
+          </NavLink>
+        </Menu.Item>
         <Menu.Item key="5">
           <NavLink to="/brands">
             <span
@@ -306,7 +332,7 @@ function Sidenav({ color }) {
             <span className="label">Sign Out</span>
         </Menu.Item>
       </Menu>
-      <div className="aside-footer">
+      {/* <div className="aside-footer">
         <div
           className="footer-box"
           style={{
@@ -322,7 +348,7 @@ function Sidenav({ color }) {
             DOCUMENTATION
           </Button>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

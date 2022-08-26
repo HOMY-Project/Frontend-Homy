@@ -13,3 +13,6 @@ thead{
     display: flex;
     justify-content: space-evenly;
 }
+.orders-holder-dashboard .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+    border: 1px solid #42a5f5;
+}
