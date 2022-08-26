@@ -9,12 +9,9 @@ import {
   message, 
   Form,
   Input,
-  Select,
   Button,
   Spin
 } from "antd";
-// import { ToTopOutlined, UploadOutlined } from '@ant-design/icons';
-// import { Image } from 'cloudinary-react';
 import HomyTable from '../components/Common/table';
 import HomyModal from '../components/Common/Modal';
 
@@ -30,18 +27,14 @@ const Categories = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { token, user } = useSelector((state) => state.auth);
 
-  console.log(copyRecord, 'copy');
-
-  // if(copyRecord){
-  //   setName(copyRecord?.name)
-  // }
   useEffect(() =>{
     setName(copyRecord?.name)
-  })
+    setImg(copyRecord?.img)
+  });
+
   const uploadImg = (e) => {
     setLoading(true);
     const { files } = e.target;
-    console.log(files[0])
     const formData = new FormData();
     formData.append('file', files[0]);
     formData.append('upload_preset', "pslraocg")
@@ -80,10 +73,10 @@ const Categories = () => {
     };
   }, [isAdded]);
 
-  const handelEdit = async (record) => {
+  const handelEdit = async (id, setIsEditModalVisible) => {
     try {
      await axios.put(
-        `${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/brand/${record.id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/brand/${id}`,
         {
           name,
           image
@@ -92,8 +85,9 @@ const Categories = () => {
           headers: { token: `Bearer ${token}`, pathname },
         }
       );
-      message.success('edit successfully');
       setIsAdded(true)
+      setIsEditModalVisible(false)
+      message.success('edit successfully');
     } catch ({
       response: {
         data: { message: msg },
@@ -120,7 +114,7 @@ const Categories = () => {
     }
   }
 
-  const content = (record) => {
+  const content = (record, setIsEditModalVisible) => {
     if(record) {
       setCopyRecord(record)
       // setImg(record.image)
@@ -129,7 +123,7 @@ const Categories = () => {
       <Form
       className="formAddRole"
       layout="vertical"
-      onFinish={record ? () => handelEdit(record): onFinish} 
+      onFinish={record ? () => handelEdit(record.id, setIsEditModalVisible): onFinish} 
       autoComplete="off"
     >
       <Form.Item label="Name" required tooltip="This is a required field"       
@@ -189,8 +183,11 @@ const Categories = () => {
                   data={data}
                   setData= {setData}
                   className="ant-border-space"
+                  isAction={true}
                   isEditing={true}
                   content={content}
+                  EditTitle="Edit Brand"
+
                 />
               </div>
             </Card>

@@ -7,11 +7,11 @@ import CardGroup from "react-bootstrap/CardGroup";
 import { useTranslation } from "react-i18next";
 import Heading from "../Heading";
 import OrderProduct from './orderProduct';
-import "./index.css";
 import paymentImg from "../../assets/payment.jpg";
 import { useSelector } from "react-redux";
 import Header from '../Header';
 import MainFooter from '../Footer';
+import "./index.css";
 
 const SingleOrder = () => {
   const { orderDetails: { order_number, payment, products, addresses, phone } } = useSelector((state) => state.singleOrder);

@@ -1,3 +1,4 @@
+/* eslint-disable no-lone-blocks */
 import { SearchOutlined, WarningFilled, CheckCircleFilled } from '@ant-design/icons';
 import { Button, Input, Space, Table, Avatar, Modal, Popconfirm } from 'antd';
 import React, { useRef, useState } from 'react';
@@ -5,7 +6,7 @@ import axios from 'axios';
 import Highlighter from 'react-highlight-words';
 import './table.css';
 
-const HomyTable = ({ columnsNames, data, isEditing, content, isExpandable, isDelete, handleDelete, handelArchive }) => {
+const HomyTable = ({ columnsNames, data, isEditing, content, isExpandable, isDelete,isArchive, handleDelete, handelArchive, EditTitle, isAction }) => {
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
   const [editRecord, setEditRecord ] = useState('');
@@ -161,32 +162,29 @@ const HomyTable = ({ columnsNames, data, isEditing, content, isExpandable, isDel
     })
   });
 
-
-  if(isEditing){
+  if(isAction){
     columns.push({
-      title: 'Action',
-      key: 'action',
-      width: '20%',
-      render: (_, record) => (
-        <Space size="middle">
-          <Button onClick={() => editItemHandel(record)}>Edit</Button>
-        </Space>
-      ),
-    });
-  }
-  if(isDelete){
-    columns.push({
-      title: 'Action',
-      key: 'Action',
+      title: 'Operation',
+      key: 'Operation',
       width: '20%',
       render: (_, record) => (
           <>
-          <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
-          <Button danger > Delete </Button>
-        </Popconfirm>
-        <Popconfirm title="You are Sure?" onConfirm={() => handelArchive(record.id, record.archived )}>
-            <Button style={{marginRight: "2%"}} > {record.archived === true ? 'Not archive' : 'Archive'} </Button>
-        </Popconfirm>
+            {isDelete ? (
+              <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id ? record.id : record.userid)}>
+              <Button danger > Delete </Button>
+            </Popconfirm>
+            ) : null}
+            {isArchive ? (
+            <Popconfirm title="You are Sure?" onConfirm={() => handelArchive(record.id, record.archived )}>
+                <Button style={{marginRight: "2%"}} > {record.archived === true ? 'Not archive' : 'Archive'} </Button>
+            </Popconfirm>
+            ) : null}
+            {isEditing ? (
+              <Space size="middle">
+              <Button onClick={() => editItemHandel(record)}>Edit</Button>
+            </Space>
+            ): null}
+            
           </>
       )
     });
@@ -251,11 +249,11 @@ const HomyTable = ({ columnsNames, data, isEditing, content, isExpandable, isDel
       />
     )}
       {isEditing && (
-        <Modal title="Edit Banner" visible={isModalVisible} 
+        <Modal title={EditTitle} visible={isModalVisible} 
         footer={null}
         onOk={()=>  setIsModalVisible(false)} onCancel={()=>  setIsModalVisible(false)}
         >
-          {content(editRecord)}
+          {content(editRecord, setIsModalVisible)}
         </Modal>
       )}
       </>

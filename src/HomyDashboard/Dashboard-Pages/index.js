@@ -10,7 +10,7 @@ import Roles from "./Roles";
 import Rtl from "./Rtl";
 import Profile from "./Profile";
 import SignIn from "./SignIn";
-
+import PromoCodes from "./PromoCodes";
 
 export {
     Dashboard,
@@ -24,5 +24,6 @@ export {
     Banners,
     Roles,
     SignIn,
-    SubCategories
+    SubCategories,
+    PromoCodes
 }

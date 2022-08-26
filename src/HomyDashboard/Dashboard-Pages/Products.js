@@ -227,8 +227,29 @@ const Users = () => {
     };
   }, [categoryId]);
 
+  const handelEdit = async (id, setIsEditModalVisible) => {
+    console.log(id, 'edit')
+    try {
+     await axios.put(
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/product/${id}`,
+          {name,price,image,albums,description,quickOverview,discount,shipment,brand,inStock,subCategoryId, categoryId },
+        {
+          headers: { token: `Bearer ${token}`, pathname },
+        }
+      );
+      setIsAdded(true);
+      setIsEditModalVisible(false);
+      message.success('edit successfully');
+    } catch ({
+      response: {
+        data: { message: msg },
+      },
+    }) {
+      message.error(msg);
+    }
+  };
+
   const onFinish = async () => {
-    console.log( name, price, image, albums, description, quickOverview, discount, shipment, brand, inStock, subCategoryId, categoryId);
     try {
       setLoading(true);
       const data = { name, price, image, albums, description, quickOverview, discount, shipment, brand, inStock, categoryId }
@@ -249,12 +270,12 @@ const Users = () => {
     }
   }
 
-  const content = () => {
+  const content = (record, setIsEditModalVisible) => {
     return(
       <Form
       className="formAddRole"
       layout="vertical"
-      onFinish={onFinish} 
+      onFinish={record ? () => handelEdit(record.id, setIsEditModalVisible): onFinish} 
       autoComplete="off"
     >
       
@@ -416,10 +437,16 @@ const Users = () => {
                   data={data}
                   className="ant-border-space"
                   isExpandable={true}
-                  isDelete={true}
                   handelArchive={handelArchive}
                   handleDelete={handleDelete}
-                />
+                  isDelete={true}
+                  isEditing={true}
+                  isAction={true}
+                  isArchive={true}        
+                  content={content}       
+                  EditTitle="Edit Product"
+
+                   />
               </div>
             </Card>
           </Col>

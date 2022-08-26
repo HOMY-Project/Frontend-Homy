@@ -78,11 +78,10 @@ const SubCategories = () => {
     };
   }, [isAdded, isArchived]);
 
-  const handelEdit = async (id) => {
-    console.log(id, 'edit')
+  const handelEdit = async (id, setIsEditModalVisible) => {
     try {
      await axios.put(
-        `${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/category/${id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/sub-category/${id}`,
         {
           name,
           categoryId
@@ -91,8 +90,9 @@ const SubCategories = () => {
           headers: { token: `Bearer ${token}`, pathname },
         }
       );
-      message.success('edit successfully');
       setIsAdded(true)
+      setIsEditModalVisible(false)
+      message.success('edit successfully');
     } catch ({
       response: {
         data: { message: msg },
@@ -143,20 +143,20 @@ const SubCategories = () => {
       {
         headers: { token: `Bearer ${token}`, pathname },
       });
-      message.success(msg);
-      setIsModalVisible(false);
       setIsAdded(true)
+      setIsModalVisible(false);
+      message.success(msg);
     }catch ({ response: { data: { message: msg } } }) {
       message.error(msg);
     }
   }
 
-  const content = (record) => {
+  const content = (record, setIsEditModalVisible) => {
     return(
       <Form
       className="formAddRole"
       layout="vertical"
-      onFinish={record ? () => handelEdit(record.id): onFinish} 
+      onFinish={record ? () => handelEdit(record.id, setIsEditModalVisible): onFinish} 
       autoComplete="off"
     >
       <Form.Item label="Name" required tooltip="This is a required field"       
@@ -220,9 +220,15 @@ const SubCategories = () => {
                   data={data}
                   setData= {setData}
                   className="ant-border-space"
-                  isDelete={true}
                   handelArchive={handelArchive}
                   handleDelete={handleDelete}
+                  isDelete={true}
+                  isEditing={true}
+                  isAction={true}
+                  isArchive={true}        
+                  content={content} 
+                  EditTitle="Edit Sub Category"
+
                 />
               </div>
             </Card>

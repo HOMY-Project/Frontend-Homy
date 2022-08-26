@@ -23,6 +23,8 @@ const Roles = () => {
   const [data, setData] = useState([]);
   const [name, setName] = useState('');
   const [pages, setPages ] = useState([]);
+  const [isDelete , setIsDeleted ] = useState(false);
+  const [isAdded, setIsAdded ] = useState(false);
   const [permissions, setPermissions] = useState([]);
   const { token, user } = useSelector((state) => state.auth);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -50,7 +52,7 @@ const Roles = () => {
     return () => {
       source.cancel();
     };
-  }, []);
+  }, [isDelete, isAdded]);
 
   // get pages
   useEffect(() => {
@@ -106,10 +108,12 @@ const Roles = () => {
         permissionPage: values.permissionPage
       },         
       {
-        headers: { token: `Bearer ${token}`.pathname },
+        headers: { token: `Bearer ${token}`,pathname },
       });
       message.success(msg);
       setIsModalVisible(false);
+      setIsAdded(true)
+      setName('');
     }catch ({ response: { data: { message: msg } } }) {
       message.error(msg);
     }
@@ -184,7 +188,7 @@ const Roles = () => {
                   placeholder="Select Page"
                 >
               {pages.map((page) => {
-                if(page.name !== 'roles' && page.name !== 'profile' && page.name !== 'users'){
+                if(page.name !== 'roles' && page.name !== 'profile' && page.name !== 'users'&& page.name !== 'home'){
                   return(
                     <Option value={page.id} label={page.name} key={page.id}>
                       <div className="demo-option-label-item">
@@ -216,6 +220,24 @@ const Roles = () => {
     )
   }
 
+  const handleDelete = async (id) =>{
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/role/${id}`,
+        { headers: { token: `Bearer ${token}`, pathname } }
+      );
+      setData((prev) => prev.filter((item) => item.id !== id));
+      setIsDeleted(true)
+      message.success("Product deleted successfully");
+    } catch ({
+      response: {
+        data: { message: msg },
+      },
+    }) {
+      message.error(msg);
+    }
+  }
+
   return (
     <>
       <div className="tabled">
@@ -241,6 +263,9 @@ const Roles = () => {
                   columnsNames={['id','role']}
                   data={data}
                   className="ant-border-space"
+                  isDelete={true}
+                  isAction={true}
+                  handleDelete={handleDelete}  
                 />
               </div>
             </Card>

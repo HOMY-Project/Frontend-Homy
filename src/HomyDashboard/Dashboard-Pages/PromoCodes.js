@@ -9,49 +9,34 @@ import {
   message, 
   Form,
   Input,
+  Select,
   Button,
   Spin
 } from "antd";
-// import { ToTopOutlined, UploadOutlined } from '@ant-design/icons';
-// import { Image } from 'cloudinary-react';
+
 import HomyTable from '../components/Common/table';
 import HomyModal from '../components/Common/Modal';
 
-const Banners = () => {
+
+const PromoCodes = () => {
   const [name, setName] = useState('');
-  const [image, setImg] = useState('');
+  const [discount, setDiscount] = useState('');
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [isArchived, setIsArchived ] = useState(false); // to update data after archive action
   const [isAdded , setIsAdded] = useState(false);
   const { pathname } = useLocation();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { token, user } = useSelector((state) => state.auth);
 
-  const uploadImg = (e) => {
-    setLoading(true);
-    const { files } = e.target;
-    console.log(files[0])
-    const formData = new FormData();
-    formData.append('file', files[0]);
-    formData.append('upload_preset', "pslraocg")
-    axios.post('https://api.cloudinary.com/v1_1/homyecommarce/image/upload', formData)
-    .then(({ data }) => {
-      setImg(data.secure_url);
-    })
-    .catch(() => message.error('something got wrong, image can not upload'))
-    .finally(() => {
-      setLoading(false);
-    });
-};
-  
-  // get Banners
   useEffect(() => {
     const source = axios.CancelToken.source();
-    const getBanners = async () => {
+    const getPromoCode = async () => {
       try {
-        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/banners`, {
+        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/promo-codes`,
+        {
           headers: { token: `Bearer ${token}`, pathname },
-        },{ cancelToken: source.token });
+        }, 
+        { cancelToken: source.token });
         setData(data);
       } catch ({
         response: {
@@ -61,20 +46,18 @@ const Banners = () => {
         message.warning(msg);
       }
     };
-    getBanners();
+    getPromoCode();
     return () => {
       source.cancel();
     };
-  }, [isAdded]);
+  }, [isAdded, isArchived]);
 
   const handelEdit = async (id, setIsEditModalVisible) => {
-    console.log(id, 'edit')
     try {
      await axios.put(
-        `${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/banner/${id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/promo-code/${id}`,
         {
-          name,
-          image
+          name, discount
         },
         {
           headers: { token: `Bearer ${token}`, pathname },
@@ -94,9 +77,9 @@ const Banners = () => {
 
   const onFinish = async () => {
     try {
-      const { data: {message: msg } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/banner`
+      const { data: {message: msg } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/promo-code`
       , { 
-        name, image
+        name, discount
       },         
       {
         headers: { token: `Bearer ${token}`, pathname },
@@ -109,8 +92,27 @@ const Banners = () => {
     }
   }
 
-  const content = (record, setIsEditModalVisible) => {
+  const handleDelete = async (id) =>{
+    console.log(id, 'promo');
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/promo-code/${id}`,
+        { headers: { token: `Bearer ${token}`, pathname } }
+      );
+      setData((prev) => prev.filter((item) => item.id !== id));
+      setIsArchived(true)
+      message.success("Promo deleted successfully");
+    } catch ({
+      response: {
+        data: { message: msg },
+      },
+    }) {
+      message.error(msg);
+    }
+  }
 
+
+  const content = (record, setIsEditModalVisible) => {
     return(
       <Form
       className="formAddRole"
@@ -119,34 +121,31 @@ const Banners = () => {
       autoComplete="off"
     >
       <Form.Item label="Name" required tooltip="This is a required field"       
-      rules={[
-          {
-            required: true,
-            message: 'Missing Name',
-          },
-        ]}>
+        rules={[
+            {
+              required: true,
+              message: 'Missing Name',
+            },
+          ]}>
         <Input placeholder="Full Name" value={name} onChange={(e)=> setName(e.target.value)}/>
       </Form.Item>
-      <Form.Item label="Image" required tooltip="This is a required field" 
-      rules={[
-          {
-            required: true,
-            message: 'Missing Image Url',
-          },
-        ]}>
-        <Input name="image" placeholder="Image Url" type="file" onChange={uploadImg}/>
+      <Form.Item label="Discount" required tooltip="This is a required field"       
+        rules={[
+            {
+              required: true,
+              message: 'Missing discount',
+            },
+          ]}>
+        <Input placeholder="Discount" value={discount} onChange={(e)=> setDiscount(e.target.value)}/>
       </Form.Item>
-
       <Form.Item>
         <Button type="primary" htmlType="submit">
           Submit
         </Button>
       </Form.Item>
-      {loading && <Spin />}
     </Form>
     )
   }
-
   return (
     <>
       <div className="tabled">
@@ -155,12 +154,12 @@ const Banners = () => {
             <Card
               bordered={false}
               className="criclebox tablespace mb-24"
-              title="Banners Table"
+              title="Brands Table"
               extra={
                 <>
                   {user.role === 2 && <HomyModal content={content()} 
-                  btnText="Add banner" 
-                  ModalTitle="Add New banner" 
+                  btnText="Add Promo Code" 
+                  ModalTitle="Add New Promo Code" 
                   isModalVisible={isModalVisible}
                   setIsModalVisible={setIsModalVisible}
                   /> } 
@@ -169,13 +168,16 @@ const Banners = () => {
             >
               <div className="table-responsive">
                 <HomyTable
-                  columnsNames={['id','image','name']}
+                  columnsNames={['name','discount']}
                   data={data}
+                  setData= {setData}
                   className="ant-border-space"
                   isEditing={true}
-                  content={content}
+                  isDelete={true}
                   isAction={true}
-                  EditTitle="Edit Banner"
+                  content={content}
+                  EditTitle="Edit Promo Code"
+                  handleDelete={handleDelete}
                 />
               </div>
             </Card>
@@ -186,4 +188,4 @@ const Banners = () => {
   );
 }
 
-export default Banners;
+export default PromoCodes;

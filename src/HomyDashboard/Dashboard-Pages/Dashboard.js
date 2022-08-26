@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import {
   Card,
@@ -19,7 +19,7 @@ import {
   RightOutlined,
 } from "@ant-design/icons";
 import Paragraph from "antd/lib/typography/Paragraph";
-
+import axios from 'axios';
 import Echart from "../components/chart/EChart";
 import LineChart from "../components/chart/LineChart";
 
@@ -41,6 +41,29 @@ function Dashboard() {
   const onChange = (e) => console.log(`radio checked:${e.target.value}`);
 
   const [reverse, setReverse] = useState(false);
+  const [data, setData ] = useState([]);
+  // get Banners
+
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+    const getStatistics = async () => {
+      try {
+        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}//api/v1/dashboard/statistics`,{ cancelToken: source.token });
+        setData(data);
+        console.log(data, 'statistics');
+      } catch ({
+        response: {
+          data: { message: msg },
+        },
+      }) {
+        message.warning(msg);
+      }
+    };
+    getStatistics();
+    return () => {
+      source.cancel();
+    };
+  }, []);
 
   const dollor = [
     <svg
