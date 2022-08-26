@@ -1,5 +1,6 @@
 import React , { useEffect, useState } from 'react';
 import { useSelector } from "react-redux";
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import {
   Row,
@@ -26,6 +27,7 @@ const Roles = () => {
   const { token, user } = useSelector((state) => state.auth);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { Option } = Select;
+  const { pathname } = useLocation();
 
   // get Roles
   useEffect(() => {
@@ -33,7 +35,7 @@ const Roles = () => {
     const getRoles = async () => {
       try {
         const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/roles`, {
-          headers: { token: `Bearer ${token}` },
+          headers: { token: `Bearer ${token}`,pathname },
         },{ cancelToken: source.token });
         setData(data);
       } catch ({
@@ -56,7 +58,7 @@ const Roles = () => {
     const getPages = async () => {
       try {
         const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/pages`, {
-          headers: { token: `Bearer ${token}` },
+          headers: { token: `Bearer ${token}` , pathname },
         },{ cancelToken: source.token });
         setPages(data);
       } catch ({
@@ -79,7 +81,7 @@ const Roles = () => {
     const getPermissions = async () => {
       try {
         const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/permissions`, {
-          headers: { token: `Bearer ${token}` },
+          headers: { token: `Bearer ${token}` , pathname },
         },{ cancelToken: source.token });
         setPermissions(data);
       } catch ({
@@ -104,7 +106,7 @@ const Roles = () => {
         permissionPage: values.permissionPage
       },         
       {
-        headers: { token: `Bearer ${token}` },
+        headers: { token: `Bearer ${token}`.pathname },
       });
       message.success(msg);
       setIsModalVisible(false);

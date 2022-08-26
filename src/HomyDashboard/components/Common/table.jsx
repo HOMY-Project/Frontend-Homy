@@ -12,6 +12,7 @@ const HomyTable = ({ columnsNames, data, isEditing, content, isExpandable, isDel
   const searchInput = useRef(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const columns=[];
+
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div
@@ -102,7 +103,15 @@ const HomyTable = ({ columnsNames, data, isEditing, content, isExpandable, isDel
     setIsModalVisible(true)
   }
 
-  columnsNames.map((item, index) => {
+  // const getCategoryName =  (productId) => {
+  //     axios.get( `${process.env.REACT_APP_BACKEND_URL}/api/v1/categories/${productId}`)
+  //     .then(({data: { data }}) => console.log(data))
+  //     .then((data) => data[0] )
+  //     // console.log(data[0]?.name, 'name');
+  //       // (<span>{data[0]?.name}</span>)
+    
+  // };
+  columnsNames.map((item ) => {
     columns.push(  item === 'image' ? 
     {
       title: item,
@@ -119,23 +128,19 @@ const HomyTable = ({ columnsNames, data, isEditing, content, isExpandable, isDel
         src={status}
       />
     )
-    } : item === 'instock' ? {
+    } : item === 'instock' || item === 'has_sub_categories' ? {
       title: item,
       dataIndex: item,
       key: item,
       width: '20%',
-      editable: true,
-      ...getColumnSearchProps(item),
       render: (status) => (
-        status ? <CheckCircleFilled style={{color: "#52c41a"}}/> : <WarningFilled style={{color: "#eb2f96"}}/>
+        status ? <CheckCircleFilled style={{color: "#52c41a", fontSize: '18px' }}/> : <WarningFilled style={{color: "#eb2f96", fontSize: '18px'}}/>
     )
     }: item === 'createdat'? {
       title: item,
       dataIndex: item,
       key: item,
       width: '20%',
-      editable: true,
-      ...getColumnSearchProps(item),
       render: (status) => (
         status.toString().split('T')[0]
     )
@@ -145,19 +150,7 @@ const HomyTable = ({ columnsNames, data, isEditing, content, isExpandable, isDel
       key: item,
       width: '20%',
       ...getColumnSearchProps(item),
-      // onCell: async (record, rowIndex) => { 
-
-      //   if(record.id){
-      //     try{
-      //     const {data: { data } } =  await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/categories/${record.id}`)  
-      //     return <span>{data[0]?.name}</span> 
-          
-      //     }catch ({ response: { data: { message: msg }}}) {
-      //      alert(msg)
-      //     }
-      //   }
-      //   // console.log(text, 'text' , record, index, 'index');
-      // }
+      // render: (_,record)=> record.id && record.category_id && console.log(getCategoryName(record.id))
     } : {
       title: item,
       dataIndex: item,
@@ -214,6 +207,7 @@ const HomyTable = ({ columnsNames, data, isEditing, content, isExpandable, isDel
     <>
     {isExpandable ? (
     <Table
+      rowKey={(record) => record.id}
       columns={columns}
       dataSource={data}
       bordered 
@@ -234,6 +228,15 @@ const HomyTable = ({ columnsNames, data, isEditing, content, isExpandable, isDel
           >
              Overview: {record.quick_overview}
             </p>
+            <div
+            style={{
+              margin: 0,
+              display: 'flex',
+              marginTop: '2%' 
+            }}
+          >
+            {record.albums.map(album => <img src={album} alt={album} style={{width: '100px' , marginLeft: "2%"}} />)}
+            </div>
           </>
         ),
         rowExpandable: (record) => record.name !== 'Not Expandable',
@@ -241,6 +244,7 @@ const HomyTable = ({ columnsNames, data, isEditing, content, isExpandable, isDel
       />
     ) : (
       <Table
+      rowKey={(record) => record.id}
       columns={columns}
       dataSource={data}
       bordered 

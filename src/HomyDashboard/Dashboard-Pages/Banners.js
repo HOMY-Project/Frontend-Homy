@@ -1,5 +1,6 @@
 import React , { useEffect, useState } from 'react';
 import { useSelector } from "react-redux";
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import {
   Row,
@@ -8,42 +9,39 @@ import {
   message, 
   Form,
   Input,
-  Upload,
   Button,
+  Spin
 } from "antd";
-import { ToTopOutlined, UploadOutlined } from '@ant-design/icons';
-import { Image } from 'cloudinary-react';
+// import { ToTopOutlined, UploadOutlined } from '@ant-design/icons';
+// import { Image } from 'cloudinary-react';
 import HomyTable from '../components/Common/table';
 import HomyModal from '../components/Common/Modal';
 
 const Banners = () => {
-  const normFile = (e) => {
-    console.log('Upload event:', e);
-  
-    if (Array.isArray(e)) {
-      return e;
-    }
-  
-    return e?.fileList;
-  };
-
-  // const [copyRecord, setCopyRecord] = useState({})
   const [name, setName] = useState('');
   const [image, setImg] = useState('');
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isAdded , setIsAdded] = useState(false);
+  const { pathname } = useLocation();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { token, user } = useSelector((state) => state.auth);
 
   const uploadImg = (e) => {
+    setLoading(true);
     const { files } = e.target;
+    console.log(files[0])
     const formData = new FormData();
     formData.append('file', files[0]);
-    formData.append('upload_preset', "qekxjhab")
-    axios.post('https://api.cloudinary.com/v1_1/homy/image/upload', formData)
+    formData.append('upload_preset', "pslraocg")
+    axios.post('https://api.cloudinary.com/v1_1/homyecommarce/image/upload', formData)
     .then(({ data }) => {
       setImg(data.secure_url);
     })
-    .catch(() => message.error('something got wrong, image can not upload'));
+    .catch(() => message.error('something got wrong, image can not upload'))
+    .finally(() => {
+      setLoading(false);
+    });
 };
   
   // get Banners
@@ -51,8 +49,8 @@ const Banners = () => {
     const source = axios.CancelToken.source();
     const getBanners = async () => {
       try {
-        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/banners`, {
-          headers: { token: `Bearer ${token}` },
+        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/banners`, {
+          headers: { token: `Bearer ${token}`, pathname },
         },{ cancelToken: source.token });
         setData(data);
       } catch ({
@@ -67,7 +65,7 @@ const Banners = () => {
     return () => {
       source.cancel();
     };
-  }, []);
+  }, [isAdded]);
 
   const handelEdit = async (id) => {
     console.log(id, 'edit')
@@ -79,10 +77,11 @@ const Banners = () => {
           image
         },
         {
-          headers: { token: `Bearer ${token}` },
+          headers: { token: `Bearer ${token}`, pathname },
         }
       );
       message.success('edit successfully');
+      setIsAdded(true)
     } catch ({
       response: {
         data: { message: msg },
@@ -93,24 +92,27 @@ const Banners = () => {
   };
 
   const onFinish = async () => {
-    console.log(image, 'imag')
     try {
       const { data: {message: msg } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/banner`
       , { 
         name, image
       },         
       {
-        headers: { token: `Bearer ${token}` },
+        headers: { token: `Bearer ${token}`, pathname },
       });
-      console.log(msg);
       message.success(msg);
       setIsModalVisible(false);
+      setIsAdded(true)
     }catch ({ response: { data: { message: msg } } }) {
       message.error(msg);
     }
   }
 
   const content = (record) => {
+    if(record) {
+      setName(record.name)
+      setImg(record.image)
+    }
     return(
       <Form
       className="formAddRole"
@@ -142,6 +144,7 @@ const Banners = () => {
           Submit
         </Button>
       </Form.Item>
+      {loading && <Spin />}
     </Form>
     )
   }
@@ -184,8 +187,3 @@ const Banners = () => {
 }
 
 export default Banners;
-        {/* <div className="uploadfile pb-15 shadow-none">
-        <Upload name="logo" action="/upload.do" listType="picture" value={image} onChange={(e)=> setImg(e.target.files)}>
-          <Button icon={<UploadOutlined />}>Click to upload</Button>
-        </Upload>
-      </div> */}

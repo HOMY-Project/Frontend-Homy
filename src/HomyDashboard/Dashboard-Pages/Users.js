@@ -1,6 +1,7 @@
 import React , { useEffect, useState } from 'react';
 import { useSelector } from "react-redux";
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 import {
   Row,
   Col,
@@ -24,17 +25,19 @@ const Users = () => {
   const [roles, setRole] = useState('');
   const [data, setData] = useState([]);
   const [roleName, setRoleName ] = useState('');
+  const [isAdded , setIsAdded] = useState(false);
   const { token, user } = useSelector((state) => state.auth);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { Option } = Select;
+  const { pathname } = useLocation();
 
-
+  //get user
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getUsers = async () => {
       try {
         const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/users-employees`, {
-          headers: { token: `Bearer ${token}` },
+          headers: { token: `Bearer ${token}`,pathname },
         },{ cancelToken: source.token });
         setData(data);
         console.log(data, 'users');
@@ -50,7 +53,7 @@ const Users = () => {
     return () => {
       source.cancel();
     };
-  }, []);
+  }, [isAdded]);
 
     // get Roles
     useEffect(() => {
@@ -58,7 +61,7 @@ const Users = () => {
       const getRoles = async () => {
         try {
           const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/roles`, {
-            headers: { token: `Bearer ${token}` },
+            headers: { token: `Bearer ${token}`,pathname },
           },{ cancelToken: source.token });
           console.log(data, 'roles');
           setRole(data);
@@ -83,9 +86,10 @@ const Users = () => {
         name, email, password, roleId:roleName , phone
       },         
       {
-        headers: { token: `Bearer ${token}` },
+        headers: { token: `Bearer ${token}`, pathname },
       });
       message.success(msg);
+      setIsAdded(true)
       setIsModalVisible(false);
     }catch ({ response: { data: { message: msg } } }) {
       message.error(msg);

@@ -11,56 +11,34 @@ import {
   Input,
   Select,
   Button,
-  Spin
 } from "antd";
-// import { ToTopOutlined, UploadOutlined } from '@ant-design/icons';
-// import { Image } from 'cloudinary-react';
 import HomyTable from '../components/Common/table';
 import HomyModal from '../components/Common/Modal';
 
 
-const Categories = () => {
+const SubCategories = () => {
   const [name, setName] = useState('');
-  const [image, setImg] = useState('');
-  const [place, setPlace] = useState('');
+  const [categoryId, setCategoryId] = useState('');
   const [data, setData] = useState([]);
-  const [hasSubCategories , setHasSubCategories] = useState(false);
+  const [categories, setCategories] = useState([])
   const [isAdded, setIsAdded ] = useState(false);
   const [isArchived, setIsArchived ] = useState(false); // to update data after archive action
-  const [loading, setLoading] = useState(false);
   const { pathname } = useLocation();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { token, user } = useSelector((state) => state.auth);
   const { Option } = Select;
 
-  const uploadImg = (e) => {
-    setLoading(true);
-    const { files } = e.target;
-    console.log(files[0])
-    const formData = new FormData();
-    formData.append('file', files[0]);
-    formData.append('upload_preset', "pslraocg")
-    axios.post('https://api.cloudinary.com/v1_1/homyecommarce/image/upload', formData)
-    .then(({ data }) => {
-      setImg(data.secure_url);
-    })
-    .catch(() => message.error('something got wrong, image can not upload'))
-    .finally(() => {
-      setLoading(false);
-    });
-};
 
   useEffect(() => {
     const source = axios.CancelToken.source();
-    const getCategories = async () => {
+    const getCategory = async () => {
       try {
         const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/categories`,
         {
           headers: { token: `Bearer ${token}`, pathname },
         }, 
         { cancelToken: source.token });
-        setData(data);
-        console.log(data, 'category');
+        setCategories(data);
       } catch ({
         response: {
           data: { message: msg },
@@ -69,7 +47,32 @@ const Categories = () => {
         message.warning(msg);
       }
     };
-    getCategories();
+    getCategory();
+    return () => {
+      source.cancel();
+    };
+  }, [isAdded, isArchived]);
+
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+    const getSubCategories = async () => {
+      try {
+        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/sub-categories`,
+        {
+          headers: { token: `Bearer ${token}`, pathname },
+        }, 
+        { cancelToken: source.token });
+        setData(data);
+        console.log(data, 'sub');
+      } catch ({
+        response: {
+          data: { message: msg },
+        },
+      }) {
+        message.warning(msg);
+      }
+    };
+    getSubCategories();
     return () => {
       source.cancel();
     };
@@ -82,7 +85,7 @@ const Categories = () => {
         `${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/category/${id}`,
         {
           name,
-          image
+          categoryId
         },
         {
           headers: { token: `Bearer ${token}`, pathname },
@@ -102,7 +105,7 @@ const Categories = () => {
   const handleDelete = async (id) =>{
     try {
       await axios.delete(
-        `${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/category/${id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/sub-category/${id}`,
         { headers: { token: `Bearer ${token}`, pathname } }
       );
       setData((prev) => prev.filter((item) => item.id !== id));
@@ -119,7 +122,7 @@ const Categories = () => {
 
   const handelArchive = async (id, archived ) =>{
     try {
-      await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/category/${id}/archive?archive=${!archived}`,{ }, { headers: { token: `Bearer ${token}`, pathname } });
+      await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/sub-category/${id}/archive?archive=${!archived}`,{ }, { headers: { token: `Bearer ${token}`, pathname } });
       message.success("Product Archived successfully");
       setIsArchived(true)
     } catch ({
@@ -133,9 +136,9 @@ const Categories = () => {
 
   const onFinish = async () => {
     try {
-      const { data: {message: msg } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/category`
+      const { data: {message: msg } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/sub-category`
       , { 
-        name, image, place, hasSubCategories
+        name, categoryId
       },         
       {
         headers: { token: `Bearer ${token}`, pathname },
@@ -165,49 +168,27 @@ const Categories = () => {
         ]}>
         <Input placeholder="Full Name" value={name} onChange={(e)=> setName(e.target.value)}/>
       </Form.Item>
-      <Form.Item label="Image" required tooltip="This is a required field" 
-      rules={[
-          {
-            required: true,
-            message: 'Missing Image Url',
-          },
-        ]}>
-        <Input name="image" placeholder="Image Url" type="file" onChange={uploadImg}/>
-      </Form.Item>
-      <Form.Item label="In Stock" required tooltip="This is a required field" >
-        <Select onChange={(value)=> setPlace(value)}>
-          <Option value="in" label="In" key="in">
-            <div className="demo-option-label-item">
-              Indoor
-            </div>
-          </Option>
-          <Option value="out" label="Out" key="out">
-            <div className="demo-option-label-item">
-              Outdoor
-            </div>
-          </Option>
+      <Form.Item label="Category" required tooltip="This is a required field" >
+        <Select
+            onChange={(value)=> setCategoryId(value)}
+            >
+          {categories && categories.map((item) => {
+              return(
+                <Option value={item.id} label={item.name} key={item.id}>
+                  <div className="demo-option-label-item">
+                    {item.name}
+                  </div>
+                </Option>
+              )
+          })}
         </Select>
       </Form.Item>
-      <Form.Item label="Has Sub Category" required tooltip="This is a required field" >
-        <Select onChange={(value)=> setHasSubCategories(value)}>
-          <Option value={true} label="Has" key={true}>
-            <div className="demo-option-label-item">
-              has
-            </div>
-          </Option>
-          <Option value={false} label="hasn'nt" key={false}>
-            <div className="demo-option-label-item">
-              has'nt 
-            </div>
-          </Option>
-        </Select>
-      </Form.Item>
+
       <Form.Item>
         <Button type="primary" htmlType="submit">
           Submit
         </Button>
       </Form.Item>
-      {loading && <Spin />}
     </Form>
     )
   }
@@ -225,8 +206,8 @@ const Categories = () => {
               extra={
                 <>
                   {user.role === 2 && <HomyModal content={content()} 
-                  btnText="Add Category" 
-                  ModalTitle="Add New Category" 
+                  btnText="Add Sub Category" 
+                  ModalTitle="Add New Sub Category" 
                   isModalVisible={isModalVisible}
                   setIsModalVisible={setIsModalVisible}
                   /> } 
@@ -235,7 +216,7 @@ const Categories = () => {
             >
               <div className="table-responsive">
                 <HomyTable
-                  columnsNames={['image','name', 'place', 'has_sub_categories']}
+                  columnsNames={['categoryname', 'category_id', 'createdat']}
                   data={data}
                   setData= {setData}
                   className="ant-border-space"
@@ -252,4 +233,4 @@ const Categories = () => {
   );
 }
 
-export default Categories;
+export default SubCategories;
