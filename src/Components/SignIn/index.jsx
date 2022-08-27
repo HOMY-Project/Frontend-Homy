@@ -6,7 +6,7 @@ import {
 
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser, setToken, loginStart, loginFailure, setPermission } from '../../Redux/features/authSlice';
 import { CheckCircleTwoTone } from '@ant-design/icons';
@@ -20,6 +20,7 @@ import './index.css';
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const { isFetching, user } = useSelector((state) => state.auth);
   const { t  } = useTranslation();
 
@@ -88,13 +89,13 @@ import './index.css';
             </button>
           </div>
           <div className="d-grid gap-2 mt-3">
-            <hr />
-            <p className=""> {t('NewCustomer')}?</p>
-            <Link to="/signUp" className="new-customer-a">
+          { pathname==='singIn'?  <hr />: ''}
+          { pathname==='singIn'? <p className=""> {t('NewCustomer')}?</p>: ''}
+           {pathname==='singIn'? <Link to="/signUp" className="new-customer-a">
               <button type="submit" className="btn btn-primary" disabled={isFetching} style={{ backgroundColor: '#fff', color: '#0F6AD0', width: '100%' }}>
                 {t('Create An Account')}
               </button>
-            </Link>
+            </Link> : ''}
           </div>
         </div>
       </form>

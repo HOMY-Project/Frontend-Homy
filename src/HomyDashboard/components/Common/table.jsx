@@ -2,7 +2,6 @@
 import { SearchOutlined, WarningFilled, CheckCircleFilled } from '@ant-design/icons';
 import { Button, Input, Space, Table, Avatar, Modal, Popconfirm } from 'antd';
 import React, { useRef, useState } from 'react';
-import axios from 'axios';
 import Highlighter from 'react-highlight-words';
 import './table.css';
 import { useSelector } from 'react-redux';

@@ -27,8 +27,6 @@ const SubCategories = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { token, user, permission } = useSelector((state) => state.auth);
   const { Option } = Select;
-
-
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getCategory = async () => {
@@ -53,6 +51,7 @@ const SubCategories = () => {
     };
   }, [isAdded, isArchived]);
 
+
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getSubCategories = async () => {
@@ -62,6 +61,7 @@ const SubCategories = () => {
           headers: { token: `Bearer ${token}`, pathname },
         }, 
         { cancelToken: source.token });
+        console.log(data);
         setData(data);
         console.log(data, 'sub');
       } catch ({
@@ -201,7 +201,7 @@ const SubCategories = () => {
             <Card
               bordered={false}
               className="criclebox tablespace mb-24"
-              title="Categories Table"
+              title="Sub Categories Table"
               extra={
                 <>
                   {(user.role === 2 || permission.find((item) => item.methodname === 'post'&& item.link === pathname))&& <HomyModal content={content()} 

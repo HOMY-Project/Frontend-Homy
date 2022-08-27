@@ -218,7 +218,7 @@ function Sidenav({ color }) {
           </NavLink>}
         </Menu.Item>
         <Menu.Item key="12">
-          {(user.role === 2 || permission.find((item) => item.methodname === 'get'&& item.link === '/subCategories'))&&<NavLink to="/sub-categories">
+          {(user.role === 2 || permission.find((item) => item.methodname === 'get'&& item.link === '/subCategories'))&&<NavLink to="/subCategories">
             <span
               className="icon"
               style={{
