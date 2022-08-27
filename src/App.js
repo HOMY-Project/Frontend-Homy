@@ -52,13 +52,14 @@ function App() {
             <Layout >
               <Content> 
                 <Routes>
+                <Route path="/dashboard/signIn" element={<SignIn />} />
                 {user && user.role !== 1 && ( 
                 <Route exact path='/' element={<Main/>}>
                     <Route  path='/' element={<Dashboard/>}/>
                     <Route  path="users" element={<Users />} />
                     <Route  path="orders" element={<OrdersList />} />
                     <Route  path="categories" element={<Categories />} />
-                    <Route path="sub-categories" element={<SubCategories />} />
+                    <Route path="subCategories" element={<SubCategories />} />
                     <Route path="promoCode" element={<PromoCodes />} />
                     <Route  path="products" element={<Products />} />
                     <Route  path="brands" element={<Brands />} />

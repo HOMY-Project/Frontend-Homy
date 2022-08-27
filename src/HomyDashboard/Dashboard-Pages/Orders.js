@@ -22,7 +22,7 @@ function Orders() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const { pathname } = useLocation();
-  const { token, user } = useSelector((state) => state.auth);
+  const { token, user, permission } = useSelector((state) => state.auth);
   const { Option } = Select
   
   console.log(status)

@@ -7,7 +7,7 @@ import { clearUser } from "../../../Redux/features/authSlice";
 function Sidenav({ color }) {
   const { pathname } = useLocation();
   const page = pathname.replace("/", "");
-  const { user } = useSelector((state) => state.auth);
+  const { user, permission } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
@@ -178,7 +178,7 @@ function Sidenav({ color }) {
         </Menu.Item>
         {user && user.role === 2 && (
         <Menu.Item key="2">
-          <NavLink to="/users">
+       {(user.role === 2 || permission.find((item) => item.methodname === 'get'&& item.link === '/users'))&& <NavLink to="/users">
             <span
               className="icon"
               style={{
@@ -188,11 +188,11 @@ function Sidenav({ color }) {
               {tables}
             </span>
             <span className="label">Users</span>
-          </NavLink>
+          </NavLink>}
         </Menu.Item>
         )}
         <Menu.Item key="3">
-          <NavLink to="/products">
+         {(user.role === 2 || permission.find((item) => item.methodname === 'get'&& item.link === '/products'))&& <NavLink to="/products">
             <span
               className="icon"
               style={{
@@ -202,10 +202,10 @@ function Sidenav({ color }) {
               {tables}
             </span>
             <span className="label">Products</span>
-          </NavLink>
+          </NavLink>}
         </Menu.Item>
         <Menu.Item key="4">
-          <NavLink to="/categories">
+         { (user.role === 2 || permission.find((item) => item.methodname === 'get'&& item.link === '/categories'))&&<NavLink to="/categories">
             <span
               className="icon"
               style={{
@@ -215,10 +215,10 @@ function Sidenav({ color }) {
               {tables}
             </span>
             <span className="label">Categories</span>
-          </NavLink>
+          </NavLink>}
         </Menu.Item>
         <Menu.Item key="12">
-          <NavLink to="/sub-categories">
+          {(user.role === 2 || permission.find((item) => item.methodname === 'get'&& item.link === '/subCategories'))&&<NavLink to="/subCategories">
             <span
               className="icon"
               style={{
@@ -228,10 +228,10 @@ function Sidenav({ color }) {
               {tables}
             </span>
             <span className="label">SubCategories</span>
-          </NavLink>
+          </NavLink>}
         </Menu.Item>
         <Menu.Item key="14">
-          <NavLink to="/promoCode">
+       { (user.role === 2 || permission.find((item) => item.methodname === 'get'&& item.link === '/promoCodes'))&&  <NavLink to="/promoCode">
             <span
               className="icon"
               style={{
@@ -241,10 +241,10 @@ function Sidenav({ color }) {
               {tables}
             </span>
             <span className="label">Promo Codes</span>
-          </NavLink>
+          </NavLink>}
         </Menu.Item>
         <Menu.Item key="5">
-          <NavLink to="/brands">
+       { (user.role === 2 || permission.find((item) => item.methodname === 'get'&& item.link === '/brands'))&&  <NavLink to="/brands">
             <span
               className="icon"
               style={{
@@ -254,11 +254,11 @@ function Sidenav({ color }) {
               {tables}
             </span>
             <span className="label">Brands</span>
-          </NavLink>
+          </NavLink>}
         </Menu.Item>
         {user && user.role === 2 && (
         <Menu.Item key="6">
-          <NavLink to="/roles">
+        {(user.role === 2 || permission.find((item) => item.methodname === 'get'&& item.link === '/roles'))&&  <NavLink to="/roles">
             <span
               className="icon"
               style={{
@@ -268,12 +268,12 @@ function Sidenav({ color }) {
               {tables}
             </span>
             <span className="label">Roles</span>
-          </NavLink>
+          </NavLink>}
         </Menu.Item>
         )
         }
         <Menu.Item key="7">
-          <NavLink to="/banners">
+         {(user.role === 2 || permission.find((item) => item.methodname === 'get'&& item.link === '/banners'))&& <NavLink to="/banners">
             <span
               className="icon"
               style={{
@@ -283,10 +283,10 @@ function Sidenav({ color }) {
               {tables}
             </span>
             <span className="label">Banners</span>
-          </NavLink>
+          </NavLink>}
         </Menu.Item>
         <Menu.Item key="8">
-          <NavLink to="/orders">
+        { (user.role === 2 || permission.find((item) => item.methodname === 'get'&& item.link === '/orders'))&& <NavLink to="/orders">
             <span
               className="icon"
               style={{
@@ -296,7 +296,7 @@ function Sidenav({ color }) {
               {billing}
             </span>
             <span className="label">Orders</span>
-          </NavLink>
+          </NavLink>}
         </Menu.Item>
         <Menu.Item key="9">
           <NavLink to="/rtl">

@@ -26,7 +26,7 @@ const Roles = () => {
   const [isDelete , setIsDeleted ] = useState(false);
   const [isAdded, setIsAdded ] = useState(false);
   const [permissions, setPermissions] = useState([]);
-  const { token, user } = useSelector((state) => state.auth);
+  const { token, user, permission } = useSelector((state) => state.auth);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { Option } = Select;
   const { pathname } = useLocation();
@@ -86,7 +86,7 @@ const Roles = () => {
           headers: { token: `Bearer ${token}` , pathname },
         },{ cancelToken: source.token });
         setPermissions(data);
-      } catch ({
+       }catch ({
         response: {
           data: { message: msg },
         },
@@ -249,7 +249,7 @@ const Roles = () => {
               title="Roles Table"
               extra={
                 <>
-                  {user.role === 2 && <HomyModal content={content()} 
+                  {(user.role === 2 || permission.find((item) => item.methodname === 'post'&& item.link === pathname)) && <HomyModal content={content()} 
                   btnText="Add Role" 
                   ModalTitle="Add New Role" 
                   isModalVisible={isModalVisible}

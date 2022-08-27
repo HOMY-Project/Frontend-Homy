@@ -236,7 +236,7 @@ const Users = () => {
               title="Users Table"
               extra={
                 <>
-                  {user.role === 2 && <HomyModal content={content()} 
+                  {(user.role === 2 || permission.find((item) => item.methodname === 'post'&& item.link === pathname)) && <HomyModal content={content()} 
                   btnText="Add User" 
                   ModalTitle="Add New User" 
                   isModalVisible={isModalVisible}
@@ -247,7 +247,7 @@ const Users = () => {
               }
             >
               <div className="table-responsive">
-                <HomyTable
+               <HomyTable
                   columnsNames={['userid','name', 'email', 'phone', 'role']}
                   data={data}
                   className="ant-border-space"

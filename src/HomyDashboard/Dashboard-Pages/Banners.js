@@ -159,7 +159,7 @@ const Banners = () => {
               title="Banners Table"
               extra={
                 <>
-                  {(user.role === 2 || permission.find((item) => item.methodname === 'post'&& item.link === '/banners')) && 
+                  {(user.role === 2 || permission.find((item) => item.methodname === 'post'&& item.link === pathname)) && 
                   <HomyModal content={content()} 
                   btnText="Add banner" 
                   ModalTitle="Add New banner" 
@@ -173,6 +173,7 @@ const Banners = () => {
                 <HomyTable
                   columnsNames={['id','image','name']}
                   data={data}
+                  pathname={pathname}
                   className="ant-border-space"
                   isEditing={true}
                   content={content}
