@@ -29,11 +29,12 @@ const Users = () => {
   const [roleName, setRoleName ] = useState('');
   const [isDelete , setIsDeleted ] = useState(false);
   const [isAdded , setIsAdded] = useState(false);
-  const { token, user } = useSelector((state) => state.auth);
+  const { token, user, permission } = useSelector((state) => state.auth);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { Option } = Select;
   const { pathname } = useLocation();
 
+  console.log(permission, 'permission');
   //get user
   useEffect(() => {
     const source = axios.CancelToken.source();

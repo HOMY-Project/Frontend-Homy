@@ -25,7 +25,7 @@ const Categories = () => {
   const [isAdded , setIsAdded] = useState(false);
   const { pathname } = useLocation();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { token, user } = useSelector((state) => state.auth);
+  const { token, user, permission } = useSelector((state) => state.auth);
 
   useEffect(() =>{
     setName(copyRecord?.name)
@@ -168,7 +168,7 @@ const Categories = () => {
               title="Brands Table"
               extra={
                 <>
-                  {user.role === 2 && <HomyModal content={content()} 
+                  {(user.role === 2 || permission.find((item) => item.methodname === 'post'&& item.link === '/brands')) && <HomyModal content={content()} 
                   btnText="Add Brand" 
                   ModalTitle="Add New Brand" 
                   isModalVisible={isModalVisible}

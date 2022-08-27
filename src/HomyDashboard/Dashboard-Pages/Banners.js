@@ -12,8 +12,7 @@ import {
   Button,
   Spin
 } from "antd";
-// import { ToTopOutlined, UploadOutlined } from '@ant-design/icons';
-// import { Image } from 'cloudinary-react';
+
 import HomyTable from '../components/Common/table';
 import HomyModal from '../components/Common/Modal';
 
@@ -25,7 +24,9 @@ const Banners = () => {
   const [isAdded , setIsAdded] = useState(false);
   const { pathname } = useLocation();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { token, user } = useSelector((state) => state.auth);
+  const { token, user, permission } = useSelector((state) => state.auth);
+
+  console.log(permission, 'permission');
 
   const uploadImg = (e) => {
     setLoading(true);
@@ -158,7 +159,8 @@ const Banners = () => {
               title="Banners Table"
               extra={
                 <>
-                  {user.role === 2 && <HomyModal content={content()} 
+                  {(user.role === 2 || permission.find((item) => item.methodname === 'post'&& item.link === '/banners')) && 
+                  <HomyModal content={content()} 
                   btnText="Add banner" 
                   ModalTitle="Add New banner" 
                   isModalVisible={isModalVisible}

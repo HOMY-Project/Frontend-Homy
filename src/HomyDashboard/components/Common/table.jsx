@@ -104,14 +104,6 @@ const HomyTable = ({ columnsNames, data, isEditing, content, isExpandable, isDel
     setIsModalVisible(true)
   }
 
-  // const getCategoryName =  (productId) => {
-  //     axios.get( `${process.env.REACT_APP_BACKEND_URL}/api/v1/categories/${productId}`)
-  //     .then(({data: { data }}) => console.log(data))
-  //     .then((data) => data[0] )
-  //     // console.log(data[0]?.name, 'name');
-  //       // (<span>{data[0]?.name}</span>)
-    
-  // };
   columnsNames.map((item ) => {
     columns.push(  item === 'image' ? 
     {
