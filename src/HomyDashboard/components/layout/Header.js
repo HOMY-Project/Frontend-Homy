@@ -15,7 +15,9 @@ import {
   Typography,
   Switch,
 } from "antd";
-
+import { useSelector, useDispatch } from "react-redux";
+import { clearUser } from "../../../Redux/features/authSlice";
+import { useNavigate } from "react-router-dom";
 import {
   SearchOutlined,
   StarOutlined,
@@ -247,8 +249,17 @@ function Header({
   handleSidenavType,
   handleFixedNavbar,
 }) {
-  const { Title, Text } = Typography;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  const signout = () => {
+    dispatch(clearUser());
+    navigate('/')
+  }
+
+  const { Title, Text } = Typography;
+  const { token } = useSelector((state) => state.auth);
+  
   const [visible, setVisible] = useState(false);
   const [sidenavType, setSidenavType] = useState("transparent");
 
@@ -410,10 +421,12 @@ function Header({
               </div>
             </div>
           </Drawer>
-          <Link to="/sign-in" className="btn-sign-in">
-            {profile}
-            <span>Sign in</span>
-          </Link>
+          <div onClick={() => signout()}>
+            <Link to="/sign-in" className="btn-sign-in">
+              {profile}
+              <span>{token ? 'sign out' : 'sign in'}</span>
+            </Link>
+          </div>
           <Input
             className="header-search"
             placeholder="Type here..."

@@ -1,5 +1,5 @@
 // import { useState } from "react";
-import { Menu, Button } from "antd";
+import { Menu } from "antd";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
 import { useSelector, useDispatch } from "react-redux";
@@ -327,10 +327,10 @@ function Sidenav({ color }) {
             <span className="label">Profile</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="13"  onClick={() => signout()} style={{paddingLeft: '16px !important'}}>
+        {/* <Menu.Item key="13"  onClick={() => signout()} style={{paddingLeft: '16px !important'}}>
             <span className="icon">{signup}</span>
             <span className="label">Sign Out</span>
-        </Menu.Item>
+        </Menu.Item> */}
       </Menu>
       {/* <div className="aside-footer">
         <div
