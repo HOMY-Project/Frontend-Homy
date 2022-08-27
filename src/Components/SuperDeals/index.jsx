@@ -38,7 +38,6 @@ const SuperDeals = () => {
         const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/product/super`, { cancelToken: source.token });
         dispatch(setAllProducts(data));
         setSuperProducts(data);
-        console.log(data, 'super product');
       } catch ({
         response: {
           data: { message: msg },
@@ -62,8 +61,6 @@ const SuperDeals = () => {
         dispatch(setAllProducts(data));
         setTopProducts(data);
         // getTopSellerPro();
-        console.log(data, 'top seller product');
-
       } catch ({
         response: {
           data: { message: msg },
