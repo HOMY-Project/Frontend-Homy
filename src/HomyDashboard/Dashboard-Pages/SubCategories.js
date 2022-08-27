@@ -25,7 +25,7 @@ const SubCategories = () => {
   const [isArchived, setIsArchived ] = useState(false); // to update data after archive action
   const { pathname } = useLocation();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { token, user } = useSelector((state) => state.auth);
+  const { token, user, permission } = useSelector((state) => state.auth);
   const { Option } = Select;
 
 
@@ -193,7 +193,6 @@ const SubCategories = () => {
     )
   }
 
-
   return (
     <>
       <div className="tabled">
@@ -205,7 +204,7 @@ const SubCategories = () => {
               title="Categories Table"
               extra={
                 <>
-                  {user.role === 2 && <HomyModal content={content()} 
+                  {(user.role === 2 || permission.find((item) => item.methodname === 'post'&& item.link === pathname))&& <HomyModal content={content()} 
                   btnText="Add Sub Category" 
                   ModalTitle="Add New Sub Category" 
                   isModalVisible={isModalVisible}
@@ -215,7 +214,7 @@ const SubCategories = () => {
               }
             >
               <div className="table-responsive">
-                <HomyTable
+             <HomyTable
                   columnsNames={['categoryname', 'category_id', 'createdat']}
                   data={data}
                   setData= {setData}
@@ -228,7 +227,7 @@ const SubCategories = () => {
                   isArchive={true}        
                   content={content} 
                   EditTitle="Edit Sub Category"
-
+                  pathname={pathname}
                 />
               </div>
             </Card>

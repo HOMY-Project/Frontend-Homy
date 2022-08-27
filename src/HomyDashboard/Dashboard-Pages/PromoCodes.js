@@ -26,7 +26,7 @@ const PromoCodes = () => {
   const [isAdded , setIsAdded] = useState(false);
   const { pathname } = useLocation();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { token, user } = useSelector((state) => state.auth);
+  const { token, user, permission } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const source = axios.CancelToken.source();
@@ -157,7 +157,7 @@ const PromoCodes = () => {
               title="Brands Table"
               extra={
                 <>
-                  {user.role === 2 && <HomyModal content={content()} 
+                  {(user.role === 2 || permission.find((item) => item.methodname === 'post'&& item.link === pathname)) && <HomyModal content={content()} 
                   btnText="Add Promo Code" 
                   ModalTitle="Add New Promo Code" 
                   isModalVisible={isModalVisible}
@@ -167,7 +167,7 @@ const PromoCodes = () => {
               }
             >
               <div className="table-responsive">
-                <HomyTable
+            <HomyTable
                   columnsNames={['name','discount']}
                   data={data}
                   setData= {setData}
@@ -178,6 +178,7 @@ const PromoCodes = () => {
                   content={content}
                   EditTitle="Edit Promo Code"
                   handleDelete={handleDelete}
+                  pathname={pathname}
                 />
               </div>
             </Card>

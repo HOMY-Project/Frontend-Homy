@@ -41,7 +41,7 @@ const Users = () => {
   const [isAdded, setIsAdded ] = useState(false);
   const [isArchived, setIsArchived ] = useState(false); // to update data after archive action
   const [data, setData] = useState([]);
-  const { token, user } = useSelector((state) => state.auth);
+  const { token, user, permission } = useSelector((state) => state.auth);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { Option } = Select;
   const { pathname } = useLocation();
@@ -182,7 +182,7 @@ const Users = () => {
   // get Categories
   useEffect(() => {
     const source = axios.CancelToken.source();
-    const getSubCate = async () => {
+    const getCate = async () => {
       try {
         const {
           data: { data },
@@ -197,7 +197,7 @@ const Users = () => {
         },
       }) {}
     };
-    getSubCate();
+    getCate();
     return () => {
       source.cancel();
     };
@@ -418,10 +418,10 @@ const Users = () => {
             <Card
               bordered={false}
               className="criclebox tablespace mb-24"
-              title="Users Table"
+              title="Products Table"
               extra={
                 <>
-                  {user.role === 2 && <HomyModal content={content()} 
+                  {(user.role === 2 || permission.find((item) => item.methodname === 'post'&& item.link === pathname))&& <HomyModal content={content()} 
                   btnText="Add Product" 
                   ModalTitle="Add New Product" 
                   isModalVisible={isModalVisible}
@@ -432,7 +432,7 @@ const Users = () => {
               }
             >
               <div className="table-responsive">
-                <HomyTable
+            <HomyTable
                   columnsNames={['name', 'image', 'brand', 'price', 'instock', 'shipment','discount', 'createdat', 'category_id']}
                   data={data}
                   className="ant-border-space"
@@ -445,7 +445,7 @@ const Users = () => {
                   isArchive={true}        
                   content={content}       
                   EditTitle="Edit Product"
-
+                  pathname={pathname}
                    />
               </div>
             </Card>

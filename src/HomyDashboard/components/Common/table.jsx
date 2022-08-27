@@ -5,13 +5,15 @@ import React, { useRef, useState } from 'react';
 import axios from 'axios';
 import Highlighter from 'react-highlight-words';
 import './table.css';
+import { useSelector } from 'react-redux';
 
-const HomyTable = ({ columnsNames, data, isEditing, content, isExpandable, isDelete,isArchive, handleDelete, handelArchive, EditTitle, isAction }) => {
+const HomyTable = ({ columnsNames, data, isEditing, content, isExpandable, isDelete,isArchive, handleDelete, handelArchive, EditTitle, isAction,pathname }) => {
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
   const [editRecord, setEditRecord ] = useState('');
   const searchInput = useRef(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const { user, permission } = useSelector((state) => state.auth);
   const columns=[];
 
   const getColumnSearchProps = (dataIndex) => ({
@@ -163,17 +165,17 @@ const HomyTable = ({ columnsNames, data, isEditing, content, isExpandable, isDel
           <>
             {isDelete ? (
               <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id ? record.id : record.userid)}>
-              <Button danger > Delete </Button>
+              {(user.role === 2 || permission.find((item) => item.methodname === 'delete'&& item.link === pathname))&&<Button danger > Delete </Button>}
             </Popconfirm>
             ) : null}
             {isArchive ? (
             <Popconfirm title="You are Sure?" onConfirm={() => handelArchive(record.id, record.archived )}>
-                <Button style={{marginRight: "2%"}} > {record.archived === true ? 'Not archive' : 'Archive'} </Button>
+                {(user.role === 2 || permission.find((item) => item.methodname === 'put'&& item.link === pathname))&&<Button style={{marginRight: "2%"}} > {record.archived === true ? 'Not archive' : 'Archive'} </Button>}
             </Popconfirm>
             ) : null}
             {isEditing ? (
               <Space size="middle">
-              <Button onClick={() => editItemHandel(record)}>Edit</Button>
+              {(user.role === 2 || permission.find((item) => item.methodname === 'put'&& item.link === pathname))&&<Button onClick={() => editItemHandel(record)}>Edit</Button>}
             </Space>
             ): null}
             

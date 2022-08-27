@@ -51,21 +51,21 @@ const Categories = () => {
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getBrands = async () => {
-      try {
-        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/brands`,
-        {
-          headers: { token: `Bearer ${token}`, pathname },
-        }, 
-        { cancelToken: source.token });
-        setData(data);
-        console.log(data, 'brand');
-      } catch ({
-        response: {
-          data: { message: msg },
-        },
-      }) {
-        message.warning(msg);
-      }
+        try {
+          const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/brands`,
+          {
+            headers: { token: `Bearer ${token}`, pathname },
+          }, 
+          { cancelToken: source.token });
+          setData(data);
+          console.log(data, 'brand');
+        } catch ({
+          response: {
+            data: { message: msg },
+          },
+        }) {
+          message.warning(msg);
+        }
     };
     getBrands();
     return () => {
@@ -168,7 +168,7 @@ const Categories = () => {
               title="Brands Table"
               extra={
                 <>
-                  {(user.role === 2 || permission.find((item) => item.methodname === 'post'&& item.link === '/brands')) && <HomyModal content={content()} 
+                  {(user.role === 2 || permission.find((item) => item.methodname === 'post'&& item.link === pathname)) && <HomyModal content={content()} 
                   btnText="Add Brand" 
                   ModalTitle="Add New Brand" 
                   isModalVisible={isModalVisible}
@@ -178,7 +178,7 @@ const Categories = () => {
               }
             >
               <div className="table-responsive">
-                <HomyTable
+               <HomyTable
                   columnsNames={['image','name']}
                   data={data}
                   setData= {setData}
@@ -187,7 +187,7 @@ const Categories = () => {
                   isEditing={true}
                   content={content}
                   EditTitle="Edit Brand"
-
+                  pathname={pathname}
                 />
               </div>
             </Card>

@@ -52,6 +52,7 @@ function App() {
             <Layout >
               <Content> 
                 <Routes>
+                <Route path="/dashboard/signIn" element={<SignIn />} />
                 {user && user.role !== 1 && ( 
                 <Route exact path='/' element={<Main/>}>
                     <Route  path='/' element={<Dashboard/>}/>

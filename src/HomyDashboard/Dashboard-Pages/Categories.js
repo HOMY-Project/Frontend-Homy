@@ -28,7 +28,7 @@ const Categories = () => {
   const [loading, setLoading] = useState(false);
   const { pathname } = useLocation();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { token, user } = useSelector((state) => state.auth);
+  const { token, user, permission } = useSelector((state) => state.auth);
   const { Option } = Select;
 
   const uploadImg = (e) => {
@@ -222,7 +222,7 @@ const Categories = () => {
               title="Categories Table"
               extra={
                 <>
-                  {user.role === 2 && <HomyModal content={content()} 
+                  {(user.role === 2 || permission.find((item) => item.methodname === 'post'&& item.link === pathname)) && <HomyModal content={content()} 
                   btnText="Add Category" 
                   ModalTitle="Add New Category" 
                   isModalVisible={isModalVisible}
@@ -232,7 +232,7 @@ const Categories = () => {
               }
             >
               <div className="table-responsive">
-                <HomyTable
+               <HomyTable
                   columnsNames={['image','name', 'place', 'has_sub_categories']}
                   data={data}
                   setData= {setData}
@@ -245,6 +245,7 @@ const Categories = () => {
                   handelArchive={handelArchive}
                   handleDelete={handleDelete}
                   EditTitle="Edit Category"
+                  pathname={pathname}
                 />
               </div>
             </Card>
