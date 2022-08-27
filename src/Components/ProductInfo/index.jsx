@@ -8,10 +8,15 @@ import {
   message,
   Select,
   Pagination,
+  Modal,
+  Form as AntForm,
+  Input
 } from "antd";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct, addWishlist } from "../../Redux/features/cartSlice";
+import { useTranslation } from "react-i18next";
+import { Link } from 'react-router-dom';
 import { CheckCircleFilled, HeartOutlined, HeartFilled } from "@ant-design/icons";
 import ImageGallery from "react-image-gallery";
 import axios from "axios";
@@ -19,7 +24,7 @@ import Heading from "../Heading/index";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
+import Form  from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
 import InputGroup from "react-bootstrap/InputGroup";
 import LoadingSpinner from "../LoadingSpinner";
@@ -31,22 +36,29 @@ const { Meta } = Card;
 function ProductInfo() {
   const [product, setProduct] = useState([]);
   const [reviews, setReviews] = useState([]);
+  const [comment, setComment] = useState('');
   const [Recommended, setRecommended] = useState([]);
   const [loading, setLoading] = useState(false);
   const [add, setAdd] = useState(false);
-  const [sortVal, setSortVal] = useState('Recent');
   const [quantity, setQuantity] = useState(0);
   const [rate, setRate] = useState([]);
+  const [reviewRate, setReviewRate]= useState(0)
   const [newAlbums, setNewAlbums] = useState([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState();
   const [categoryName, setCategoryName ] = useState([]);
+  const [isAdded, setIsAdded] = useState(false);
   const [isWishlist, setIsWishlist] = useState(false);
   const productId = window.location.href.split("/")[6];
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const { Option } = Select;
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const pro = product[0];
+  const { Item } = AntForm;
+  const { TextArea } = Input;
+  const { t  } = useTranslation();
+
 
   const images = [];
   var obj = {};
@@ -79,7 +91,7 @@ function ProductInfo() {
     return () => {
       source.cancel();
     };
-  }, []);
+  }, [productId]);
   
   const handelAddProduct = async (product) => {
     if (token && quantity > 0 && product) {
@@ -147,13 +159,13 @@ function ProductInfo() {
         });
         setProduct(data);
         setNewAlbums(data[0].albums);
-        setLoading(false);
       } catch ({
         response: {
           data: { message: msg },
         },
       }) {
         message.warning(msg);
+      }finally {
         setLoading(false);
       }
     };
@@ -161,7 +173,7 @@ function ProductInfo() {
     return () => {
       source.cancel();
     };
-  }, []);
+  }, [productId]);
 
   useEffect(() => {
     const source = axios.CancelToken.source();
@@ -176,7 +188,6 @@ function ProductInfo() {
         );
         setReviews(data);
         setTotal(data[0]?.count);
-          console.log(data, 'review');
       } catch ({
         response: {
           data: { message: msg },
@@ -189,7 +200,7 @@ function ProductInfo() {
     return () => {
       source.cancel();
     };
-  }, [page]);
+  }, [page, isAdded, productId]);
 
   useEffect(() => {
     const source = axios.CancelToken.source();
@@ -245,6 +256,18 @@ function ProductInfo() {
     };
   }, [product]);
 
+  const PostComment = async () => {
+    try {
+      const { data: {message: msg } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/product/${productId}/review`
+      , { comment, rate: reviewRate },  { headers: { token: `Bearer ${token}` } });
+
+      setIsModalVisible(false);
+      setIsAdded(!isAdded);
+      message.success(msg);
+    }catch ({ response: { data: { message: msg } } }) {
+      message.error(msg);
+    }
+  }
   //increase counter
   const increase = () => {
     setQuantity((count) => count + 1);
@@ -256,13 +279,11 @@ function ProductInfo() {
 };
 
 const sortReviews = (value) =>{
-  setSortVal(value)
-  console.log(value);
-  setReviews(Recommended.sort((a, b) => {
+  setReviews(reviews.sort((a, b) => {
     if (value === "Recent") {
-      return a.createdat - b.createdat;
+      return Date.parse(a.createdat) - Date.parse(b.createdat);
     } else if (value === "Latest") {
-      return b.createdat - a.createdat;
+      return Date.parse(b.createdat) - Date.parse(a.createdat);
     }
   }
   ))
@@ -280,18 +301,6 @@ const sortReviews = (value) =>{
                   <Breadcrumb.Item>{categoryName[0]?.name}</Breadcrumb.Item>
                   <Breadcrumb.Item active>{prod.name}</Breadcrumb.Item>
                 </Breadcrumb>
-                {loading ? (
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      height: "200px",
-                    }}
-                  >
-                    <LoadingSpinner />
-                  </div>
-                ) : (
                   <>
                     <Row>
                       <Col>
@@ -400,13 +409,15 @@ const sortReviews = (value) =>{
                               >
                                 {add ? "added to Cart " : "add to Cart"}{" "}
                               </Button>
-                              <Button
-                                variant="primary"
-                                size="lg"
-                                className="buyNow"
-                              >
-                                Buy Now{" "}
-                              </Button>
+                              <Link to="/cart">
+                                <Button
+                                  variant="primary"
+                                  size="lg"
+                                  className="buyNow"
+                                >
+                                  Buy Now{" "}
+                                </Button>
+                              </Link>
                             </div>
                             <hr />
                             <div>
@@ -468,15 +479,53 @@ const sortReviews = (value) =>{
                           <h6 style={{ fontWeight: "bold" }}>
                             Customers Comments
                           </h6>
-                          <Select
-                            // defaultValue="Recent"
-                            className="filter-select"
-                            value={sortVal}
-                            onChange={(value) => sortReviews(value)}
-                          >
-                            <Option value="Recent">Recent</Option>
-                            <Option value="Latest">Latest</Option>
-                          </Select>
+                          <div style={{ display: "flex", width: "28%", justifyContent: "space-between"}}>
+                            <Select
+                              className="filter-select"
+                              placeholder="sort by retardate"
+                              onChange={(value) => sortReviews(value)}
+                            >
+                              <Option value="Recent">Recent</Option>
+                              <Option value="Latest">Latest</Option>
+                            </Select>
+                            <div className="addReviewBtn-holder"><Button type="primary" onClick={() => setIsModalVisible(true)}>Add Review</Button></div>         
+                            <Modal title="Edit Comment" visible={isModalVisible} onOk={PostComment} onCancel={() => setIsModalVisible(false)}>
+                                <AntForm name="basic"
+                                  labelCol={{
+                                  span: 20,
+                                  }}
+                                  wrapperCol={{
+                                  span: 25,
+                                  }}
+                                  className="Auth-form"
+                                  autoComplete="off"
+                                >
+                                <div className="Auth-form-content">
+                                  <div className="form-group mt-3">
+                                    <label>{t("Comment")} </label>
+                                    <Item className="form-control mt-1" name="name" value={comment} onChange={(e) => setComment(e.target.value)}
+                                      rules={[
+                                      {
+                                      type: "text",
+                                      message: "The input is not valid Comment!",
+                                      },
+                                      {
+                                      required: true,
+                                      message: "Please input your Comment",
+                                      },
+                                      ]}
+                                      >
+                                      <TextArea rows={4} maxLength={6} />
+                                    </Item>
+                                  </div>
+                                  <div className="form-group mt-3">
+                                  <label>{t("Rate")} {" "} <Rate onChange={setReviewRate} value={reviewRate} /> {reviewRate}/5</label>
+                                  </div>
+                                </div>
+                                </AntForm>                               
+                            </Modal>                      
+                          </div>
+
                         </div>
                         <hr
                           style={{ borderTop: "1px solid rgba(0,0,0,.06)" }}
@@ -512,7 +561,7 @@ const sortReviews = (value) =>{
                                       }
                                       content={<p>{comment}</p>}
                                       datetime={
-                                        <Rate disabled defaultValue={rate} />
+                                        <Rate disabled value={rate} />
                                       }
                                     />
                                   </>
@@ -530,7 +579,7 @@ const sortReviews = (value) =>{
                                     onChange={(value) => setPage(value)}
                                   />
                                 </div>
-                              )}                                
+                              )} 
                               </div>
                             </>
                               ) : (
@@ -549,6 +598,7 @@ const sortReviews = (value) =>{
                               </div>
                             </div>
                           )}
+
                         </div>
                       </Col>
                     </Row>                            
@@ -578,8 +628,18 @@ const sortReviews = (value) =>{
                         </div>
                       )}
                     </Row>
-                  </>
-                )}
+                    {loading && 
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "200px",
+                      }}>
+                      <LoadingSpinner />
+                    </div>
+                    }
+                    </>
               </>
             );
           })}

@@ -14,6 +14,9 @@
 #button-addon2 {
     transform: matrix(1, 0, 0, 1, 0, 0) !important;
 }
+.btn.btn-cancelIcon:hover{
+    color:#000 !important;
+}
 button.ant-btn.ant-btn-button.btn.btn-danger.Cart-btn {
     border: 0;
     background-color: transparent;
@@ -22,6 +25,9 @@ button.ant-btn.ant-btn-button.btn.btn-danger.Cart-btn {
     font-weight: bold;
     font-size: 16px;
 }
+.productContainer .ant-btn svg {
+    margin-right: 0 !important;
+  }
 .productContainer .mb-3 {
     margin-bottom: 0!important;
 }

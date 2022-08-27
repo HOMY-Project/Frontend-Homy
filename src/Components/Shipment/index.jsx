@@ -37,7 +37,7 @@ const Shipment = () => {
   const [block, setBlock] = useState("");
   const [payment, setPayment] = useState("Knet");
   const [validated, setValidated] = useState(false);
-  const { products, quantity, total } = useSelector((state) => state.cart);
+  const { products, quantity, total, shipmentTotal } = useSelector((state) => state.cart);
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -123,29 +123,31 @@ const Shipment = () => {
                   <h3 style={{ fontSize: "20px", fontWeight: "bold" }}>
                     {t("Checkout")}
                   </h3>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-evenly",
-                      alignItems: "center",
-                      width: "40%",
-                    }}
-                  >
-                    <p style={{ marginBottom: "0", marginLeft: "2%" }}>
-                      {t("Existing customer?")}
-                    </p>
-                    <Link to="/signin">
-                      {" "}
-                      <Button
-                        style={{
-                          color: "#1890FF !important",
-                          borderColor: "#1890FF !important",
-                        }}
-                      >
-                        {t("signIn")}
-                      </Button>{" "}
-                    </Link>
-                  </div>
+                  {!token && (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-evenly",
+                        alignItems: "center",
+                        width: "40%",
+                      }}
+                    >
+                      <p style={{ marginBottom: "0", marginLeft: "2%" }}>
+                        {t("Existing customer?")}
+                      </p>
+                      <Link to="/signin">
+                        {" "}
+                        <Button
+                          style={{
+                            color: "#1890FF !important",
+                            borderColor: "#1890FF !important",
+                          }}
+                        >
+                          {t("signIn")}
+                        </Button>{" "}
+                      </Link>
+                    </div>
+                  )}
                 </div>
                 <hr style={{ color: "#ccc" }} />
                 <Col lg="7" md="8" sm="12">
@@ -429,7 +431,7 @@ const Shipment = () => {
                     <p style={{ color: "#9a9a9a" }}>{t("Standart Delivery")}</p>
                   </Col>
                   <Col lg="6">
-                    <p>Free</p>
+                    <p>{shipmentTotal > 0 ? shipmentTotal : 'Free'}</p>
                   </Col>
                 </Row>
                 <Row>
@@ -445,7 +447,7 @@ const Shipment = () => {
                 </Row>
                 <Row>
                   <Form>
-                <Button type="submit" onClick={handelShipment} >
+                <Button type="primary" onClick={handelShipment} >
                     {t("Confirm Order Now")}
                 </Button>
                   </Form>

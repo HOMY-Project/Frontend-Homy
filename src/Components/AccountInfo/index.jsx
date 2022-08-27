@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from 'react-router-dom'
 import {  Container } from 'react-bootstrap';
 import { Form, Input, message, Breadcrumb } from "antd";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
+import { setUser } from '../../Redux/features/authSlice';
 import Heading from "../Heading/index";
 import "../SignIn/index.css";
 import "./index.css";
 
 const AccountInfo = () => {
   const { user, token } = useSelector((state) => state.auth);
-
+  const dispatch = useDispatch();
+  console.log(user, 'user');
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhoneNum] = useState("");
   const [edit, isEdit] = useState(true);
   const { t } = useTranslation();
+
   useEffect(() => {
     const { name, email, phone } = user;
     setName(name);
@@ -26,7 +29,7 @@ const AccountInfo = () => {
 
   const editInfo = async () => {
     try {
-     await axios.put(
+    const {data : { data }} =  await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${user.id}/update`,
         {
           name,
@@ -38,6 +41,8 @@ const AccountInfo = () => {
         }
       );
       isEdit(true);
+      console.log(data, 'data edit');
+      dispatch(setUser(data));
       message.success(
         t("accountInfo.success")
       );

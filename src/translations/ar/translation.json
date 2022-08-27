@@ -93,5 +93,8 @@
     "Filter By": "تصفية حسب",
     "There are no products in this category" : "لا توجد منتجات في هذا القسم",
     "Price Range": "نطاق السعر",
-    "Sort By" : "ترتيب حسب"
+    "Sort By" : "ترتيب حسب",
+    "Comment" : "تعليق",
+    "Rate": "التقييم",
+    "Apply":"تأكيد"
 }

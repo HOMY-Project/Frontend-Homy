@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import {
   message, notification,
 } from 'antd';
@@ -21,30 +21,60 @@ import './index.css';
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { isFetching, user } = useSelector((state) => state.auth);
+  const { isFetching, user, token } = useSelector((state) => state.auth);
+  const { products } = useSelector((state) => state.cart);
   const { t  } = useTranslation();
+
+  
+  const handelAddProduct = async (product) => {
+    const carts = [{ ...product}];
+    try {
+        const {
+        data: { message: msg },
+        } = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${user.id}/cart`,
+        { carts },
+        { headers: { token: `Bearer ${token}` } }
+        );
+        console.log(msg);
+    } catch ({
+        response: {
+        data: { message: msg },
+        },
+    }) {
+      console.log(msg);
+    }
+  }
+
   const signIn = async (e) => {
     e.preventDefault();
     dispatch(loginStart());
     try {
+      // user login 
       const { data: { data, token } } = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/signin`
       , { email, password });
       dispatch(setUser(data));
       dispatch(setToken(token));
-      notification.open({
-        message: 'Welcome back',
-        description: `happy shopping ${data.name}`,
-        icon: (
-          <CheckCircleTwoTone twoToneColor="#52c41a" />
-        ),
-      });
-      
-      // if(data.role) {
+
+
+      // set User Permission
         const { data: { data: permissionData } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/permission-role?roleId=${data.role}`);
-        console.log(permissionData, 'permission-role');
         dispatch(setPermission(permissionData));
-      // }
-      navigate('/')
+
+
+      // post cart prod to DB
+        const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${user.id}/cart`,{ carts: products },{ headers: { token: `Bearer ${token}` } })
+        console.log(res);
+
+        navigate('/');
+
+        notification.open({
+          message: 'Welcome back',
+          description: `happy shopping ${user.name}`,
+          icon: (
+            <CheckCircleTwoTone twoToneColor="#52c41a" />
+          ),
+        });
     } catch ({ response: { data: { message: msg } } }) {
       message.error(msg);
       dispatch(loginFailure());

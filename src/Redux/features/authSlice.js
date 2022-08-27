@@ -25,6 +25,7 @@ const authSlice = createSlice({
         state.user = action.payload;
         state.isFetching = false;
       },
+      
       setToken : (state, action) =>{
         state.token = action.payload;
       },
