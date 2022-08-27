@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import LocaleContext from '../../translations/LocaleContext';
 import { CloseOutlined } from "@ant-design/icons";
 import {
@@ -8,29 +8,31 @@ import {
   Image,
   ListGroup,
   Row,
-  // Breadcrumb,
   InputGroup,
 } from "react-bootstrap";
+import axios from "axios";
 import { Button, Steps, Input, message, Popconfirm, Result, Breadcrumb } from "antd";
 import { useTranslation } from "react-i18next";
 import Heading from "../Heading";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from 'react-router-dom';
-import { removeItem, incrementQuantity, decrementQuantity } from '../../Redux/features/cartSlice';
-import axios from "axios";
-import "../Order/index.css";
-import "./index.css";
+import { removeItem, incrementQuantity, decrementQuantity, setTotalAfterDiscount } from '../../Redux/features/cartSlice';
 import empty from '../../assets/empty-cart-removebg-preview.png';
 import Header from '../Header';
 import MainFooter from '../Footer';
+import "../Order/index.css";
+import "./index.css";
 
 const Cart = () => {
   const { locale } = useContext(LocaleContext);
   const cart = useSelector((state) => state.cart);
+  const [discount, setDiscount ] = useState(0);
+  const [code, setCode] = useState('');
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  
+  console.log(cart.products);
+
   useEffect(() => {
       const source = axios.CancelToken.source();
       if(token){
@@ -58,6 +60,28 @@ const Cart = () => {
   };
   }, [])
 
+const applyPromoCode = async () => {
+  try {
+    const { data: { data }} = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/promo-code/${code}`);
+    setDiscount(parseInt(data[0]?.discount) > 0 ? parseInt(data[0]?.discount) : 0);
+    dispatch(setTotalAfterDiscount(discount));
+
+
+    console.log(parseInt(data[0]?.discount), 'discount');
+    console.log(discount, 'discount from react');
+    console.log(cart.total, 'cart.total');
+
+    setCode('');
+    message.success('Congratulations, you got the discount')
+
+  } catch ({
+    response: {
+      data: { message: msg },
+    },
+  }) { 
+    message.warning(msg);
+  }
+};
 
   const handelDeleteProductCart = async (productId) =>{
     if (token) {
@@ -72,7 +96,7 @@ const Cart = () => {
     }else{
       dispatch(removeItem(productId));
     }
-    }   
+  }   
   const { Step } = Steps;
   return (
     <div>
@@ -84,7 +108,7 @@ const Cart = () => {
               <a href="/">{t('Home')}</a>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <a href="">{t('Shopping Cart')}</a>
+              <a href="/cart">{t('Shopping Cart')}</a>
             </Breadcrumb.Item>
         </Breadcrumb>
 
@@ -173,10 +197,13 @@ const Cart = () => {
                       style={{
                         width: "calc(125% - 200px)",
                       }}
-                      defaultValue={t("Have Promo code?")}
+                      value={code}
+                      onChange={(e) => setCode(e.target.value)}
+                      placeholder={t("Have Promo code?")}
                     />
-                    <Button type="primary">{t('Checkout')}</Button>
+                    <Button type="primary" onClick={applyPromoCode} style={{height: '40px'}}>{t('Apply')}</Button>
                   </Input.Group>
+                  
                 </Col>
               </Row>
               <Row style={{ marginTop: "6%" }}>
@@ -187,7 +214,7 @@ const Cart = () => {
                   </p>
                 </Col>
                 <Col lg="6">
-                  <p>{cart.total} KWD</p>
+                  <p>{(cart.total>0 ? cart.total  : '0')} KWD</p>
                 </Col>
               </Row>
               <Row style={{ marginTop: "3%" }}>
@@ -196,7 +223,7 @@ const Cart = () => {
                   <p style={{ color: "#9a9a9a" }}>{t('Standart Delivery')}</p>
                 </Col>
                 <Col lg="6">
-                  <p>Free</p>
+                  <p>{cart.shipmentTotal > 0 ? cart.shipmentTotal : 'Free'}</p>
                 </Col>
               </Row>
               <Row>
@@ -206,7 +233,7 @@ const Cart = () => {
                 </Col>
                 <Col>
                   <p style={{ fontWeight: "bold", fontSize: "17px" }}>
-                    {cart.total <1 ? '0' : cart.total} KWD
+                    {(cart.total>0 ? cart.total + cart.shipmentTotal : '0')} KWD
                   </p>
                 </Col>
               </Row>
@@ -215,6 +242,7 @@ const Cart = () => {
                   <Button type="primary">{t('Checkout')}</Button>
                 </Link>
               </Row>
+              
             </Container>
           </Col>
         </Row>

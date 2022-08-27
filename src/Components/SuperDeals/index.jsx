@@ -38,7 +38,7 @@ const SuperDeals = () => {
         const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/product/super`, { cancelToken: source.token });
         dispatch(setAllProducts(data));
         setSuperProducts(data);
-
+        console.log(data, 'super product');
       } catch ({
         response: {
           data: { message: msg },
@@ -61,7 +61,9 @@ const SuperDeals = () => {
         const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/top-seller`, { cancelToken: source.token });
         dispatch(setAllProducts(data));
         setTopProducts(data);
-        getTopSellerPro();
+        // getTopSellerPro();
+        console.log(data, 'top seller product');
+
       } catch ({
         response: {
           data: { message: msg },
@@ -79,7 +81,7 @@ const SuperDeals = () => {
   return (
     <>
       <ProductCard products={superProducts} title={t("Super Deals")} />
-      <ProductCard products={TopProArr} title={t("Top Sellers")} />
+      <ProductCard products={topProducts} title={t("Top Sellers")} />
     </>
   )
   

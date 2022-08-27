@@ -6,6 +6,7 @@ const cartSlice = createSlice({
         products: [],
         quantity: 0,
         total: 0,
+        shipmentTotal: 0,
         wishlist: [],
     },
     reducers:{
@@ -14,12 +15,15 @@ const cartSlice = createSlice({
                 state.products.find(product => product.id === action.payload.id).quantity += 1;
                 state.quantity += 1;
                 state.total += action.payload.price; // product quantity * product price
+                state.shipmentTotal += action.payload.shipment
             }else{
             state.products.push(action.payload);
             state.quantity += 1; // cart quantity
-            state.total += action.payload.price  // product quantity * product price
+            state.total += action.payload.price; // product quantity * product price
+            state.shipmentTotal += action.payload.shipment;
             }
         },
+
         addWishlist: (state, action) => {
             state.wishlist.push(action.payload);
         },
@@ -30,6 +34,9 @@ const cartSlice = createSlice({
             state.products = [];
             state.quantity = 0;
             state.total = 0;
+        },
+        setTotalAfterDiscount: (state) => {
+            state.total -= state.payload.discount;
         },
         incrementQuantity: (state, action) => {
             const item = state.products.find((item) => item.id === action.payload);
@@ -52,6 +59,7 @@ const cartSlice = createSlice({
             state.products = removeItem;
             state.quantity = state.products.length;
             state.total = state.products.reduce((total, item) => total + item.price, 0);
+            state.shipmentTotal = state.products.reduce((total, item) => total + item.shipment, 0);
         },
         removeItemFromWishlist: (state, action) => {
             const removeItem = state.wishlist.filter((item) => item.id !== action.payload);
@@ -60,4 +68,4 @@ const cartSlice = createSlice({
     }
 })
 export default cartSlice.reducer;
-export const { addProduct, clearCart, removeItem, incrementQuantity,clearWishlist, decrementQuantity, addWishlist, removeItemFromWishlist } = cartSlice.actions;
+export const { addProduct, clearCart, removeItem, incrementQuantity,clearWishlist, decrementQuantity, setTotalAfterDiscount, addWishlist, removeItemFromWishlist } = cartSlice.actions;

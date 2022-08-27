@@ -18,6 +18,12 @@ input.quantityInput.form-control {
     height: 32px;
     text-align: center;
 }
+.productInfoCard-holder .ant-form-item.form-control.mt-1 {
+    border: none !important;
+}
+.left-rate span.anticon.anticon-star {
+    color: #FFC416;
+}
 .productInfoCard-holder #button-addon1, #button-addon2 {
     background: #0F6AD0;
     border-radius: 0px 4px 4px 0px;
