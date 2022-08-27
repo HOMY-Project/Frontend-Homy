@@ -188,11 +188,6 @@ const Orders = () => {
             <Tag color={status === 'Pending' ? 'orange' : 'green'}>{status}</Tag>
         )
       },
-      {
-        title: t('Review'),
-        dataIndex: 'Review',
-        key: 'Review',
-      },
   ];
   return (
     <><Header /><Container fluid style={{ marginTop: '3%' }} className="order-holder">

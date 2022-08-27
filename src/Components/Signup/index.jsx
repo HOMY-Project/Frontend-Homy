@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setUser, setToken } from '../../Redux/features/authSlice';
-import { Form, Input, message } from "antd";
+import { CheckCircleTwoTone } from '@ant-design/icons';
+import { Form, Input, message, notification } from "antd";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import "../SignIn/index.css";
@@ -16,6 +17,8 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [phone, setPhoneNum] = useState("");
   const dispatch = useDispatch();
+  const { products } = useSelector((state) => state.cart);
+  const { user } = useSelector((state) => state.auth);
   const { t } = useTranslation();
 
   const signup = async () => {
@@ -31,8 +34,19 @@ const SignUp = () => {
       dispatch(setUser(data));
       dispatch(setToken(token));
 
-      message.success(`Welcome ${name}, ${msg}`);
-      navigate("/");
+      // post cart prod to DB
+      const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${user.id}/cart`,{ carts: products },{ headers: { token: `Bearer ${token}` } })
+      console.log(res);
+
+    notification.open({
+      message: 'Welcome To Homy',
+      description: `happy shopping ${user.name}`,
+      icon: (
+        <CheckCircleTwoTone twoToneColor="#52c41a" />
+      ),
+    });
+    navigate("/");
+
     } catch ({
       response: {
         data: { message: msg },

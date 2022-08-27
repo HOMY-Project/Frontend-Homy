@@ -17,7 +17,7 @@ const { Meta } = Card;
 function ProductCard({ products, title }) {
   const dispatch = useDispatch();
   const { user, token } = useSelector((state) => state.auth);
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
 
   const handelAddProduct = async (product) => {
     if (token &&  product) {
@@ -74,11 +74,11 @@ function ProductCard({ products, title }) {
                 description={product.quick_overview} 
                 />
                 <div style={{ display: 'flex' , alignItems: 'center', marginBottom: '2%', marginTop: '3%' }}>
-                    <StarFilled /> <span style={{ marginLeft: '2%' }}>5.0</span>
+                    <StarFilled /> <span style={{ marginLeft: '2%' }}>{product.rating}.0</span>
                 </div>
                 <div className="price-holder">
-                    <p className="price">{product.price} KWD</p>
-                    <p className="discount">{product.discount} KWD</p>
+                    <p className="price">{(product.price - product.discount) >= 0 ? (product.price - product.discount) : 0} KWD</p>
+                    <p className="discount">{product.price} KWD</p>
                 </div>
                 <div className="d-grid gap-2">
                     <Button variant="primary" size="lg" className="btn btn-cart"onClick={() => handelAddProduct(product)}>Add to Cart </Button>

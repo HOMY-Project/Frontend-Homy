@@ -17,10 +17,10 @@ const AddressInfo = () => {
   const [area, setArea] = useState("");
   const [street, setStreet] = useState("");
   const [building, setBuilding] = useState("");
+  const [isAction, setIsAction ] = useState(false);
   const [block, setBlock] = useState("");
   const { user, token } = useSelector((state) => state.auth);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  console.log(address, 'address');
   const { t } = useTranslation();
   const userId = user.id;
 
@@ -44,6 +44,7 @@ const AddressInfo = () => {
         { headers: { token: `Bearer ${token}` } }
       );
       setAddress((prev) => prev.filter((item) => item.id !== id));
+      setIsAction(true)
       message.success("address deleted successfully");
     } catch ({
       response: {
@@ -70,8 +71,9 @@ const AddressInfo = () => {
           return item;
         })
       );
-      message.success("address is updated successfully");
       setIsModalVisible(false);
+      setIsAction(true)
+      message.success("address is updated successfully");
     } catch ({
       response: {
         data: { message: msg },
@@ -126,7 +128,7 @@ const AddressInfo = () => {
       }
     };
     getAddress();
-  }, []);
+  }, [isAction]);
 
   return (
     <div className="AddressInfo-holder">
@@ -140,7 +142,7 @@ const AddressInfo = () => {
               <a href="/account">{t('Account')}</a>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <a href="">{t('Addresses Information')}</a>
+              <a href="/">{t('Addresses Information')}</a>
             </Breadcrumb.Item>
         </Breadcrumb>
         {loading ? (
