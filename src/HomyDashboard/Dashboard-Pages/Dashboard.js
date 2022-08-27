@@ -21,7 +21,7 @@ import {
 import Paragraph from "antd/lib/typography/Paragraph";
 import axios from 'axios';
 import Echart from "../components/chart/EChart";
-import LineChart from "../components/chart/LineChart";
+import PinChart from "../components/chart/PinChart";
 
 import ava1 from "../assets/images/logo-shopify.svg";
 import ava2 from "../assets/images/logo-atlassian.svg";
@@ -34,6 +34,7 @@ import team2 from "../assets/images/team-2.jpg";
 import team3 from "../assets/images/team-3.jpg";
 import team4 from "../assets/images/team-4.jpg";
 import card from "../assets/images/info-card-1.jpg";
+import { useSelector } from "react-redux";
 
 function Dashboard() {
   const { Title, Text } = Typography;
@@ -41,14 +42,17 @@ function Dashboard() {
   const onChange = (e) => console.log(`radio checked:${e.target.value}`);
 
   const [reverse, setReverse] = useState(false);
-  const [data, setData ] = useState([]);
-  // get Banners
+  const [data, setData ] = useState({});
+  const { token, user } = useSelector((state) => state.auth);
+
 
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getStatistics = async () => {
       try {
-        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}//api/v1/dashboard/statistics`,{ cancelToken: source.token });
+        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/statistics`,  {
+          headers: { token: `Bearer ${token}` },
+        },{ cancelToken: source.token });
         setData(data);
         console.log(data, 'statistics');
       } catch ({
@@ -153,29 +157,29 @@ function Dashboard() {
   ];
   const count = [
     {
-      today: "Today’s Sales",
-      title: "$53,000",
+      today: "Homy's Products",
+      title: data?.products,
       persent: "+30%",
       icon: dollor,
       bnb: "bnb2",
     },
     {
-      today: "Today’s Users",
-      title: "3,200",
+      today: "Homy's Users",
+      title: data?.users,
       persent: "+20%",
       icon: profile,
       bnb: "bnb2",
     },
     {
-      today: "New Clients",
-      title: "+1,200",
+      today: "Homy's Employees",
+      title: data?.employees,
       persent: "-20%",
       icon: heart,
       bnb: "redtext",
     },
     {
-      today: "New Orders",
-      title: "$13,200",
+      today: "Homy's Categories",
+      title: data?.categories,
       persent: "10%",
       icon: cart,
       bnb: "bnb2",
@@ -393,7 +397,7 @@ function Dashboard() {
           </Col>
           <Col xs={24} sm={24} md={12} lg={12} xl={14} className="mb-24">
             <Card bordered={false} className="criclebox h-full">
-              <LineChart />
+              <PinChart />
             </Card>
           </Col>
         </Row>
