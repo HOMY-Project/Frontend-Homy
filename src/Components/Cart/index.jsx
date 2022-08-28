@@ -31,7 +31,6 @@ const Cart = () => {
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  console.log(cart.products);
 
   useEffect(() => {
       const source = axios.CancelToken.source();
@@ -63,15 +62,10 @@ const Cart = () => {
 const applyPromoCode = async () => {
   try {
     const { data: { data }} = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/promo-code/${code}`);
-    setDiscount(parseInt(data[0]?.discount) > 0 ? parseInt(data[0]?.discount) : 0);
+    setDiscount(parseInt(data[0]?.discount));
     dispatch(setTotalAfterDiscount(discount));
 
 
-    console.log(parseInt(data[0]?.discount), 'discount');
-    console.log(discount, 'discount from react');
-    console.log(cart.total, 'cart.total');
-
-    setCode('');
     message.success('Congratulations, you got the discount')
 
   } catch ({
@@ -80,6 +74,8 @@ const applyPromoCode = async () => {
     },
   }) { 
     message.warning(msg);
+  }finally{
+    setCode('');
   }
 };
 
@@ -197,6 +193,7 @@ const applyPromoCode = async () => {
                       style={{
                         width: "calc(125% - 200px)",
                       }}
+                      required
                       value={code}
                       onChange={(e) => setCode(e.target.value)}
                       placeholder={t("Have Promo code?")}

@@ -100,6 +100,13 @@ const AddressInfo = () => {
       },
     }) {
       message.error(msg);
+    }finally{
+      setIsModalVisible(false)
+      setCity('');
+      setBuilding('');
+      setStreet('');
+      setBlock('');
+      setArea('');
     }
   };
 

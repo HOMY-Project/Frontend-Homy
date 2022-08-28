@@ -144,7 +144,6 @@ const HomyTable = ({ columnsNames, data, isEditing, content, isExpandable, isDel
       key: item,
       width: '20%',
       ...getColumnSearchProps(item),
-      // render: (_,record)=> record.id && record.category_id && console.log(getCategoryName(record.id))
     } : {
       title: item,
       dataIndex: item,
@@ -164,7 +163,7 @@ const HomyTable = ({ columnsNames, data, isEditing, content, isExpandable, isDel
           <>
             {isDelete ? (
               <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id ? record.id : record.userid)}>
-              {(user.role === 2 || permission.find((item) => item.methodname === 'delete'&& item.link === pathname))&&<Button danger > Delete </Button>}
+              {(user.role === 2 || permission.find((item) => item.methodname === 'delete'&& item.link === pathname))&&<Button danger style={{marginRight: "2%"}}> Delete </Button>}
             </Popconfirm>
             ) : null}
             {isArchive ? (

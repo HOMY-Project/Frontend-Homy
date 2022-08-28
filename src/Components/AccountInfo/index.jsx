@@ -13,7 +13,6 @@ import "./index.css";
 const AccountInfo = () => {
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  console.log(user, 'user');
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhoneNum] = useState("");
@@ -41,7 +40,6 @@ const AccountInfo = () => {
         }
       );
       isEdit(true);
-      console.log(data, 'data edit');
       dispatch(setUser(data));
       message.success(
         t("accountInfo.success")

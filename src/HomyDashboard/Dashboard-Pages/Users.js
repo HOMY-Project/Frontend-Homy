@@ -34,7 +34,6 @@ const Users = () => {
   const { Option } = Select;
   const { pathname } = useLocation();
 
-  console.log(permission, 'permission');
   //get user
   useEffect(() => {
     const source = axios.CancelToken.source();

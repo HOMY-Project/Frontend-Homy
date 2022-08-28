@@ -17,7 +17,6 @@ const Slider = () => {
           { cancelToken: source.token }
         );
         setSlider(data);
-        console.log(data, 'data');
       } catch ({
         response: {
           data: { message: msg },

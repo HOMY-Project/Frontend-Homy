@@ -16,3 +16,12 @@ thead{
 .orders-holder-dashboard .ant-select:not(.ant-select-customize-input) .ant-select-selector {
     border: 1px solid #42a5f5;
 }
+.productTable .ant-card-extra{
+    width: 30%;
+}
+.categories .ant-card-extra{
+    width: 25%;
+}
+.subCate .ant-card-extra{
+    width: 25%;
+}

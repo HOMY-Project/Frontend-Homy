@@ -93,7 +93,6 @@ const PromoCodes = () => {
   }
 
   const handleDelete = async (id) =>{
-    console.log(id, 'promo');
     try {
       await axios.delete(
         `${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/promo-code/${id}`,

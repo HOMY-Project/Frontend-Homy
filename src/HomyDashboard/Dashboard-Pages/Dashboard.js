@@ -28,7 +28,6 @@ function Dashboard() {
           headers: { token: `Bearer ${token}` },
         },{ cancelToken: source.token });
         setData(data);
-        console.log(data, 'statistics');
       } catch ({
         response: {
           data: { message: msg },
@@ -43,6 +42,29 @@ function Dashboard() {
     };
   }, [token]);
 
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+    const getOrderMonth = async () => {
+      try {
+        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/order-month`,  {
+          headers: { token: `Bearer ${token}` },
+        },{ cancelToken: source.token });
+        setData(data);
+        console.log(data, 'order status');
+      } catch ({
+        response: {
+          data: { message: msg },
+        },
+      }) {
+        message.warning(msg);
+      }
+    };
+    getOrderMonth();
+    return () => {
+      source.cancel();
+    };
+  }, [token]);
+  
   const dollor = [
     <svg
       width="22"

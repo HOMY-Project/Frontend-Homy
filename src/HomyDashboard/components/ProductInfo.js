@@ -17,7 +17,6 @@ const ProductInfo = ({ product }) => {
             cancelToken: source.token,
           });
           setProduct(data);
-          console.log(data, 'product info')
         } catch ({
           response: {
             data: { message: msg },

@@ -41,12 +41,12 @@ function App() {
 
   return (
     <div className="App">
-      <ThemeProvider dir={locale === 'en' ? 'ltr' : 'rtl'}>
+      <ThemeProvider dir={locale === 'ar' ? 'rtl' : 'ltr'}>
         <LocaleContext.Provider value={{ locale, setLocale }}>
           <React.Suspense fallback={<Loading />} >
             <Helmet htmlAttributes={{
               lang: locale,
-              dir: locale === 'en' ? 'ltr' : 'rtl'
+              dir: locale === 'ar' ? ' rtl' : 'ltr'
             }} />
 
             <Layout >

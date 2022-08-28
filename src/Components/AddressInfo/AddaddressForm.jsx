@@ -21,33 +21,39 @@ const AddaddressForm = () => {
     
   const { Item } = Form;
 
-    const handelAdd = async () =>{
-      try {
-        const {
-          data: { message: msg},
-        } = await axios.post(
-          `${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${user.id}/address`,
-          {
-            city,
-            area,
-            street,
-            building,
-            block,
-          },
-          {
-            headers: { token: `Bearer ${token}` },
-          }
-        );
-        message.success(msg);
-        navigate("/addressInfo");
-      } catch ({
-        response: {
-          data: { message: msg },
+  const handelAdd = async () =>{
+    try {
+      const {
+        data: { message: msg},
+      } = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${user.id}/address`,
+        {
+          city,
+          area,
+          street,
+          building,
+          block,
         },
-      }) {
-        message.error(msg);
-      }
+        {
+          headers: { token: `Bearer ${token}` },
+        }
+      );
+      message.success(msg);
+      navigate("/addressInfo");
+    } catch ({
+      response: {
+        data: { message: msg },
+      },
+    }) {
+      message.error(msg);
+    }finally{
+      setCity('');
+      setBuilding('');
+      setStreet('');
+      setBlock('');
+      setArea('');
     }
+  }
 
 
   return (
