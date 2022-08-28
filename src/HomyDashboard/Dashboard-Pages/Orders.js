@@ -25,11 +25,8 @@ function Orders() {
   const { token, user, permission } = useSelector((state) => state.auth);
   const { Option } = Select
   
-  console.log(status)
   const handelChangeStatus = async (id) =>{
     try {
-      console.log(id);
-      //  setStatus(value)
       await axios.put(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/order/${id}/status`,{ status },
       { headers: { token: `Bearer ${token}`, pathname } });
       message.success("Status updated successfully");

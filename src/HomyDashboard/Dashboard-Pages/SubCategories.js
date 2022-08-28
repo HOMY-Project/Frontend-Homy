@@ -22,16 +22,18 @@ const SubCategories = () => {
   const [data, setData] = useState([]);
   const [categories, setCategories] = useState([])
   const [isAdded, setIsAdded ] = useState(false);
+  const [allArchived, setAllArchived] = useState(false);
   const [isArchived, setIsArchived ] = useState(false); // to update data after archive action
   const { pathname } = useLocation();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { token, user, permission } = useSelector((state) => state.auth);
   const { Option } = Select;
+  
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getCategory = async () => {
       try {
-        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/categories`,
+        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/categories?archive=${allArchived}`,
         {
           headers: { token: `Bearer ${token}`, pathname },
         }, 
@@ -49,7 +51,7 @@ const SubCategories = () => {
     return () => {
       source.cancel();
     };
-  }, [isAdded, isArchived]);
+  }, [isAdded, isArchived, allArchived, token, pathname]);
 
 
   useEffect(() => {
@@ -61,9 +63,7 @@ const SubCategories = () => {
           headers: { token: `Bearer ${token}`, pathname },
         }, 
         { cancelToken: source.token });
-        console.log(data);
         setData(data);
-        console.log(data, 'sub');
       } catch ({
         response: {
           data: { message: msg },
@@ -76,7 +76,7 @@ const SubCategories = () => {
     return () => {
       source.cancel();
     };
-  }, [isAdded, isArchived]);
+  }, [isAdded, isArchived, pathname, token]);
 
   const handelEdit = async (id, setIsEditModalVisible) => {
     try {
@@ -195,7 +195,7 @@ const SubCategories = () => {
 
   return (
     <>
-      <div className="tabled">
+      <div className="tabled subCate">
         <Row gutter={[24, 0]}>
           <Col xs="24" xl={24}>
             <Card
@@ -210,7 +210,10 @@ const SubCategories = () => {
                   isModalVisible={isModalVisible}
                   setIsModalVisible={setIsModalVisible}
                   /> } 
+                  <Button onClick={() => setAllArchived(!allArchived)}>{allArchived ? 'Archived' : 'Not Archived'}</Button>
+
                 </>
+                
               }
             >
               <div className="table-responsive">

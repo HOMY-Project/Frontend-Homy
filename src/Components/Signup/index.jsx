@@ -35,8 +35,7 @@ const SignUp = () => {
       dispatch(setToken(token));
 
       // post cart prod to DB
-      const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${user.id}/cart`,{ carts: products },{ headers: { token: `Bearer ${token}` } })
-      console.log(res);
+     await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${user.id}/cart`,{ carts: products },{ headers: { token: `Bearer ${token}` } })
 
     notification.open({
       message: 'Welcome To Homy',

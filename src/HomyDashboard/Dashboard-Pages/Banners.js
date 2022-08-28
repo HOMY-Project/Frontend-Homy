@@ -26,8 +26,6 @@ const Banners = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { token, user, permission } = useSelector((state) => state.auth);
 
-  console.log(permission, 'permission');
-
   const uploadImg = (e) => {
     setLoading(true);
     const { files } = e.target;
@@ -69,7 +67,6 @@ const Banners = () => {
   }, [isAdded]);
 
   const handelEdit = async (id, setIsEditModalVisible) => {
-    console.log(id, 'edit')
     try {
      await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/banner/${id}`,

@@ -1,81 +1,52 @@
-/*!
-  =========================================================
-  * Muse Ant Design Dashboard - v1.0.0
-  =========================================================
-  * Product Page: https://www.creative-tim.com/product/muse-ant-design-dashboard
-  * Copyright 2021 Creative Tim (https://www.creative-tim.com)
-  * Licensed under MIT (https://github.com/creativetimofficial/muse-ant-design-dashboard/blob/main/LICENSE.md)
-  * Coded by Creative Tim
-  =========================================================
-  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-import { useState } from "react";
+import React, { useState,useEffect } from "react";
 
 import {
   Row,
   Col,
   Card,
   Button,
-  List,
+  Modal,
+  Form,
   Descriptions,
   Avatar,
-  Radio,
-  Switch,
-  Upload,
   message,
+  Input
 } from "antd";
 
 import {
   FacebookOutlined,
   TwitterOutlined,
   InstagramOutlined,
-  VerticalAlignTopOutlined,
 } from "@ant-design/icons";
-
+import { useSelector, useDispatch } from 'react-redux';
+import { setUser } from '../../Redux/features/authSlice';
 import BgProfile from "../assets/images/bg-profile.jpg";
 import profilavatar from "../assets/images/face-1.jpg";
-import convesionImg from "../assets/images/face-3.jpg";
-import convesionImg2 from "../assets/images/face-4.jpg";
-import convesionImg3 from "../assets/images/face-5.jpeg";
-import convesionImg4 from "../assets/images/face-6.jpeg";
-import convesionImg5 from "../assets/images/face-2.jpg";
-import project1 from "../assets/images/home-decor-1.jpeg";
-import project2 from "../assets/images/home-decor-2.jpeg";
-import project3 from "../assets/images/home-decor-3.jpeg";
+import axios from 'axios';
 
 function Profile() {
   const [imageURL, setImageURL] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhoneNum] = useState("");
   const [, setLoading] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const { user, permission, token} = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  console.log(permission, 'user');
+  const { Item } = Form;
+
+  useEffect(() => {
+    const { name, email, phone } = user;
+    setName(name);
+    setEmail(email);
+    setPhoneNum(phone);
+  }, [user]);
 
   const getBase64 = (img, callback) => {
     const reader = new FileReader();
     reader.addEventListener("load", () => callback(reader.result));
     reader.readAsDataURL(img);
-  };
-
-  const beforeUpload = (file) => {
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-    if (!isJpgOrPng) {
-      message.error("You can only upload JPG/PNG file!");
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error("Image must smaller than 2MB!");
-    }
-    return isJpgOrPng && isLt2M;
-  };
-
-  const handleChange = (info) => {
-    if (info.file.status === "uploading") {
-      setLoading(false);
-      return;
-    }
-    if (info.file.status === "done") {
-      getBase64(info.file.originFileObj, (imageUrl) => {
-        setLoading(false);
-        setImageURL(false);
-      });
-    }
   };
 
   const pencil = [
@@ -98,64 +69,32 @@ function Profile() {
     </svg>,
   ];
 
-  const uploadButton = (
-    <div className="ant-upload-text font-semibold text-dark">
-      {<VerticalAlignTopOutlined style={{ width: 20, color: "#000" }} />}
-      <div>Upload New Project</div>
-    </div>
-  );
-
-  const data = [
-    {
-      title: "Sophie B.",
-      avatar: convesionImg,
-      description: "Hi! I need more information…",
-    },
-    {
-      title: "Anne Marie",
-      avatar: convesionImg2,
-      description: "Awesome work, can you…",
-    },
-    {
-      title: "Ivan",
-      avatar: convesionImg3,
-      description: "About files I can…",
-    },
-    {
-      title: "Peterson",
-      avatar: convesionImg4,
-      description: "Have a great afternoon…",
-    },
-    {
-      title: "Nick Daniel",
-      avatar: convesionImg5,
-      description: "Hi! I need more information…",
-    },
-  ];
-
-  const project = [
-    {
-      img: project1,
-      titlesub: "Project #1",
-      title: "Modern",
-      disciption:
-        "As Uber works through a huge amount of internal management turmoil.",
-    },
-    {
-      img: project2,
-      titlesub: "Project #2",
-      title: "Scandinavian",
-      disciption:
-        "Music is something that every person has his or her own specific opinion about.",
-    },
-    {
-      img: project3,
-      titlesub: "Project #3",
-      title: "Minimalist",
-      disciption:
-        "Different people have different taste, and various types of music, Zimbali Resort",
-    },
-  ];
+  const editInfo = async () => {
+    try {
+    const {data : { data }} =  await axios.put(
+        `${process.env.REACT_APP_BACKEND_URL}/api/v1/user/${user.id}/update`,
+        {
+          name,
+          email,
+          phone,
+        },
+        {
+          headers: { token: `Bearer ${token}` },
+        }
+      );
+      console.log(data, 'data edit');
+      message.success('Your Info is saved successfully')
+      dispatch(setUser(data));
+    } catch ({
+      response: {
+        data: { message: msg },
+      },
+    }) {
+      message.error(msg);
+    }finally{
+      setIsModalVisible(false);
+    }
+  };
 
   return (
     <>
@@ -174,8 +113,8 @@ function Profile() {
                 <Avatar size={74} shape="square" src={profilavatar} />
 
                 <div className="avatar-info">
-                  <h4 className="font-semibold m-0">Sarah Jacob</h4>
-                  <p>CEO / Co-Founder</p>
+                  <h4 className="font-semibold m-0">{user.name}</h4>
+                  <p>{permission[0]?.role ? permission[0]?.role : 'Admin'}</p>
                 </div>
               </Avatar.Group>
             </Col>
@@ -188,88 +127,117 @@ function Profile() {
                 justifyContent: "flex-end",
               }}
             >
-              <Radio.Group defaultValue="a">
-                <Radio.Button value="a">OVERVIEW</Radio.Button>
-                <Radio.Button value="b">TEAMS</Radio.Button>
-                <Radio.Button value="c">PROJECTS</Radio.Button>
-              </Radio.Group>
             </Col>
           </Row>
         }
       ></Card>
 
-      <Row gutter={[24, 0]}>
-        <Col span={24} md={8} className="mb-24 ">
-          <Card
-            bordered={false}
-            className="header-solid h-full"
-            title={<h6 className="font-semibold m-0">Platform Settings</h6>}
-          >
-            <ul className="list settings-list">
-              <li>
-                <h6 className="list-header text-sm text-muted">ACCOUNT</h6>
-              </li>
-              <li>
-                <Switch defaultChecked />
-
-                <span>Email me when someone follows me</span>
-              </li>
-              <li>
-                <Switch />
-                <span>Email me when someone answers me</span>
-              </li>
-              <li>
-                <Switch defaultChecked />
-                <span>Email me when someone mentions me</span>
-              </li>
-              <li>
-                <h6 className="list-header text-sm text-muted m-0">
-                  APPLICATION
-                </h6>
-              </li>
-              <li>
-                <Switch defaultChecked />
-                <span>New launches and projects</span>
-              </li>
-              <li>
-                <Switch defaultChecked />
-                <span>Monthly product updates</span>
-              </li>
-              <li>
-                <Switch defaultChecked />
-                <span>Subscribe to newsletter</span>
-              </li>
-            </ul>
-          </Card>
-        </Col>
-        <Col span={24} md={8} className="mb-24">
+      <Row gutter={[24, 0]} style={{marginTop: '2%'}}>
+        <Col span={24} md={12} className="mb-24">
           <Card
             bordered={false}
             title={<h6 className="font-semibold m-0">Profile Information</h6>}
             className="header-solid h-full card-profile-information"
-            extra={<Button type="link">{pencil}</Button>}
+            extra={<Button type="link" onClick={() => setIsModalVisible(true)}>{pencil}</Button>}
             bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
           >
-            <p className="text-dark">
+            <Modal title="Edit Comment" onOk={editInfo} onCancel={() => setIsModalVisible(false)}  visible={isModalVisible}>
+                <Form name="basic"
+                  labelCol={{
+                  span: 20,
+                  }}
+                  wrapperCol={{
+                  span: 25,
+                  }}
+                  className="Auth-form"
+                  autoComplete="off"
+                >
+                <div className="Auth-form-content">
+                  <div className="form-group mt-3" style={{border: "none !important"}}>
+                    <label>Full Name</label>
+                        <Item
+                          className="form-control mt-1"
+                          name="name"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          rules={[
+                            {
+                              type: "text",
+                              message: "The input is not valid Full Name!",
+                            },
+                            {
+                              required: true,
+                              message: "Please input your Full Name",
+                            },
+                          ]}
+                        >
+                          <Input />
+                        </Item>
+                  </div>
+
+                  <div className="form-group mt-3" style={{border: "none !important"}}>
+                    <label>Email-address</label>
+                    <Item
+                      name="email"
+                      className="form-control mt-1"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      rules={[
+                        {
+                          type: "email",
+                          message: "The input is not valid E-mail!",
+                        },
+                        {
+                          required: true,
+                          message: "Please input your E-mail!",
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Item>
+                  </div>
+
+                  <div className="form-group mt-3" style={{border: "none !important"}}>
+                    <label>Phone Number</label>
+                    <Item
+                      name="phone"
+                      className="form-control mt-1"
+                      value={phone}
+                      placeholder="+965"
+                      onChange={(e) => setPhoneNum(e.target.value)}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your phone Number!",
+                        },
+                      ]}
+                    >
+                      <Input />
+                    </Item>
+                  </div>
+                </div>
+                </Form>                               
+            </Modal>  
+            {/* <p className="text-dark">
               {" "}
               Hi, I’m Alec Thompson, Decisions: If you can’t decide, the answer
               is no. If two equally difficult paths, choose the one more painful
               in the short term (pain avoidance is creating an illusion of
               equality).{" "}
             </p>
-            <hr className="my-25" />
-            <Descriptions title="Oliver Liam">
+            <hr className="my-25" /> */}
+            <Descriptions title="">
               <Descriptions.Item label="Full Name" span={3}>
-                Sarah Emily Jacob
+                {user.name}
               </Descriptions.Item>
               <Descriptions.Item label="Mobile" span={3}>
-                (44) 123 1234 123
+                {user.phone}
               </Descriptions.Item>
               <Descriptions.Item label="Email" span={3}>
-                sarahjacob@mail.com
+                {user.email}
               </Descriptions.Item>
-              <Descriptions.Item label="Location" span={3}>
-                USA
+              <Descriptions.Item label="Role Name" span={3}>
+                {permission[0]?.role ? permission[0]?.role : 'Admin'}
               </Descriptions.Item>
               <Descriptions.Item label="Social" span={3}>
                 <a href="#pablo" className="mx-5 px-5">
@@ -285,89 +253,7 @@ function Profile() {
             </Descriptions>
           </Card>
         </Col>
-        <Col span={24} md={8} className="mb-24">
-          <Card
-            bordered={false}
-            title={<h6 className="font-semibold m-0">Conversations</h6>}
-            className="header-solid h-full"
-            bodyStyle={{ paddingTop: 0, paddingBottom: 16 }}
-          >
-            <List
-              itemLayout="horizontal"
-              dataSource={data}
-              split={false}
-              className="conversations-list"
-              renderItem={(item) => (
-                <List.Item actions={[<Button type="link">REPLY</Button>]}>
-                  <List.Item.Meta
-                    avatar={
-                      <Avatar shape="square" size={48} src={item.avatar} />
-                    }
-                    title={item.title}
-                    description={item.description}
-                  />
-                </List.Item>
-              )}
-            />
-          </Card>
-        </Col>
       </Row>
-      <Card
-        bordered={false}
-        className="header-solid mb-24"
-        title={
-          <>
-            <h6 className="font-semibold">Projects</h6>
-            <p>Architects design houses</p>
-          </>
-        }
-      >
-        <Row gutter={[24, 24]}>
-          {project.map((p, index) => (
-            <Col span={24} md={12} xl={6} key={p}>
-              <Card
-                bordered={false}
-                className="card-project"
-                cover={<img alt="example" src={p.img} />}
-              >
-                <div className="card-tag">{p.titlesub}</div>
-                <h5>{p.titile}</h5>
-                <p>{p.disciption}</p>
-                <Row gutter={[6, 0]} className="card-footer">
-                  <Col span={12}>
-                    <Button type="button">VIEW PROJECT</Button>
-                  </Col>
-                  <Col span={12} className="text-right">
-                    <Avatar.Group className="avatar-chips">
-                      <Avatar size="small" src={profilavatar} />
-                      <Avatar size="small" src={convesionImg} />
-                      <Avatar size="small" src={convesionImg2} />
-                      <Avatar size="small" src={convesionImg3} />
-                    </Avatar.Group>
-                  </Col>
-                </Row>
-              </Card>
-            </Col>
-          ))}
-          <Col span={24} md={12} xl={6}>
-            <Upload
-              name="avatar"
-              listType="picture-card"
-              className="avatar-uploader projects-uploader"
-              showUploadList={false}
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              beforeUpload={beforeUpload}
-              onChange={handleChange}
-            >
-              {imageURL ? (
-                <img src={imageURL} alt="avatar" style={{ width: "100%" }} />
-              ) : (
-                uploadButton
-              )}
-            </Upload>
-          </Col>
-        </Row>
-      </Card>
     </>
   );
 }

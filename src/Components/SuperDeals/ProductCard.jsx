@@ -17,7 +17,6 @@ const { Meta } = Card;
 function ProductCard({ products, title }) {
   const dispatch = useDispatch();
   const { user, token } = useSelector((state) => state.auth);
-  // const { t } = useTranslation();
 
   const handelAddProduct = async (product) => {
     if (token &&  product) {
@@ -42,7 +41,7 @@ function ProductCard({ products, title }) {
     } else {
     return dispatch(addProduct({ ...product, quantity:1 }))
     }
-};
+  };
   const responsive = {
       superLargeDesktop: {
         // the naming can be any, depends on you.
@@ -74,7 +73,7 @@ function ProductCard({ products, title }) {
                 description={product.quick_overview} 
                 />
                 <div style={{ display: 'flex' , alignItems: 'center', marginBottom: '2%', marginTop: '3%' }}>
-                    <StarFilled /> <span style={{ marginLeft: '2%' }}>{product.rating}.0</span>
+                    <StarFilled /> <span style={{ marginLeft: '2%' }}>{product.rating === 0 && product.users_rated_number === 0 ? "0" : (product.rating / product.users_rated_number)}</span>
                 </div>
                 <div className="price-holder">
                     <p className="price">{(product.price - product.discount) >= 0 ? (product.price - product.discount) : 0} KWD</p>

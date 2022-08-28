@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React , { useEffect, useState } from 'react';
 import { useSelector } from "react-redux";
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { UploadOutlined } from "@ant-design/icons";
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import {
@@ -39,6 +39,7 @@ const Users = () => {
   const [cateList, setCateList ] = useState([]);
   const [subCateList, setSubCateList ] = useState([]);
   const [isAdded, setIsAdded ] = useState(false);
+  const [allArchived, setAllArchived] = useState(false);
   const [isArchived, setIsArchived ] = useState(false); // to update data after archive action
   const [data, setData] = useState([]);
   const { token, user, permission } = useSelector((state) => state.auth);
@@ -58,15 +59,12 @@ const Users = () => {
         reader.onload = () => {
           const img = document.createElement('img');
           img.src = reader.result;
-          console.log(reader.result, 'reader.result');
-
           const formData = new FormData();
           formData.append('file', reader.result);
           formData.append('upload_preset', "pslraocg")
           axios.post('https://api.cloudinary.com/v1_1/homyecommarce/image/upload', formData)
           .then(({ data }) => {
             setAlbums(prev => [...prev, data.secure_url]);
-            console.log(albums, 'albmus');
           }) 
           .catch(() => message.error('something got wrong, image can not upload'));
 
@@ -135,11 +133,10 @@ const Users = () => {
   useEffect(() => {
     const source = axios.CancelToken.source();
     const getProducts = async () => {
-      try {
-        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/products`, {
+      try { 
+        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/products?archive=${allArchived}`, {
           headers: { token: `Bearer ${token}`, pathname },
         },{ cancelToken: source.token });
-        console.log(data, 'products');
         setData(data);
       } catch ({
         response: {
@@ -153,7 +150,7 @@ const Users = () => {
     return () => {
       source.cancel();
     };
-  }, [isAdded, isArchived]);
+  }, [isAdded, isArchived, allArchived]);
 
   // get brands
   useEffect(() => {
@@ -164,7 +161,6 @@ const Users = () => {
           headers: { token: `Bearer ${token}`, pathname},
         },{ cancelToken: source.token });
         setBrandsList(data);
-        console.log(data, 'brands');
       } catch ({
         response: {
           data: { message: msg },
@@ -228,7 +224,6 @@ const Users = () => {
   }, [categoryId]);
 
   const handelEdit = async (id, setIsEditModalVisible) => {
-    console.log(id, 'edit')
     try {
      await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/product/${id}`,
@@ -412,7 +407,7 @@ const Users = () => {
 
   return (
     <>
-      <div className="tabled">
+      <div className="tabled productTable">
         <Row gutter={[24, 0]}>
           <Col xs="24" xl={24}>
             <Card
@@ -428,6 +423,7 @@ const Users = () => {
                   setIsModalVisible={setIsModalVisible}
                   /> } 
                   <ExportBtn data={data}/>
+                  <Button onClick={() => setAllArchived(!allArchived)}>{allArchived ? 'Archived' : 'Not Archived'}</Button>
                 </>
               }
             >

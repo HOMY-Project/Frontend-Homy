@@ -27,10 +27,10 @@ const Categories = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { token, user, permission } = useSelector((state) => state.auth);
 
-  useEffect(() =>{
-    setName(copyRecord?.name)
-    setImg(copyRecord?.img)
-  });
+  // useEffect(() =>{
+  //   setName(copyRecord?.name)
+  //   setImg(copyRecord?.img)
+  // });
 
   const uploadImg = (e) => {
     setLoading(true);
@@ -58,7 +58,6 @@ const Categories = () => {
           }, 
           { cancelToken: source.token });
           setData(data);
-          console.log(data, 'brand');
         } catch ({
           response: {
             data: { message: msg },

@@ -6,6 +6,9 @@
     width: 100%;
     padding: 2% 0;
   }
+  .Auth-form-container.changeHight{
+    min-height: 720px;
+  }
   .Auth-form-container .d-grid.gap-2.mt-3.sec-password {
     display: flex !important;
     justify-content: space-between;

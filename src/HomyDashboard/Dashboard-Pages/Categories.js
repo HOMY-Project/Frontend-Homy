@@ -24,6 +24,7 @@ const Categories = () => {
   const [data, setData] = useState([]);
   const [hasSubCategories , setHasSubCategories] = useState(false);
   const [isAdded, setIsAdded ] = useState(false);
+  const [allArchived, setAllArchived] = useState(false);
   const [isArchived, setIsArchived ] = useState(false); // to update data after archive action
   const [loading, setLoading] = useState(false);
   const { pathname } = useLocation();
@@ -34,7 +35,6 @@ const Categories = () => {
   const uploadImg = (e) => {
     setLoading(true);
     const { files } = e.target;
-    console.log(files[0])
     const formData = new FormData();
     formData.append('file', files[0]);
     formData.append('upload_preset', "pslraocg")
@@ -52,13 +52,12 @@ const Categories = () => {
     const source = axios.CancelToken.source();
     const getCategories = async () => {
       try {
-        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/categories`,
+        const { data: { data } } = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/v1/dashboard/categories?archive=${allArchived}`,
         {
           headers: { token: `Bearer ${token}`, pathname },
         }, 
         { cancelToken: source.token });
         setData(data);
-        console.log(data, 'category');
       } catch ({
         response: {
           data: { message: msg },
@@ -71,7 +70,7 @@ const Categories = () => {
     return () => {
       source.cancel();
     };
-  }, [isAdded, isArchived]);
+  }, [isAdded, isArchived, allArchived, token, pathname]);
 
   const handelEdit = async (id, setIsEditModalVisible) => {
     try {
@@ -213,7 +212,7 @@ const Categories = () => {
 
   return (
     <>
-      <div className="tabled">
+      <div className="tabled categories">
         <Row gutter={[24, 0]}>
           <Col xs="24" xl={24}>
             <Card
@@ -227,7 +226,9 @@ const Categories = () => {
                   ModalTitle="Add New Category" 
                   isModalVisible={isModalVisible}
                   setIsModalVisible={setIsModalVisible}
-                  /> } 
+                  /> 
+                } 
+                <Button onClick={() => setAllArchived(!allArchived)}>{allArchived ? 'Archived' : 'Not Archived'}</Button>
                 </>
               }
             >
